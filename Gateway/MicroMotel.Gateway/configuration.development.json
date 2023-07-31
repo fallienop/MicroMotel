@@ -1,0 +1,61 @@
+{
+  
+    "Routes": [
+      {
+        "DownstreamPathTemplate": "/api/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 5010
+          }
+        ],
+        "UpstreamPathTemplate": "/services/motel/{everything}",
+        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+        "UpstreamScheme": "http",
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "GatewayScheme",
+          "AllowedScopes": [ "motel_fullpermission" ]
+        }
+      },
+      {
+        "DownstreamPathTemplate": "/api/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 5011
+          }
+        ],
+        "UpstreamPathTemplate": "/services/photostock/{everything}",
+        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+        "UpstreamScheme": "http",
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "GatewayScheme",
+          "AllowedScopes": [ "photo_fullpermission" ]
+        }
+      },
+      {
+        "DownstreamPathTemplate": "/api/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 5012
+          }
+        ],
+        "UpstreamPathTemplate": "/services/fakepayment/{everything}",
+        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+        "UpstreamScheme": "http",
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "GatewayScheme",
+          "AllowedScopes": [ "payment_fullpermission" ]
+        }
+      }
+
+
+    ],
+    "GlobalConfiguration": {
+      "BaseUrl": "https://localhost:5000"
+    }
+  }

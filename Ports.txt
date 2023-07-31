@@ -1,0 +1,7 @@
+
+ IdentityServer : 5001 
+ Motel          : 5010
+ PhotoStock     : 5011
+ FakePayment    : 5012
+ Reservation    : 5013
+ Gateway        : 5000
