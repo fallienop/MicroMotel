@@ -20,24 +20,28 @@ namespace MicroMotel.Services.Motel.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var meals=await _mealService.GetAllMeals();
+            var meals = await _mealService.GetAllMeals();
             return CustomActionResult(meals);
         }
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var meal=await _mealService.GetMealById(id);
             return CustomActionResult(meal);
         }
+        [HttpDelete]
         public async Task<IActionResult> DeleteById(int id)
         {
             var resp=await _mealService.DeleteMealById(id);
             return CustomActionResult(resp);
         }
+        [HttpPut]
         public async Task<IActionResult> Update (MealUpdateDTO mud)
         {
             var resp = await _mealService.UpdateMeal(mud);
             return CustomActionResult(resp);
         }
+        [HttpPost]
         public async Task<IActionResult> Create(MealCreateDTO mcd)
         {
             var resp = await _mealService.CreateNewMeal(mcd);

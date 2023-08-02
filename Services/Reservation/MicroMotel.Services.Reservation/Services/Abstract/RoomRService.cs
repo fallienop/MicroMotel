@@ -1,34 +1,67 @@
-﻿using MicroMotel.Services.Reservation.Models;
+﻿using AutoMapper.Configuration.Conventions;
+using MicroMotel.Services.Reservation.Context;
+using MicroMotel.Services.Reservation.Models;
 using MicroMotel.Services.Reservation.Services.Interface;
 using MicroMotel.Shared.DTOs;
+using Microsoft.EntityFrameworkCore;
 
 namespace MicroMotel.Services.Reservation.Services.Abstract
 {
     public class RoomRService : IRoomRService
     {
-        public Task<NoContent> CreateReservation(RoomR roomR)
+        private readonly ReservationContext _reservationContext;
+
+        public RoomRService(ReservationContext reservationContext)
         {
-            throw new NotImplementedException();
+            _reservationContext = reservationContext;
         }
 
-        public Task<NoContent> DeleteRoomReservation(int id)
+        public async Task<Response<NoContent>> CreateReservation(RoomR roomR)
         {
-            throw new NotImplementedException();
+            await _reservationContext.AddAsync(roomR);
+            await _reservationContext.SaveChangesAsync();
+            return Response<NoContent>.Success(200);
         }
 
-        public Task<List<RoomR>> GetAllRoomRs()
+        public async Task<Response<NoContent>> DeleteRoomReservation(int id)
         {
-            throw new NotImplementedException();
+            var room = await _reservationContext.FindAsync<RoomR>(id);
+            if (room == null)
+            {
+                return Response<NoContent>.Fail("error", 200);
+            }
+            _reservationContext.Remove(room);
+            _reservationContext.SaveChangesAsync();
+            return Response<NoContent>.Success(200);    
         }
 
-        public Task<RoomR> GetRoomRById(int id)
+        public async Task<Response<List<RoomR>>> GetAllRoomRs()
         {
-            throw new NotImplementedException();
+            var listreservedroom = await _reservationContext.Set<RoomR>().ToListAsync();
+            return Response<List<RoomR>>.Success(listreservedroom, 200);
+
+
         }
 
-        public Task<NoContent> UpdateReservation(RoomR roomR)
+        public async Task<Response<RoomR>> GetRoomRById(int id)
         {
-            throw new NotImplementedException();
+            var reservedroom = await _reservationContext.Set<RoomR>().FindAsync(id);
+            if (reservedroom == null)
+            {
+                return Response<RoomR>.Fail("Not Found", 404);
+            }
+            return Response<RoomR>.Success(reservedroom, 200);
+        }
+
+        public async Task<Response<NoContent>> UpdateReservation(RoomR roomR)
+        {
+            _reservationContext.Update(roomR);
+           var res= await _reservationContext.SaveChangesAsync();
+            if (res > 0)
+            {
+                return Response<NoContent>.Success(200);
+            }
+            return Response<NoContent>.Fail("error", 500);
         }
     }
 }

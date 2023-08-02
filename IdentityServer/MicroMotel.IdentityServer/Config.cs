@@ -18,6 +18,7 @@ namespace MicroMotel.IdentityServer
             new ApiResource("resource_motel"){Scopes={"motel_fullpermission" } },
             new ApiResource("resource_photo"){Scopes={"photo_fullpermission"}},
             new ApiResource("resource_payment"){Scopes={"payment_fullpermission"}}, 
+            new ApiResource("resource_reservation"){Scopes={ "reservation_fullpermission"} },
             new ApiResource("resource_gateway"){Scopes={"gateway_fullpermission" } },
             new ApiResource(IdentityServerConstants.LocalApi.ScopeName)
         };
@@ -36,6 +37,7 @@ namespace MicroMotel.IdentityServer
                new ApiScope("motel_fullpermission","full permission for motel"),
                new ApiScope("photo_fullpermission","full permission for photostock"),
                new ApiScope("payment_fullpermission","full permission for payment"),
+               new ApiScope("reservation_fullpermission","full permission for reservation"),
                new ApiScope("gateway_fullpermission","full permission for gateway"),
                new ApiScope(IdentityServerConstants.LocalApi.ScopeName)
             };
@@ -58,7 +60,7 @@ namespace MicroMotel.IdentityServer
                     ClientId="forregistered",
                     ClientSecrets={new Secret ("register".Sha512()) },
                     AllowedGrantTypes=GrantTypes.ResourceOwnerPassword,
-                    AllowedScopes={IdentityServerConstants.StandardScopes.OfflineAccess,IdentityServerConstants.LocalApi.ScopeName,IdentityServerConstants.StandardScopes.Profile,IdentityServerConstants.StandardScopes.Email,IdentityServerConstants.StandardScopes.OpenId, "payment_fullpermission", "gateway_fullpermission"},
+                    AllowedScopes={IdentityServerConstants.StandardScopes.OfflineAccess,IdentityServerConstants.LocalApi.ScopeName,IdentityServerConstants.StandardScopes.Profile,IdentityServerConstants.StandardScopes.Email,IdentityServerConstants.StandardScopes.OpenId, "payment_fullpermission", "reservation_fullpermission", "gateway_fullpermission"},
                     AllowOfflineAccess=true,
                     AccessTokenLifetime=3600,
                     RefreshTokenExpiration=TokenExpiration.Absolute,

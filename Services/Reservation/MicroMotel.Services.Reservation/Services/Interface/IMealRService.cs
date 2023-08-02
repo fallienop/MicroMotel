@@ -5,10 +5,10 @@ namespace MicroMotel.Services.Reservation.Services.Interface
 {
     public interface IMealRService
     {
-        public Task<MealR> GetMealRById(int id);
-        public Task<List<MealR>> GetAllMealRs();
-        public Task<NoContent> CreateReservation(MealR MealR);
-        public Task<NoContent> UpdateReservation(MealR MealR);
-        public Task<NoContent> DeleteMealReservation(int id);
+        public Task<Response<MealR>> GetMealRById(int id);
+        public Task<Response<List<MealR>>> GetAllMealRs();
+        public Task<Response<NoContent>> CreateReservation(MealR MealR);
+        public Task<Response<NoContent>> UpdateReservation(MealR MealR);
+        public Task<Response<NoContent>> DeleteMealReservation(int id);
     }
 }

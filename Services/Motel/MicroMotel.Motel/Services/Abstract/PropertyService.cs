@@ -77,7 +77,7 @@ namespace MicroMotel.Services.Motel.Services.Abstract
 
         public async Task<Response<List<PropertyWithRoomsDTO>>> GetWithRooms(int id)
         {
-            var properties = await _context.Properties.Include(p => p.Rooms).ToListAsync();
+            var properties = await _context.Properties.Include(p => p.Rooms).Where(x=>x.Id==id).ToListAsync();
             var propertyDTOsWithRooms = _mapper.Map<List<PropertyWithRoomsDTO>>(properties);
             return Response<List<PropertyWithRoomsDTO>>.Success(propertyDTOsWithRooms, 200);
         }

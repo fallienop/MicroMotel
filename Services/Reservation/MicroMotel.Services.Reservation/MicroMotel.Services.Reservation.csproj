@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\..\Shared\MicroMotel.Shared\MicroMotel.Shared.csproj" />
     <ProjectReference Include="..\..\Motel\MicroMotel.Motel\MicroMotel.Services.Motel.csproj" />
   </ItemGroup>

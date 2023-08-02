@@ -9,7 +9,7 @@ namespace MicroMotel.Motel.DTOs.PropertyDTOs
 
         public byte RoomCount { get; set; }
 
-        public string RoomName { get; set; }
+      
         public byte FloorCount { get; set; }
 
         public bool HasParking { get; set; }
