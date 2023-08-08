@@ -17,10 +17,10 @@ namespace MicroMotel.Services.Motel.Controllers
             _mealService = mealService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("property/{id}")]
+        public async Task<IActionResult> GetAllByProperty(int id)
         {
-            var meals = await _mealService.GetAllMeals();
+            var meals = await _mealService.GetAllMeals(id);
             return CustomActionResult(meals);
         }
         [HttpGet("{id}")]

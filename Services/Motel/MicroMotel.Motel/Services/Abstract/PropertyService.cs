@@ -66,20 +66,26 @@ namespace MicroMotel.Services.Motel.Services.Abstract
         public async Task<Response<PropertyDTO>> GetPropertyById(int id)
         {
             var prop= await _context.Set<Property>().FindAsync(id);
-            var response= _mapper.Map<PropertyDTO>(prop);
-            if(response == null)
+            if(prop == null)
             {
                 return Response<PropertyDTO>.Fail("not found", 404);
             }
+            var response= _mapper.Map<PropertyDTO>(prop);
             return Response<PropertyDTO>.Success(response, 200);
 
         }
 
-        public async Task<Response<List<PropertyWithRoomsDTO>>> GetWithRooms(int id)
+        public async Task<Response<PropertyWithRoomsDTO>> GetWithRooms(int id)
         {
+           if((await _context.FindAsync<Property>(id))==null)
+            {
+                return Response<PropertyWithRoomsDTO>.Fail("Property not found", 404);
+            }
+            
             var properties = await _context.Properties.Include(p => p.Rooms).Where(x=>x.Id==id).ToListAsync();
-            var propertyDTOsWithRooms = _mapper.Map<List<PropertyWithRoomsDTO>>(properties);
-            return Response<List<PropertyWithRoomsDTO>>.Success(propertyDTOsWithRooms, 200);
+
+            var propertyDTOsWithRooms = _mapper.Map<PropertyWithRoomsDTO>(properties);
+            return Response<PropertyWithRoomsDTO>.Success(propertyDTOsWithRooms, 200);
         }
 
         public async Task<Response<NoContent>> UpdateProperty(PropertyUpdateDTO pud)

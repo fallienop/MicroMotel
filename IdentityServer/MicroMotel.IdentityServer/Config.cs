@@ -50,7 +50,7 @@ namespace MicroMotel.IdentityServer
                 {
                     ClientName="for non-registered users",
                     ClientSecrets={new Secret("nonregister".Sha512()) },
-                   ClientId="nonregisterd",
+                   ClientId="nonregistered",
                    AllowedGrantTypes=GrantTypes.ClientCredentials,
                     AllowedScopes={IdentityServerConstants.LocalApi.ScopeName, "gateway_fullpermission", "motel_fullpermission", "photo_fullpermission" } 
                 } ,

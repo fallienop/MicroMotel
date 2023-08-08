@@ -36,7 +36,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroMotel.Gateway", "Gatew
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reservation", "Reservation", "{BD1ED5F7-3FD9-42FE-BDF4-1A3502570CE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroMotel.Services.Reservation", "Services\Reservation\MicroMotel.Services.Reservation\MicroMotel.Services.Reservation.csproj", "{6E0DB0E1-022E-49E4-9EAD-AAF77F8DA59D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroMotel.Services.Reservation", "Services\Reservation\MicroMotel.Services.Reservation\MicroMotel.Services.Reservation.csproj", "{6E0DB0E1-022E-49E4-9EAD-AAF77F8DA59D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{1788A8B3-55DA-4267-836C-A53AB41FCC5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroMotel.Web", "MicroMotel.Web\MicroMotel.Web.csproj", "{DA21B03C-B9DD-4805-97C5-FA6B8E381BC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,6 +76,10 @@ Global
 		{6E0DB0E1-022E-49E4-9EAD-AAF77F8DA59D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E0DB0E1-022E-49E4-9EAD-AAF77F8DA59D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E0DB0E1-022E-49E4-9EAD-AAF77F8DA59D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA21B03C-B9DD-4805-97C5-FA6B8E381BC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA21B03C-B9DD-4805-97C5-FA6B8E381BC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA21B03C-B9DD-4805-97C5-FA6B8E381BC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA21B03C-B9DD-4805-97C5-FA6B8E381BC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +97,7 @@ Global
 		{2FB546A2-7CB5-4028-B6F4-4C205E342040} = {4D84F5B7-EA06-4F2D-BD83-F2C7983EF6A4}
 		{BD1ED5F7-3FD9-42FE-BDF4-1A3502570CE2} = {A5067F95-53A1-447A-8974-0B001A248526}
 		{6E0DB0E1-022E-49E4-9EAD-AAF77F8DA59D} = {BD1ED5F7-3FD9-42FE-BDF4-1A3502570CE2}
+		{DA21B03C-B9DD-4805-97C5-FA6B8E381BC8} = {1788A8B3-55DA-4267-836C-A53AB41FCC5B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA84B894-76CB-46E4-8111-9331783C4498}

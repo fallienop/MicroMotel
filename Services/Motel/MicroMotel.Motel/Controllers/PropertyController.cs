@@ -56,7 +56,7 @@ namespace MicroMotel.Services.Motel.Controllers
         [HttpGet("combined/{id}")]
         public async Task<IActionResult> getWithRooms(int id)
         {
-            
+           
             var resp=await _propertyservice.GetWithRooms(id);
             return CustomActionResult(resp);
         }

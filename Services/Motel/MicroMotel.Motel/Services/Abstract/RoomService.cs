@@ -50,6 +50,8 @@ namespace MicroMotel.Services.Motel.Services.Abstract
             return Response<List<RoomDTO>>.Success(response, 200);
         }
 
+    
+
         public async Task<Response<RoomDTO>> GetRoomById(int id)
         {
             var room = await _motelContext.Set<Room>().FindAsync(id);

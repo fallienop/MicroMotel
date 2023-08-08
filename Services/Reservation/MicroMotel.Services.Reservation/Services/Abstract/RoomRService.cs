@@ -1,5 +1,7 @@
-﻿using AutoMapper.Configuration.Conventions;
+﻿using AutoMapper;
+using AutoMapper.Configuration.Conventions;
 using MicroMotel.Services.Reservation.Context;
+using MicroMotel.Services.Reservation.DTOs.RoomRDTOs;
 using MicroMotel.Services.Reservation.Models;
 using MicroMotel.Services.Reservation.Services.Interface;
 using MicroMotel.Shared.DTOs;
@@ -10,15 +12,21 @@ namespace MicroMotel.Services.Reservation.Services.Abstract
     public class RoomRService : IRoomRService
     {
         private readonly ReservationContext _reservationContext;
+        private readonly IMapper _mapper;
 
-        public RoomRService(ReservationContext reservationContext)
+        public RoomRService(ReservationContext reservationContext, IMapper mapper)
         {
             _reservationContext = reservationContext;
+            _mapper = mapper;
         }
 
-        public async Task<Response<NoContent>> CreateReservation(RoomR roomR)
+        public async Task<Response<NoContent>> CreateReservation(RoomRCreateDTO Roomr)
         {
-            await _reservationContext.AddAsync(roomR);
+
+            var resp = _mapper.Map<RoomR>(Roomr);
+
+            await _reservationContext.AddAsync(resp);
+            
             await _reservationContext.SaveChangesAsync();
             return Response<NoContent>.Success(200);
         }
@@ -31,37 +39,56 @@ namespace MicroMotel.Services.Reservation.Services.Abstract
                 return Response<NoContent>.Fail("error", 200);
             }
             _reservationContext.Remove(room);
-            _reservationContext.SaveChangesAsync();
+            await _reservationContext.SaveChangesAsync();
             return Response<NoContent>.Success(200);    
         }
 
-        public async Task<Response<List<RoomR>>> GetAllRoomRs()
+        public async Task<Response<List<RoomRDTO>>> GetAllRoomRs()
         {
-            var listreservedroom = await _reservationContext.Set<RoomR>().ToListAsync();
-            return Response<List<RoomR>>.Success(listreservedroom, 200);
+            var listreservedroom = await _reservationContext.Set<RoomR>().Include(r=>r.MealRs).ToListAsync();
+            var resp = _mapper.Map<List<RoomRDTO>>(listreservedroom);
+            return Response<List<RoomRDTO>>.Success(resp, 200);
 
 
         }
 
-        public async Task<Response<RoomR>> GetRoomRById(int id)
+        public async Task<Response<List<RoomRDTO>>> GetAllRoomRsbyPropertyId(int propertyid)
+        {
+            var roomrsofprop = await _reservationContext.Set<RoomR>().Where(x => x.PropertyId == propertyid).Include(x => x.MealRs).ToListAsync();
+            if (roomrsofprop == null)
+            {
+                return Response<List<RoomRDTO>>.Fail("not found", 404);
+
+            }
+            var resp = _mapper.Map<List<RoomRDTO>>(roomrsofprop);
+            return Response<List<RoomRDTO>>.Success(resp, 200);
+            
+        }
+
+        public async Task<Response<List<RoomRDTO>>> GetAllRoomRsbyRoomId(int roomid)
+        {
+            var roomrsofprop = await _reservationContext.Set<RoomR>().Where(x => x.RoomId == roomid).Include(x => x.MealRs).ToListAsync();
+            if (roomrsofprop == null)
+            {
+                return Response<List<RoomRDTO>>.Fail("not found", 404);
+
+            }
+            var resp = _mapper.Map<List<RoomRDTO>>(roomrsofprop);
+            return Response<List<RoomRDTO>>.Success(resp, 200);
+
+        }
+        public async Task<Response<RoomRDTO>> GetRoomRById(int id)
         {
             var reservedroom = await _reservationContext.Set<RoomR>().FindAsync(id);
+            var resp=_mapper.Map<RoomRDTO>(reservedroom);   
             if (reservedroom == null)
             {
-                return Response<RoomR>.Fail("Not Found", 404);
+                return Response<RoomRDTO>.Fail("Not Found", 404);
             }
-            return Response<RoomR>.Success(reservedroom, 200);
+            return Response<RoomRDTO>.Success(resp, 200);
         }
 
-        public async Task<Response<NoContent>> UpdateReservation(RoomR roomR)
-        {
-            _reservationContext.Update(roomR);
-           var res= await _reservationContext.SaveChangesAsync();
-            if (res > 0)
-            {
-                return Response<NoContent>.Success(200);
-            }
-            return Response<NoContent>.Fail("error", 500);
-        }
+       
+       
     }
 }

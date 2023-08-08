@@ -1,4 +1,4 @@
-namespace MicroMotel.Web.Models
+namespace MicroMotel.Web.Models.BaseModels
 {
     public class ErrorViewModel
     {

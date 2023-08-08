@@ -10,5 +10,8 @@ namespace MicroMotel.Services.Motel.Services.Interface
         Task<Response<NoContent>> CreateNewRoom(RoomCreateDTO rcd);
         Task<Response<NoContent>> UpdateRoom(RoomUpdateDTO rud);
         Task<Response<NoContent>> DeleteRoomById(int id);
+
     }
+
 }
+

@@ -18,6 +18,8 @@ builder.Services.AddAuthentication().AddJwtBearer(opt =>
     opt.Authority = builder.Configuration["IdentityServerUrl"];
     opt.RequireHttpsMetadata = false;
 });
+builder.Services.AddAutoMapper(typeof(Program));
+
 builder.Services.AddControllers(opt =>
 {
     opt.Filters.Add(new AuthorizeFilter(requriedauthorizepolicy));

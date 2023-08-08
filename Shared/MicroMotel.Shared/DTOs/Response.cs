@@ -10,7 +10,7 @@ namespace MicroMotel.Shared.DTOs
 {
     public class Response<T>
     {
-        public T Data { get; private set; }
+        public T Data { get;  set; }
         [JsonIgnore]
         public int Status { get; private set; }
         [JsonIgnore]

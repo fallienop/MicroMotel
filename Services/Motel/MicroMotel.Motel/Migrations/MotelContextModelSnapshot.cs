@@ -39,7 +39,6 @@ namespace MicroMotel.Services.Motel.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte>("RoomCount")
@@ -104,11 +103,9 @@ namespace MicroMotel.Services.Motel.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PrepTime")
@@ -135,19 +132,15 @@ namespace MicroMotel.Services.Motel.Migrations
                                 .HasColumnType("int");
 
                             b1.Property<string>("Building")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("City")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("District")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Street")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("PropertyId");
@@ -158,8 +151,7 @@ namespace MicroMotel.Services.Motel.Migrations
                                 .HasForeignKey("PropertyId");
                         });
 
-                    b.Navigation("Address")
-                        .IsRequired();
+                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("MicroMotel.Motel.Models.Room", b =>

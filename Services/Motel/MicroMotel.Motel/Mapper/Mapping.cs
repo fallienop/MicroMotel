@@ -4,6 +4,7 @@ using MicroMotel.Motel.DTOs.RoomDTOs;
 using MicroMotel.Motel.Models;
 using MicroMotel.Services.Motel.DTOs.MealDTOs;
 using MicroMotel.Services.Motel.DTOs.PropertyDTOs;
+using MicroMotel.Services.Motel.DTOs.PropertyDTOs.AddressDTOs;
 using MicroMotel.Services.Motel.Models;
 
 namespace MicroMotel.Motel.Mapper
@@ -25,6 +26,7 @@ namespace MicroMotel.Motel.Mapper
             CreateMap<Meal,MealCreateDTO>().ReverseMap();
             CreateMap<Meal,MealUpdateDTO>().ReverseMap();
 
+            CreateMap<Address,AddressDTO>().ReverseMap();
             
         }
     }

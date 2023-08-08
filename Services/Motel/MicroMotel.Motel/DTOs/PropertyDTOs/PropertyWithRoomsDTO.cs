@@ -1,4 +1,6 @@
-﻿using MicroMotel.Motel.Models;
+﻿using MicroMotel.Motel.DTOs.RoomDTOs;
+using MicroMotel.Motel.Models;
+using MicroMotel.Services.Motel.DTOs.PropertyDTOs.AddressDTOs;
 
 namespace MicroMotel.Services.Motel.DTOs.PropertyDTOs
 {
@@ -6,7 +8,7 @@ namespace MicroMotel.Services.Motel.DTOs.PropertyDTOs
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public Address Address { get; set; }
+        public AddressDTO Address { get; set; }
 
         public byte RoomCount { get; set; }
 
@@ -15,6 +17,6 @@ namespace MicroMotel.Services.Motel.DTOs.PropertyDTOs
         public bool HasParking { get; set; }
         public bool HasOpenSpace { get; set; }
 
-        public ICollection<Room> Rooms { get; set; }
+        public ICollection<RoomDTO> Rooms { get; set; }
     }
 }

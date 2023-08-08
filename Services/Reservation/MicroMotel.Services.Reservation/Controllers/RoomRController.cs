@@ -1,4 +1,5 @@
-﻿using MicroMotel.Services.Reservation.Models;
+﻿using MicroMotel.Services.Reservation.DTOs.RoomRDTOs;
+using MicroMotel.Services.Reservation.Models;
 using MicroMotel.Services.Reservation.Services.Interface;
 using MicroMotel.Shared.ControllerBases;
 using Microsoft.AspNetCore.Http;
@@ -11,11 +12,28 @@ namespace MicroMotel.Services.Reservation.Controllers
     public class RoomRController : CustomControllerr
     {
         private readonly IRoomRService _roomRService;
+      
 
         public RoomRController(IRoomRService roomRService)
         {
             _roomRService = roomRService;
         }
+
+        [HttpGet("prop/{propid}")]
+        public async Task<IActionResult> GetRoomrByPropid(int propid)
+        {
+            var resp=await _roomRService.GetAllRoomRsbyPropertyId(propid);
+            return CustomActionResult(resp);
+        } 
+        
+        [HttpGet("room/{roomid}")]
+        public async Task<IActionResult> GetRoomrByRoomid(int roomid)
+        {
+            var resp=await _roomRService.GetAllRoomRsbyRoomId(roomid);
+            return CustomActionResult(resp);
+        }
+
+        
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -33,7 +51,7 @@ namespace MicroMotel.Services.Reservation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> newres(RoomR roomr)
+        public async Task<IActionResult> newres(RoomRCreateDTO roomr)
         {
             var resp = await _roomRService.CreateReservation(roomr);
             return CustomActionResult(resp);
@@ -46,11 +64,6 @@ namespace MicroMotel.Services.Reservation.Controllers
             return CustomActionResult(res);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update(RoomR roomr)
-        {
-            var res = await _roomRService.UpdateReservation(roomr);
-            return CustomActionResult(res);
-        }
+   
     }
 }

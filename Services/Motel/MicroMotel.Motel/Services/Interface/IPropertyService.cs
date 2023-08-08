@@ -12,7 +12,7 @@ namespace MicroMotel.Services.Motel.Services.Interface
         Task<Response<NoContent>> CreateNewProperty(PropertyCreateDTO pcd);
         Task<Response<NoContent>> UpdateProperty(PropertyUpdateDTO pud);
         Task<Response<NoContent>> DeletePropertyById(int id);
-        Task<Response<List<PropertyWithRoomsDTO>>> GetWithRooms(int id);
+        Task<Response<PropertyWithRoomsDTO>> GetWithRooms(int id);
 
         
         

@@ -50,9 +50,9 @@ namespace MicroMotel.Services.Motel.Services.Abstract
 
         }
 
-        public async Task<Response<List<MealDTO>>> GetAllMeals()
+        public async Task<Response<List<MealDTO>>> GetAllMeals(int propertyid)
         {
-            var meals=await _context.Meals.ToListAsync();
+            var meals=await _context.Meals.Where(x=>x.PropertyId==propertyid).ToListAsync();
             var resp=_mapper.Map<List<MealDTO>>(meals);
 
             return Response<List<MealDTO>>.Success(resp, 200);

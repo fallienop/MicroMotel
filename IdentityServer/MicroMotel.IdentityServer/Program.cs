@@ -49,7 +49,7 @@ namespace MicroMotel.IdentityServer
                     var dbcontext = services.GetRequiredService<ApplicationDbContext>();
                     dbcontext.Database.Migrate(); 
                     var usermanager=services.GetRequiredService<UserManager<ApplicationUser>>();
-                    if(usermanager.Users.Any())
+                    if(!usermanager.Users.Any())
                     {
                         usermanager.CreateAsync(new ApplicationUser { UserName = "fallien", City = "Baku", Email = "fallien.ssd@gmail.com", }, "1_Paroll0").Wait();
                     }

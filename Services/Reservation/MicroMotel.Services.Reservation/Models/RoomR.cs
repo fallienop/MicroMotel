@@ -1,4 +1,4 @@
-﻿using MicroMotel.Motel.Models;
+﻿
 using System.ComponentModel.DataAnnotations;
 
 namespace MicroMotel.Services.Reservation.Models

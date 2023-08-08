@@ -1,11 +1,12 @@
 ﻿using MicroMotel.Motel.Models;
+using MicroMotel.Services.Motel.DTOs.PropertyDTOs.AddressDTOs;
 
 namespace MicroMotel.Motel.DTOs.PropertyDTOs
 {
     public class PropertyCreateDTO
     {
         public string Name { get; set; }
-        public Address Address { get; set; }
+        public AddressDTO Address { get; set; }
 
         public byte RoomCount { get; set; }
 
