@@ -1,4 +1,5 @@
 ﻿using MicroMotel.Motel.DTOs.RoomDTOs;
+using MicroMotel.Services.Motel.DTOs.PropertyDTOs;
 using MicroMotel.Shared.DTOs;
 
 namespace MicroMotel.Services.Motel.Services.Interface
@@ -10,6 +11,8 @@ namespace MicroMotel.Services.Motel.Services.Interface
         Task<Response<NoContent>> CreateNewRoom(RoomCreateDTO rcd);
         Task<Response<NoContent>> UpdateRoom(RoomUpdateDTO rud);
         Task<Response<NoContent>> DeleteRoomById(int id);
+        Task<Response<List<RoomsofProperty>>> GetWithRooms(int id);
+
 
     }
 

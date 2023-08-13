@@ -1,9 +1,10 @@
-﻿using MicroMotel.Web.Models.Motel.Property.Address;
-using MicroMotel.Web.Models.Motel.Room;
+﻿using MicroMotel.Motel.DTOs.RoomDTOs;
+using MicroMotel.Motel.Models;
+using MicroMotel.Services.Motel.DTOs.PropertyDTOs.AddressDTOs;
 
-namespace MicroMotel.Web.Models.Motel.Property
+namespace MicroMotel.Services.Motel.DTOs.PropertyDTOs
 {
-    public class PropertyWithRoomsViewModel
+    public class RoomsofProperty
     {
         public int Id { get; set; }
 
@@ -18,5 +19,6 @@ namespace MicroMotel.Web.Models.Motel.Property
         public byte Status { get; set; }
 
         public int PropertyId { get; set; }
+
     }
 }

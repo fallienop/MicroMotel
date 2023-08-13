@@ -1,12 +1,15 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿    @{
+    ViewData["Title"] = "Index";
+
+    Layout = "~/Views/Shared/_mainlayout.cshtml";
+
     var count = 0;
 }
 
 @model List<PropertyViewModel>
 <h2>Kurslar</h2>
 <hr />
-
+<br />
 @if (Model.Any())
 {
     @foreach (var item in Model)
@@ -19,7 +22,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">@item.Address</h5>
+                    <h5 class="card-title">@item.Address.City</h5>
                     <p class="card-text">@item.Name</p>
                     <h4 class="text-primary">@item.FloorCount TL</h4>
                     <div>

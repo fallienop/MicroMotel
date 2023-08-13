@@ -8,13 +8,13 @@ namespace MicroMotel.Web.Services.Interface
     {
         #region Property
         Task<List<PropertyViewModel>> GetAllPropertiesAsync();
-        Task<PropertyWithRoomsViewModel> GetPropertyWithRoomsAsync(int propertyid);
         Task<bool> CreateProperty(PropertyCreateInput pci);
         Task<bool> UpdateProperty(PropertyUpdateModel pum);
         Task<bool> DeleteProperty(int id);
         #endregion
 
         #region Room
+        Task<List<PropertyWithRoomsViewModel>> GetPropertyWithRoomsAsync(int propertyid);
         Task<List<RoomViewModel>> GetAllRoomsAsync();
         Task<RoomViewModel> GetRoomById(int id);
         Task<bool> CreateNewRoom(RoomCreateInput rci);

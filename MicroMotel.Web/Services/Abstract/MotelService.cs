@@ -28,17 +28,7 @@ namespace MicroMotel.Web.Services.Abstract
             var resp=await response.Content.ReadFromJsonAsync<Response<List<PropertyViewModel>>>();
             return resp.Data;
         }
-        public async Task<PropertyWithRoomsViewModel> GetPropertyWithRoomsAsync(int propertyid)
-        {
-            
-            var response = await _httpClient.GetAsync($"property/combined/{propertyid}");
-            if(!response.IsSuccessStatusCode)
-            {
-                return null;
-            }
-            var resp = await response.Content.ReadFromJsonAsync<Response<PropertyWithRoomsViewModel>>();
-            return resp.Data;
-        }
+    
 
         public async Task<bool> CreateProperty(PropertyCreateInput pci)
         {
@@ -58,8 +48,20 @@ namespace MicroMotel.Web.Services.Abstract
         }
         #endregion
 
-        
+
         #region Room
+
+        public async Task<List<PropertyWithRoomsViewModel>> GetPropertyWithRoomsAsync(int propertyid)
+        {
+
+            var response = await _httpClient.GetAsync($"room/combined/{propertyid}");
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+            var resp = await response.Content.ReadFromJsonAsync<Response<List<PropertyWithRoomsViewModel>>>();
+            return resp.Data;
+        }
         public async Task<List<RoomViewModel>> GetAllRoomsAsync()
         {
             var response = await _httpClient.GetAsync("room");
@@ -95,7 +97,7 @@ namespace MicroMotel.Web.Services.Abstract
         }
         public async Task<bool> DeleteRoom(int id)
         {
-            var resp = await _httpClient.DeleteAsync($"room/{id}");
+            var resp = await _httpClient.DeleteAsync($"room/delete/{id}");
             return resp.IsSuccessStatusCode;
         }
         #endregion

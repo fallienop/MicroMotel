@@ -1,0 +1,53 @@
+﻿
+    @{
+        ViewData["Title"] = "AddProperty";
+        Layout = "~/Views/Shared/_adminLayout.cshtml";
+    }
+
+    <form class="form-group" method="post">
+
+        
+        @Html.Label("Name")
+    <input type="text" name="Name" class="form-control form-control-sm" />
+        <br />
+        @Html.Label("Room Count")
+    <input type="text" name="RoomCount" class="form-control form-control-sm" />
+        <br />
+        @Html.Label("Floor Count")
+        <input type="text" name="FloorCount" class="form-control form-control-sm" />
+        <br />
+        @Html.Label("Has Parking")
+    <select class="form-control form-control-sm" name="HasParking">
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+
+    </select>
+
+        <br />
+        @Html.Label("Has OpenSpace")
+       
+    <select class="form-control form-control-sm" name="HasOpenSpaces"  >
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+      
+    </select>
+        <br />
+    
+        @Html.Label("Address")
+        <div class="address-fields">
+        <input type="text" id="Address.City" name="Address.City" class="form-control form-control-sm" placeholder="City" />
+        <input type="text" id="Address.District" name="Address.District" class="form-control form-control-sm" placeholder="District" />
+        <input type="text" id="Address.Street" name="Address.Street" class="form-control form-control-sm" placeholder="Street" />
+        <input type="text" id="Address.Building" name="Address.Building" class="form-control form-control-sm" placeholder="Building" />
+        </div>
+      <br />
+        <button type="submit" class="btn btn-primary mr-2">Submit</button>
+       
+
+    </form>
+
+<style>
+    .address-fields input {
+        margin-bottom: 5px; /* İstenilen boşluğu ayarlayın */
+    }
+</style>

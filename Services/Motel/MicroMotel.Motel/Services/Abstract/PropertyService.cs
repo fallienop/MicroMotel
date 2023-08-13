@@ -6,6 +6,7 @@ using MicroMotel.Services.Motel.DTOs.PropertyDTOs;
 using MicroMotel.Services.Motel.Services.Interface;
 using MicroMotel.Shared.DTOs;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace MicroMotel.Services.Motel.Services.Abstract
 {
@@ -75,18 +76,7 @@ namespace MicroMotel.Services.Motel.Services.Abstract
 
         }
 
-        public async Task<Response<PropertyWithRoomsDTO>> GetWithRooms(int id)
-        {
-           if((await _context.FindAsync<Property>(id))==null)
-            {
-                return Response<PropertyWithRoomsDTO>.Fail("Property not found", 404);
-            }
-            
-            var properties = await _context.Properties.Include(p => p.Rooms).Where(x=>x.Id==id).ToListAsync();
-
-            var propertyDTOsWithRooms = _mapper.Map<PropertyWithRoomsDTO>(properties);
-            return Response<PropertyWithRoomsDTO>.Success(propertyDTOsWithRooms, 200);
-        }
+          
 
         public async Task<Response<NoContent>> UpdateProperty(PropertyUpdateDTO pud)
         {

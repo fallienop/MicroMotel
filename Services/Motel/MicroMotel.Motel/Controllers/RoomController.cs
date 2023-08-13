@@ -46,6 +46,8 @@
                 return CustomActionResult(resp);
             }
 
+
+            [Route("Delete/{id}")]     
             [HttpDelete]
             public async Task<IActionResult> Delete(int id)
             {
@@ -53,5 +55,14 @@
                 return CustomActionResult(resp);
 
             }
+
+        [HttpGet("combined/{id}")]
+        public async Task<IActionResult> getWithRooms(int id)
+        {
+
+            var resp = await _roomservice.GetWithRooms(id);
+            return CustomActionResult(resp);
         }
+
     }
+}

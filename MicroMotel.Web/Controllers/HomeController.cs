@@ -21,6 +21,11 @@ namespace MicroMotel.Web.Controllers
         {
             return View(await _motelService.GetAllPropertiesAsync());
         }
+        public async Task<IActionResult> Detail(int id)
+        {
+
+            return View(_motelService.GetPropertyWithRoomsAsync(id));
+        }
 
         public IActionResult Privacy()
         {

@@ -2,6 +2,7 @@
 using MicroMotel.Motel.Context;
 using MicroMotel.Motel.DTOs.RoomDTOs;
 using MicroMotel.Motel.Models;
+using MicroMotel.Services.Motel.DTOs.PropertyDTOs;
 using MicroMotel.Services.Motel.Services.Interface;
 using MicroMotel.Shared.DTOs;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,20 @@ namespace MicroMotel.Services.Motel.Services.Abstract
             var r= await _motelContext.SaveChangesAsync();
             if ( r>0 ) { return Response<NoContent>.Success(200); }
             return Response<NoContent>.Fail("error",500);
+        }
+
+        public async Task<Response<List<RoomsofProperty>>> GetWithRooms(int id)
+        {
+            if ((await _motelContext.FindAsync<Property>(id)) == null)
+            {
+                return Response<List<RoomsofProperty>>.Fail("Property not found", 404);
+            }
+
+            var rooms = await _motelContext.Rooms.Where(x => x.PropertyId == id).ToListAsync();
+
+
+            var propertyDTOsWithRooms = _mapper.Map<List<RoomsofProperty>>(rooms);
+            return Response<List<RoomsofProperty>>.Success(propertyDTOsWithRooms, 200);
         }
 
         public async Task<Response<NoContent>> DeleteRoomById(int id)

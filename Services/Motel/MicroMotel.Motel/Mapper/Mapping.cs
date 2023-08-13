@@ -16,8 +16,8 @@ namespace MicroMotel.Motel.Mapper
             CreateMap<Property,PropertyCreateDTO>().ReverseMap();
             CreateMap<Property,PropertyUpdateDTO>().ReverseMap();
             CreateMap<Property, PropertyDTO>().ReverseMap();
-            CreateMap<Property,PropertyWithRoomsDTO>().ReverseMap();
 
+            CreateMap<Room,RoomsofProperty>().ReverseMap();
             CreateMap<Room,RoomDTO>().ReverseMap();
             CreateMap<Room,RoomCreateDTO>().ReverseMap();
             CreateMap<Room,RoomUpdateDTO>().ReverseMap();
