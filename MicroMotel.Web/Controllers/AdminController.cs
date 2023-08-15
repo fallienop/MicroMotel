@@ -118,6 +118,10 @@ namespace MicroMotel.Web.Controllers
 
         public async Task<IActionResult> PropertyWithMeals(int id)
         {
+            if (TempData.ContainsKey("PropertyId") && TempData["PropertyId"] != null)
+            {
+                id = (int)TempData["PropertyId"];
+            }
             var meals = await _MotelService.GetAllMealsByPropertyId(id);
             ViewBag.propid = id;
             return View(meals);
@@ -145,6 +149,30 @@ namespace MicroMotel.Web.Controllers
             await _MotelService.CreateNewMeal(mci);
 
             return RedirectToAction(nameof(PropertyWithMeals));
+        }
+
+        public async Task<IActionResult> DeleteMeal(int id,int propid)
+        {
+            await _MotelService.DeleteMeal(id);
+            TempData["PropertyId"] = propid;
+
+            return RedirectToAction(nameof(PropertyWithMeals));
+
+        }
+
+        public async Task<IActionResult> UpdateMeal(int id)
+        {
+            var meal = await _MotelService.GetMealById(id);
+
+            return View(meal);
+            
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateMeal(MealUpdateModel mum)
+        {
+            await _MotelService.UpdateMeal(mum);
+            return RedirectToAction(nameof(MealDetails), new { id = mum.Id });
         }
     }
 }

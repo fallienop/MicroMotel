@@ -29,6 +29,7 @@ namespace MicroMotel.Services.Motel.Controllers
             var meal=await _mealService.GetMealById(id);
             return CustomActionResult(meal);
         }
+        [Route("DeleteById/{id}")]
         [HttpDelete]
         public async Task<IActionResult> DeleteById(int id)
         {

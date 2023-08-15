@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewData["Title"] = "UpdateMeal";
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+
+@model MicroMotel.Web.Models.Motel.Meal.MealViewModel
+<form class="form-group" method="post">
+
+    @Html.HiddenFor(x=>x.PropertyId)
+    @Html.HiddenFor(x=>x.Id)
+
+    @Html.Label("Name")
+    <input type="text" name="Name" value="@Model.Name" class="form-control form-control-sm" />
+    <br />
+    @Html.Label("Price")
+    <input type="text" name="Price" value="@Model.Price" class="form-control form-control-sm" />
+    <br />
+
+    @Html.Label("Preperation Time")
+    <input type="text" name="PrepTime" value="@Model.PrepTime" class="form-control form-control-sm" />
+    <br />
+
+    @Html.Label("Description")
+    <br />
+    <textarea name="Description">@Model.Description</textarea>
+    <br />
+    <br />
+
+  
+
+
+    <button class="btn-success">Save</button>
+
+
+
+
+
+
+</form>
+

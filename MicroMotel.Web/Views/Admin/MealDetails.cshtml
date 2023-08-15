@@ -6,82 +6,58 @@
 
 
 @model MicroMotel.Web.Models.Motel.Meal.MealViewModel
-@{
-    ViewData["Title"] = "RoomDetails";
-    Layout = "~/Views/Shared/_adminLayout.cshtml";
-}
 
 <div class="container">
-    <h2>Room Details</h2>
-    <div class="room-details">
-        <div class="room-info">
-            <div class="room-label">Room ID:</div>
-            <div class="room-value">@Model.Id</div>
+    <h2>Meal Details</h2>
+    <div class="Meal-details">
+        <div class="Meal-info">
+            <div class="Meal-label">Meal ID:</div>
+            <div class="Meal-value">@Model.Id</div>
         </div>
-        <div class="room-info">
-            <div class="room-label">Room Number:</div>
-            <div class="room-value">@Model.Number</div>
+        <div class="Meal-info">
+            <div class="Meal-label">Prop ID:</div>
+            <div class="Meal-value">@Model.PropertyId</div>
         </div>
-        <div class="room-info">
-            <div class="room-label">Price:</div>
-            <div class="room-value">@Model.Price</div>
+        <div class="Meal-info">
+            <div class="Meal-label">Meal Name:</div>
+            <div class="Meal-value">@Model.Name</div>
         </div>
-        <div class="room-info">
-            <div class="room-label">Bed Count:</div>
-            <div class="room-value">@Model.BedCount</div>
+        <div class="Meal-info">
+            <div class="Meal-label">Price:</div>
+            <div class="Meal-value">@Model.Price</div>
         </div>
-        <div class="room-info">
-            <div class="room-label">Has Bath:</div>
-            <div class="room-value">@Model.HasBath</div>
+        <div class="Meal-info">
+            <div class="Meal-label">Preparation Time:</div>
+            <div class="Meal-value">@Model.PrepTime</div>
         </div>
-        <div class="room-info">
-            <div class="room-label">Has Fridge:</div>
-            <div class="room-value">@Model.HasFridge</div>
+
+        <div class="Meal-info">
+            <div class="Meal-label">Description:</div>
+            <div class="Meal-value">
+                <textarea class="form-control" rows="5" readonly>@Model.Description</textarea>
+            </div>
         </div>
-        <div class="room-info">
-            <div class="room-label">Has TV:</div>
-            <div class="room-value">@Model.HasTv</div>
-        </div>
-        <div class="room-info">
-            <div class="room-label">Has Network:</div>
-            <div class="room-value">@Model.HasNetwork</div>
-        </div>
-        <div class="room-info">
-            <div class="room-label">Has AC:</div>
-            <div class="room-value">@Model.HasAC</div>
-        </div>
-        <div class="room-info">
-            <div class="room-label">Floor:</div>
-            <div class="room-value">@Model.Floor</div>
-        </div>
-        <div class="room-info">
-            <div class="room-label">Status:</div>
-            <div class="room-value">@Model.Status</div>
-        </div>
-        <div class="room-info">
-            <div class="room-label">Property ID:</div>
-            <div class="room-value">@Model.PropertyId</div>
-        </div>
+      
         @*
         <div class="buttons-container">
         @{
         var id = Model.Id;
         var propid = Model.PropertyId;
         string link = id + "_" + propid;
-        <a href="/Admin/UpdateRoom/@link" class="btn btn-warning">Update</a>
-        <a href="/Admin/DeleteRoom/@Model.Id" class="btn btn-danger">Delete</a>
+        <a href="/Admin/UpdateMeal/@link" class="btn btn-warning">Update</a>
+        <a href="/Admin/DeleteMeal/@Model.Id" class="btn btn-danger">Delete</a>
         }
 
         </div>*@
 
-        <a href="/Admin/UpdateRoom?id=@Model.Id&propid=@Model.PropertyId" class="btn btn-warning">Update</a>
-        <a href="/Admin/DeleteRoom/@Model.Id" class="btn btn-danger">Delete</a>
+        <a href="/Admin/UpdateMeal/@Model.Id" class="btn btn-warning">Update</a>
+        <a href="/Admin/DeleteMeal?id=@Model.Id&propid=@Model.PropertyId" class="btn btn-danger">Delete</a>
 
     </div>
 </div>
 
 <style>
-    .room-details {
+    .Meal-details {
         border: 1px solid #ddd;
         padding: 20px;
         margin: 20px 0;
@@ -101,17 +77,17 @@
         margin-left: 60px; /* Add a little margin to the left */
     }
 
-    .room-info {
+    .Meal-info {
         display: flex;
         margin-bottom: 10px;
     }
 
-    .room-label {
+    .Meal-label {
         width: 120px;
         font-weight: bold;
     }
 
-    .room-value {
+    .Meal-value {
         flex: 1;
     }
 </style>

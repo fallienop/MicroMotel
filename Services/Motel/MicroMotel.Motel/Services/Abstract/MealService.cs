@@ -40,8 +40,9 @@ namespace MicroMotel.Services.Motel.Services.Abstract
             {
                 return Response<NoContent>.Fail("not found", 404);
             }
-            var r = _context.SaveChangesAsync();
-            if (r.Result > 0)
+            _context.Remove(meal);
+            var r = await _context.SaveChangesAsync();
+            if (r> 0)
             {
                 return Response<NoContent>.Success(200);
 

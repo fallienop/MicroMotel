@@ -150,7 +150,7 @@ namespace MicroMotel.Web.Services.Abstract
         }
         public async Task<bool> DeleteMeal(int id)
         {
-            var response = await _httpClient.DeleteAsync($"meal/{id}");
+            var response = await _httpClient.DeleteAsync($"meal/deletebyid/{id}");
             return response.IsSuccessStatusCode;    
         } 
         #endregion
