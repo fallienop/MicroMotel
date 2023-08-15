@@ -6,6 +6,7 @@ namespace MicroMotel.Web.Models.Motel.Property
     public class PropertyWithRoomsViewModel
     {
         public int Id { get; set; }
+        public string Number { get; set; }
 
         public decimal Price { get; set; }
         public byte BedCount { get; set; }

@@ -1,22 +1,23 @@
 ﻿
 @{
-    ViewData["Title"] = "AddRoom";
+    ViewData["Title"] = "UpdateRoom";
     Layout = "~/Views/Shared/_adminLayout.cshtml";
 }
-
+@model MicroMotel.Web.Models.Motel.Room.RoomViewModel
 <form class="form-group" method="post">
-     
-    @Html.Hidden("PropertyId")
+
+    @Html.HiddenFor(x=>x.PropertyId)
+    @Html.HiddenFor(x=>x.Id)
     @Html.Label("Price")
-    <input type="text" name="Price" class="form-control form-control-sm" />
-    <br /> 
-    
+    <input type="text" name="Price" class="form-control form-control-sm" value="@Model.Price" />
+    <br />
+
     @Html.Label("Room Number")
-    <input type="text" name="Number" class="form-control form-control-sm" />
+    <input type="text" name="Number" class="form-control form-control-sm" value="@Model.Number" />
     <br />
 
     @Html.Label("Bed Count")
-    <input type="text" name="BedCount" class="form-control form-control-sm" />
+    <input type="text" name="BedCount" class="form-control form-control-sm" / value="@Model.BedCount">
     <br />
 
     @Html.Label("Has Bath")
@@ -48,7 +49,7 @@
     <br />
 
     @Html.Label("Has AC")
-    <select class="form-control form-control-sm" name="HasAC">
+    <select class="form-control form-control-sm" name="HasAC" >
         <option value="true">Yes</option>
         <option value="false">No</option>
     </select>
@@ -75,4 +76,10 @@
     <br />
     <button class="btn-success">Save</button>
 
+
+
+
+
+
 </form>
+

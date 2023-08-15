@@ -28,7 +28,18 @@ namespace MicroMotel.Web.Services.Abstract
             var resp=await response.Content.ReadFromJsonAsync<Response<List<PropertyViewModel>>>();
             return resp.Data;
         }
-    
+
+        public async Task<PropertyViewModel> GetPropertybyId(int id)
+        {
+            var response = await _httpClient.GetAsync($"property/{id}");
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+            var r = await response.Content.ReadAsStringAsync();
+            var resp = await response.Content.ReadFromJsonAsync<Response<PropertyViewModel>>();
+            return resp.Data;
+        }
 
         public async Task<bool> CreateProperty(PropertyCreateInput pci)
         {
@@ -46,6 +57,8 @@ namespace MicroMotel.Web.Services.Abstract
             return response.IsSuccessStatusCode;
 
         }
+
+        
         #endregion
 
 

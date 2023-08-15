@@ -18,9 +18,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>
-                                #
-                            </th>
+                            
                             <th>
                                 Name
                             </th>
@@ -36,6 +34,7 @@
                             <th></th>
                             <th></th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,9 +43,7 @@
                             <tr>
 
 
-                                <td>
-                                    @item.Id
-                                </td>
+                           
 
                                 <td>
                                     @item.Name
@@ -62,7 +59,7 @@
                                 </td>
                                 <td><a href="#" class="btn btn-warning btn-sm">Update</a></td>
                                 <td><a href="#" class="btn btn-danger btn-sm">Delete</a></td>
-                                <td><a href="/Admin/PropertyWithRooms/@item.Id" class="btn btn-info btn-sm">Details</a></td>
+                                <td><a href="/Admin/PropertyDetails/@item.Id" class="btn btn-info btn-sm">Details</a></td>
                             </tr>
                         }
                     </tbody>

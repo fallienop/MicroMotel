@@ -2,6 +2,8 @@
 {
     public class RoomCreateDTO
     {
+        public string Number { get; set; }
+
         public decimal Price { get; set; }
         public byte BedCount { get; set; }
         public bool HasBath { get; set; }

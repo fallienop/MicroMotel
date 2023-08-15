@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewData["Title"] = "AddMeal";
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+
+@model MicroMotel.Web.Models.Motel.Meal.MealCreateInput
+<form class="form-group" method="post">
+
+    @Html.HiddenFor(x=>x.PropertyId)
+
+    @Html.Label("Name")
+    <input type="text" name="Name" class="form-control form-control-sm" />
+    <br />
+    @Html.Label("Price")
+    <input type="text" name="Price" class="form-control form-control-sm" />
+    <br />
+
+    @Html.Label("Preperation Time")
+    <input type="text" name="PrepTime" class="form-control form-control-sm" />
+    <br />
+
+    @Html.Label("Description")
+    <br />
+    <textarea name="Description"></textarea>
+    <br />
+    <br />
+    <button class="btn-success">Save</button>
+</form>
+
+<style>
+    /* Stil textarea */
+    textarea {
+        color: #000; /* Metin rengi */
+        font-size: 14px; /* Metin boyutu */
+        width: 100%; /* Genişlik ayarı */
+        height: 100px; /* Yükseklik ayarı */
+        padding: 8px; /* Kenar boşluğu */
+        border: 1px solid #ccc; /* Kenar çizgisi */
+        resize: both; /* Dikey boyutlandırmaya izin ver */
+    }
+</style>

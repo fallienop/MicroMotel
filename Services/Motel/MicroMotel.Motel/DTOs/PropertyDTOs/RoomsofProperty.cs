@@ -7,6 +7,7 @@ namespace MicroMotel.Services.Motel.DTOs.PropertyDTOs
     public class RoomsofProperty
     {
         public int Id { get; set; }
+        public string Number { get; set; }
 
         public decimal Price { get; set; }
         public byte BedCount { get; set; }
