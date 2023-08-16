@@ -25,9 +25,10 @@
     <textarea name="Description"></textarea>
     <br />
     <br />
-    <button class="btn-success">Save</button>
+    <button class="btn btn-success btn-sm">Save</button>
+    <span class="space-between-buttons"></span> <!-- Boşluk -->
+    <a href="/admin/propertywithmeals/@Model.PropertyId" class="btn btn-outline-dark btn-sm">Cancel</a>
 </form>
-
 <style>
     /* Stil textarea */
     textarea {
@@ -38,5 +39,10 @@
         padding: 8px; /* Kenar boşluğu */
         border: 1px solid #ccc; /* Kenar çizgisi */
         resize: both; /* Dikey boyutlandırmaya izin ver */
+    }
+
+    .space-between-buttons {
+        display: inline-block;
+        width: 10px; /* İstenilen genişliği ayarlayın */
     }
 </style>

@@ -148,7 +148,7 @@ namespace MicroMotel.Web.Controllers
         {
             await _MotelService.CreateNewMeal(mci);
 
-            return RedirectToAction(nameof(PropertyWithMeals));
+            return RedirectToAction(nameof(PropertyWithMeals),new {Id=mci.PropertyId});
         }
 
         public async Task<IActionResult> DeleteMeal(int id,int propid)
@@ -156,7 +156,7 @@ namespace MicroMotel.Web.Controllers
             await _MotelService.DeleteMeal(id);
             TempData["PropertyId"] = propid;
 
-            return RedirectToAction(nameof(PropertyWithMeals));
+            return RedirectToAction(nameof(PropertyWithMeals),new {Id=propid});
 
         }
 
@@ -164,15 +164,38 @@ namespace MicroMotel.Web.Controllers
         {
             var meal = await _MotelService.GetMealById(id);
 
+
             return View(meal);
             
         }
+
+        
 
         [HttpPost]
         public async Task<IActionResult> UpdateMeal(MealUpdateModel mum)
         {
             await _MotelService.UpdateMeal(mum);
-            return RedirectToAction(nameof(MealDetails), new { id = mum.Id });
+            return RedirectToAction(nameof(MealDetails), new { Id = mum.Id });
+        }
+
+
+        public async Task<IActionResult> DeleteProperty(int id)
+        {
+            await _MotelService.DeleteProperty(id);
+            return RedirectToAction(nameof(PropertyList));
+
+        }
+
+        public async Task<IActionResult> UpdateProperty(int id)
+        {
+            var prop = await _MotelService.GetPropertybyId(id);
+            return View(prop);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateProperty(PropertyUpdateModel pum)
+        {
+            await _MotelService.UpdateProperty(pum);
+            return RedirectToAction(nameof(PropertyDetails),new {Id=pum.Id});
         }
     }
 }

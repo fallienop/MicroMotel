@@ -46,6 +46,7 @@ namespace MicroMotel.Services.Motel.Controllers
             return CustomActionResult(resp);
         }
 
+        [Route("Delete/{id}")]
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {

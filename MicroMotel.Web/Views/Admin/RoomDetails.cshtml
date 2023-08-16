@@ -6,7 +6,13 @@
 }
 
 <div class="container">
-    <h2>Room Details</h2>
+
+    <div class="title-and-button-container">
+
+        <a class="btn btn-outline-behance btn-sm mr-2" style="float: left" href="/admin/PropertyWithRooms/@Model.PropertyId">←</a>
+        <h3 class="mb-0">Room Details</h3>
+
+    </div>
     <div class="room-details">
         <div class="room-info">
             <div class="room-label">Room ID:</div>
@@ -75,6 +81,17 @@
 </div>
 
 <style>
+
+    .title-and-button-container h3 {
+        margin-right: 20px; /* İstenilen boşluğu ayarlayın */
+    }
+
+    .title-and-button-container .btn {
+        width: 40px;
+        padding: 6px 7px;
+        margin-left: 10px; /*  Bu satırı kaldırın veya düşürün */
+    }
+
     .room-details {
         border: 1px solid #ddd;
         padding: 20px;

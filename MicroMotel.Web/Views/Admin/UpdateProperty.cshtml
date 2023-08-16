@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewData["Title"] = "UpdateProperty";
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+
+@model MicroMotel.Web.Models.Motel.Property.PropertyViewModel
+
+<form class="form-group" method="post">
+    @Html.HiddenFor(x=>x.Id)
+    @Html.Label("Name")
+    <input type="text" name="Name" value="@Model.Name" class="form-control form-control-sm" />
+    <br />
+    @Html.Label("Room Count")
+    <input type="text" name="RoomCount" value="@Model.RoomCount" class="form-control form-control-sm" />
+    <br />
+    @Html.Label("Floor Count")
+    <input type="text" name="FloorCount" value="@Model.FloorCount" class="form-control form-control-sm" />
+    <br />
+    @Html.Label("Has Parking")
+    <select class="form-control form-control-sm" name="HasParking">
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+
+    </select>
+    <br />
+
+    @Html.Label("Has OpenSpace")
+
+    <select class="form-control form-control-sm" name="HasOpenSpaces">
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+
+    </select>
+    <br />
+
+    @Html.Label("Address")
+    <div class="address-fields">
+        <input type="text" id="Address.City" name="Address.City" value="@Model.Address.City" class="form-control form-control-sm"  />
+        <input type="text" id="Address.District" name="Address.District" value="@Model.Address.District" class="form-control form-control-sm"  />
+        <input type="text" id="Address.Street" name="Address.Street" value="@Model.Address.Street" class="form-control form-control-sm"  />
+        <input type="text" id="Address.Building" name="Address.Building" value="@Model.Address.Building" class="form-control form-control-sm"  />
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+
+
+</form>
+
+<style>
+    .address-fields input {
+        margin-bottom: 5px; /* İstenilen boşluğu ayarlayın */
+    }
+</style>

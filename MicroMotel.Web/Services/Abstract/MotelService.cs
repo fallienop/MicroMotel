@@ -53,7 +53,7 @@ namespace MicroMotel.Web.Services.Abstract
         }
         public async Task<bool> DeleteProperty(int id)
         {
-            var response = await _httpClient.DeleteAsync($"property/{id}");
+            var response = await _httpClient.DeleteAsync($"property/delete/{id}");
             return response.IsSuccessStatusCode;
 
         }

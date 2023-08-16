@@ -8,12 +8,16 @@
 <div class="col-lg-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
-            <div class="title-and-button-container">
-                <h4 class="card-title">Meals</h4>
+            <div class="contt">
+                <a href="/Admin/PropertyDetails/@ViewBag.propid" class="bttn btn btn-outline-behance btn-sm mr-2">←</a>
+                <div class="title-and-button-container">
+                    <h4 class="card-title">Meals</h4>
+                </div>
                 <div class="action-buttons">
                     <a href="/Admin/AddMeal/@ViewBag.propid" class="btn btn-primary btn-sm">+ Add Meal</a>
                 </div>
             </div>
+         
 
             <div class="table-responsive">
                 <table class="table table-striped">
@@ -64,9 +68,23 @@
     </div>
 </div>
 <style>
-    .title-and-button-container {
+    .contt{
         display: flex;
         justify-content: space-between;
+       
+    }
+    .contt .title-and-button-container {
+        margin-right: 10px; /* İstenilen boşluğu ayarlayın */
+    }
+
+    .contt .bttn {
+        width: 40px;
+        padding: 6px 7px;
+        margin-left: 10px; /*  Bu satırı kaldırın veya düşürün */
+    }
+
+    .title-and-button-container {
+        display: flex;
         align-items: center;
         margin-bottom: 20px; /* Increase the margin to have more space between title and buttons */
     }
