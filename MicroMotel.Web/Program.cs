@@ -9,14 +9,17 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using MicroMotel.Web.Models.Reservation.RoomR;
 using MicroMotel.Web.Validators;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var requriedauthorizepolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
 {
-    opt.LoginPath = "/Auth/Signin";
+    opt.LoginPath = "/Auth/Signin"; 
     opt.ExpireTimeSpan = TimeSpan.FromDays(60);
     opt.SlidingExpiration = true;
+    
     opt.Cookie.Name = "micromotelcookie";
 });
 builder.Services.AddHttpContextAccessor();
@@ -48,7 +51,10 @@ builder.Services.AddHttpClient<ISignUpService, SignUpService>(opt =>
 }).AddHttpMessageHandler<CCTokenHandler>();
 //builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters() ;
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(opt =>
+{
+    opt.Filters.Add(new AuthorizeFilter(requriedauthorizepolicy));
+});
 
 builder.Services.AddHttpClient<IUserService, UserService>(opt =>
 {

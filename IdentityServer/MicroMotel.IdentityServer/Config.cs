@@ -20,7 +20,6 @@ namespace MicroMotel.IdentityServer
             new ApiResource("resource_payment"){Scopes={"payment_fullpermission"}}, 
             new ApiResource("resource_reservation"){Scopes={ "reservation_fullpermission"} },
             new ApiResource("resource_gateway"){Scopes={"gateway_fullpermission" } },
-            new ApiResource("resouce_admin"){Scopes={"admin_permission"}},
             new ApiResource(IdentityServerConstants.LocalApi.ScopeName)
         };
         public static IEnumerable<IdentityResource> IdentityResources =>
@@ -29,7 +28,8 @@ namespace MicroMotel.IdentityServer
                        new IdentityResources.Email(),
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                new IdentityResource(){Name="Roles",DisplayName="Roles",Description="User roles",UserClaims= new[]{"Roles"}}
+                new IdentityResource(){Name="Roles",DisplayName="Roles",Description="User roles",UserClaims= new[]{"Roles"}},
+                new IdentityResource{Name="Admin", DisplayName="Admin Role", UserClaims=new[]{"Admin"}}
                    };
 
         public static IEnumerable<ApiScope> ApiScopes =>
@@ -40,7 +40,6 @@ namespace MicroMotel.IdentityServer
                new ApiScope("payment_fullpermission","full permission for payment"),
                new ApiScope("reservation_fullpermission","full permission for reservation"),
                new ApiScope("gateway_fullpermission","full permission for gateway"),
-               new ApiScope("admin_permission","full permission for admin"),
                new ApiScope(IdentityServerConstants.LocalApi.ScopeName)
             };
 

@@ -75,7 +75,7 @@
 
 <li class="nav-item nav-profile dropdown">
     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-        <img src="~/skydash/images/faces/face28.jpg" alt="profile" />
+                    <img src="~/profile-icon-design-free-vector.jpg" alt="profile" />
     </a>
     <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
         @if (isAuthenticated)
@@ -86,23 +86,21 @@
             </a>
             <a class="dropdown-item" href="/Auth/Logout">
                 <i class="ti-power-off text-primary"></i>
-                Logout
+                Log out
             </a>
-            <a class="dropdown-item" href="/Auth/SignIn">
-                <i class="ti-user text-primary"></i>
-                Login
-            </a>
+     
 
-                        <a class="dropdown-item" href="/Auth/SignUp">
-                            <i class="ti-user text-primary"></i>
-                            SignUp
-                        </a>
+         
         }
         else
         {
-            <a class="dropdown-item" href="/Auth/Sign">
+                        <a class="dropdown-item" href="/Auth/SignUp">
+                            <i class="ti-user text-primary"></i>
+                            Sign up
+                        </a>
+            <a class="dropdown-item" href="/Auth/Signin">
                 <i class="ti-user text-primary"></i>
-                Login
+                Log in
             </a>
         }
     </div>

@@ -2,10 +2,14 @@
 using MicroMotel.Web.Models;
 using MicroMotel.Web.Models.BaseModels;
 using MicroMotel.Web.Services.Interface;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MicroMotel.Web.Controllers
 {
+    [AllowAnonymous]
     public class AuthController : Controller
     {
         private readonly IROPService _ropservice;
@@ -56,6 +60,14 @@ namespace MicroMotel.Web.Controllers
                 return View();
             }
             return RedirectToAction("Index", "Home");
+        }
+
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await _ropservice.RevokeRefreshToken();
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
     }
 }

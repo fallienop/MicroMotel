@@ -1,11 +1,13 @@
 ﻿using MicroMotel.Web.Models;
 using MicroMotel.Web.Models.BaseModels;
 using MicroMotel.Web.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace MicroMotel.Web.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
