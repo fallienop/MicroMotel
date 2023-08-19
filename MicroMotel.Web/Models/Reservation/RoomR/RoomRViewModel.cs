@@ -10,5 +10,8 @@ namespace MicroMotel.Web.Models.Reservation.RoomR
         public DateTime ReservStart { get; set; }
         public DateTime ReservEnd { get; set; }
         public ICollection<MealRViewModel>? MealRs { get; set; }
+        public string UserID { get; set; }
+        public string? UserName { get; set; }
+
     }
 }

@@ -1,0 +1,135 @@
+﻿
+@{
+    ViewData["Title"] = "RoomDetail";
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+@model MicroMotel.Web.Models.Motel.Room.RoomViewModel
+<div class="content-wrapper">
+    <div class="room-detail-container">
+
+        
+       
+
+
+        <h3><span style="font-family: arial, helvetica, sans-serif;"><strong>Room Number: @Model.Number</strong></span></h3>
+            <h5 style="font-family: arial, helvetica, sans-serif;color:@Model.Color">Status : @Model.StatusText</h5>
+        <ul>
+            <li><span style="font-family: arial, helvetica, sans-serif;">Price: @Model.Price$</span></li>
+            <li><span style="font-family: arial, helvetica, sans-serif;">Bed Count: @Model.BedCount</span></li>
+            <li><span style="font-family: arial, helvetica, sans-serif;">Floor: @Model.Floor</span></li>
+            <li>
+                <span style="font-family: arial, helvetica, sans-serif;">
+                    Bathroom: @if (Model.HasBath)
+                    {
+                        <text>Yes</text>
+                    }
+                    else
+                    {
+                        <text>No</text>
+                    }
+                </span>
+            </li>
+            <li>
+                <span style="font-family: arial, helvetica, sans-serif;">
+                    Fridge: @if (Model.HasFridge)
+                    {
+                        <text>Yes</text>
+                    }
+                    else
+                    {
+                        <text>No</text>
+                    }
+                </span>
+            </li>
+            <li>
+                <span style="font-family: arial, helvetica, sans-serif;">
+                    TV: @if (Model.HasTv)
+                    {
+                        <text>Yes</text>
+                    }
+                    else
+                    {
+                        <text>No</text>
+                    }
+                </span>
+            </li>
+            <li>
+                <span style="font-family: arial, helvetica, sans-serif;">
+                    Network: @if (Model.HasNetwork)
+                    {
+                        <text>Yes</text>
+                    }
+                    else
+                    {
+                        <text>No</text>
+                    }
+                </span>
+            </li>
+            <li>
+                <span style="font-family: arial, helvetica, sans-serif;">
+
+
+                    AC: @if (Model.HasAC)
+                    {
+                        <text>Yes</text>
+                    }
+                    else
+                    {
+                        <text>No</text>
+                    }
+
+                </span>
+            </li>
+            
+        </ul>
+               
+                  
+                 
+     <br />
+     <a href="/Reservation/Room?id=@Model.Id&propertyid=@Model.PropertyId" class="btn btn-outline-behance btn-sm">Reserve</a>
+        
+        
+  
+   </div>
+</div>
+
+<style>
+    .content-wrapper {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 20px;
+    }
+
+    .room-detail-container {
+    }
+
+    .room-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-radius: 8px 8px 0 0;
+       
+    }
+
+        .room-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+    .room-info {
+        margin-top: 20px;
+    }
+
+    .property-info h3, .room-features h3 {
+        color: #333;
+        margin: 0;
+        font-size: 20px;
+    }
+
+    .room-info p {
+        margin: 0;
+        font-size: 18px;
+    }
+</style>

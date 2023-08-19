@@ -20,6 +20,7 @@ namespace MicroMotel.IdentityServer
             new ApiResource("resource_payment"){Scopes={"payment_fullpermission"}}, 
             new ApiResource("resource_reservation"){Scopes={ "reservation_fullpermission"} },
             new ApiResource("resource_gateway"){Scopes={"gateway_fullpermission" } },
+            new ApiResource("resouce_admin"){Scopes={"admin_permission"}},
             new ApiResource(IdentityServerConstants.LocalApi.ScopeName)
         };
         public static IEnumerable<IdentityResource> IdentityResources =>
@@ -39,6 +40,7 @@ namespace MicroMotel.IdentityServer
                new ApiScope("payment_fullpermission","full permission for payment"),
                new ApiScope("reservation_fullpermission","full permission for reservation"),
                new ApiScope("gateway_fullpermission","full permission for gateway"),
+               new ApiScope("admin_permission","full permission for admin"),
                new ApiScope(IdentityServerConstants.LocalApi.ScopeName)
             };
 
@@ -48,10 +50,14 @@ namespace MicroMotel.IdentityServer
                 
                 new Client
                 {
+                    
                     ClientName="for non-registered users",
                     ClientSecrets={new Secret("nonregister".Sha512()) },
                    ClientId="nonregistered",
                    AllowedGrantTypes=GrantTypes.ClientCredentials,
+                   
+
+
                     AllowedScopes={IdentityServerConstants.LocalApi.ScopeName, "gateway_fullpermission", "motel_fullpermission", "photo_fullpermission" } 
                 } ,
                 new Client
@@ -60,6 +66,7 @@ namespace MicroMotel.IdentityServer
                     ClientId="forregistered",
                     ClientSecrets={new Secret ("register".Sha512()) },
                     AllowedGrantTypes=GrantTypes.ResourceOwnerPassword,
+                   
                     AllowedScopes={IdentityServerConstants.StandardScopes.OfflineAccess,IdentityServerConstants.LocalApi.ScopeName,IdentityServerConstants.StandardScopes.Profile,IdentityServerConstants.StandardScopes.Email,IdentityServerConstants.StandardScopes.OpenId, "payment_fullpermission", "reservation_fullpermission", "gateway_fullpermission"},
                     AllowOfflineAccess=true,
                     AccessTokenLifetime=3600,

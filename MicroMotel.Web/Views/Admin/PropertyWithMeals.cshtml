@@ -9,9 +9,13 @@
     <div class="card">
         <div class="card-body">
             <div class="contt">
+                <div class="cl">
                 <a href="/Admin/PropertyDetails/@ViewBag.propid" class="bttn btn btn-outline-behance btn-sm mr-2">←</a>
-                <div class="title-and-button-container">
+
                     <h4 class="card-title">Meals</h4>
+
+                </div>
+                <div class="title-and-button-container">
                 </div>
                 <div class="action-buttons">
                     <a href="/Admin/AddMeal/@ViewBag.propid" class="btn btn-primary btn-sm">+ Add Meal</a>
@@ -68,6 +72,17 @@
     </div>
 </div>
 <style>
+
+ /*   body, html {
+        margin: 0;
+    }*/
+    .cl
+    {
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+
     .contt{
         display: flex;
         justify-content: space-between;
@@ -89,10 +104,9 @@
         margin-bottom: 20px; /* Increase the margin to have more space between title and buttons */
     }
 
-    .card-title {
-        margin: 0;
-    }
-
+    .card .card-title {margin-bottom:0px;}
+    
+ 
     .action-buttons {
         display: flex;
         gap: 10px; /* Adjust the gap between the buttons */

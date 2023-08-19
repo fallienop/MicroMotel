@@ -11,6 +11,8 @@
             public DateTime ReservStart { get; set; }
             public DateTime ReservEnd { get; set; }
             public ICollection<MealRDTO>? MealRs { get; set; }
+             public string UserID { get; set; }
 
-        }
+
     }
+}

@@ -1,40 +1,46 @@
-﻿@{
-    ViewData["Title"] = "PropertyList";
+﻿
+@{
+    ViewData["Title"] = "AllRoomReservations";
     Layout = "~/Views/Shared/_adminLayout.cshtml";
-
 }
-@model List<MicroMotel.Web.Models.Motel.Property.PropertyViewModel>
+
+<h2>AllRoomReservations</h2>
+
+@model List<RoomRViewModel>
+
 <div class="col-lg-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
-            <div class="title-and-button-container">
+   @*         <div class="title-and-button-container">
                 <h4 class="card-title">Properities</h4>
 
                 <a href="/Admin/AddProperty" class="btn btn-primary btn-sm"> + Add Property </a>
-                
-            </div>
+
+            </div>*@
 
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            
                             <th>
-                                Name
+                                UserName
                             </th>
                             <th>
-                                District
+                                PropertyId
                             </th>
                             <th>
-                                Room Count
+                                RoomId
                             </th>
                             <th>
-                                Floor Count
+                                R.Start
+                            </th>
+                            <th>
+                                R.End
                             </th>
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th></th>
+                           
                         </tr>
                     </thead>
                     <tbody>
@@ -43,50 +49,33 @@
                             <tr>
 
 
-                           
+
 
                                 <td>
-                                    @item.Name
+                                    @item.UserID
                                 </td>
                                 <td>
-                                    @item.Address.District
+                                    @item.PropertyId
                                 </td>
                                 <td>
-                                    @item.RoomCount
+                                    @item.RoomId
                                 </td>
                                 <td>
-                                    @item.FloorCount
+                                    @item.ReservStart
+                                </td>
+                                <td>
+                                    @item.ReservEnd
                                 </td>
                                 <td><a href="/Admin/UpdateProperty/@item.Id" class="btn btn-warning btn-sm">Update</a></td>
                                 <td><a href="/Admin/DeleteProperty/@item.Id" class="btn btn-danger btn-sm">Delete</a></td>
-                                <td><a href="/Admin/PropertyDetails/@item.Id" class="btn btn-info btn-sm">Details</a></td>
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
 
-            <a href="/admin/AllRoomReservations" class="btn btn-outline-youtube btn-sm">Reservs</a>
+
         </div>
     </div>
 </div>
-<style>
-    .add-property-button {
-        text-align: right;
-        margin-top: 10px;
-        display: flex;
-        justify-content: flex-end;
-        background-color: rgba(255, 255, 255, 0);
-    }
 
-    .title-and-button-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-
-    .card-title {
-        margin: 0; /* Remove default margin to align better with the button */
-    }
-</style>

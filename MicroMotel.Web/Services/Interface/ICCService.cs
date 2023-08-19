@@ -1,7 +1,7 @@
-﻿namespace MicroMotel.Web.Services.Interface
-{
-    public interface ICCService
+﻿    namespace MicroMotel.Web.Services.Interface
     {
-        Task<string> GetToken();
+        public interface ICCService
+        {
+            Task<string> GetToken();
+        }
     }
-}

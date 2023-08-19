@@ -21,12 +21,27 @@ namespace MicroMotel.Web.Controllers
         {
             return View(await _motelService.GetAllPropertiesAsync());
         }
-        public async Task<IActionResult> Detail(int id)
+        public async Task<IActionResult> Rooms(int id)
         {
 
-            return View(_motelService.GetPropertyWithRoomsAsync(id));
+            return View(await _motelService.GetPropertyWithRoomsAsync(id));
         }
 
+        public async Task<IActionResult> Meals(int id)
+        {
+            return View(await _motelService.GetAllMealsByPropertyId(id));
+
+        }
+
+        public async Task<IActionResult> MealDetails(int id)
+        {
+            return View(await _motelService.GetMealById(id));
+        }
+        public async Task<IActionResult> RoomDetail(int id)
+        {
+            var room = await _motelService.GetRoomById(id);
+            return View(room);
+        }
         public IActionResult Privacy()
         {
             return View();

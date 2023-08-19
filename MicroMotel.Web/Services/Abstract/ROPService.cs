@@ -6,6 +6,7 @@ using MicroMotel.Web.Services.Interface;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 using System.Globalization;
@@ -24,12 +25,12 @@ namespace MicroMotel.Web.Services.Abstract
         #endregion
 
     
-        public ROPService(HttpClient httpClient, IHttpContextAccessor contextAccessor, ServiceURLs serviceURLs, ClientSettings clientSettings)
+        public ROPService(HttpClient httpClient, IHttpContextAccessor contextAccessor, IOptions<ServiceURLs> serviceURLs, IOptions<ClientSettings> clientSettings)
         {
             _httpClient = httpClient;
             _contextAccessor = contextAccessor;
-            _serviceURLs = serviceURLs;
-            _clientSettings = clientSettings;
+            _serviceURLs = serviceURLs.Value;
+            _clientSettings = clientSettings.Value;
         } 
     
 

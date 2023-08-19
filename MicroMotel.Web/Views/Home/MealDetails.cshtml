@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewData["Title"] = "MealDetails";
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+
+
+@model MicroMotel.Web.Models.Motel.Meal.MealViewModel
+<div class="content-wrapper">
+    <div class="room-detail-container">
+
+
+
+
+
+        <h3><span style="font-family: arial, helvetica, sans-serif;"><strong>Meal Name: @Model.Name</strong></span></h3>
+        <h5 style="font-family: arial, helvetica, sans-serif;">Price : @Model.Price</h5>
+        <ul>
+            <li><span style="font-family: arial, helvetica, sans-serif;">Preperation time: @Model.PrepTime</span></li>
+          
+            
+
+        </ul>
+
+        <p>Description : @Model.Description</p>
+
+
+
+
+
+
+    </div>
+</div>
+
+<style>
+    .content-wrapper {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 20px;
+    }
+
+    .room-detail-container {
+    }
+
+    .room-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-radius: 8px 8px 0 0;
+    }
+
+        .room-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+    .room-info {
+        margin-top: 20px;
+    }
+
+    .property-info h3, .room-features h3 {
+        color: #333;
+        margin: 0;
+        font-size: 20px;
+    }
+
+    .room-info p {
+        margin: 0;
+        font-size: 18px;
+    }
+</style>

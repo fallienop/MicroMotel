@@ -1,18 +1,25 @@
-﻿using MicroMotel.Web.Models.Motel.Meal;
+﻿using MicroMotel.Shared.Services;
+using MicroMotel.Web.Models.Motel.Meal;
 using MicroMotel.Web.Models.Motel.Property;
 using MicroMotel.Web.Models.Motel.Room;
 using MicroMotel.Web.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MicroMotel.Web.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class AdminController : Controller
     {
         private readonly IMotelService _MotelService;
+        private readonly IReservationService _reservationservice;
+        private readonly IUserService _userservice;
 
-        public AdminController(IMotelService motelService)
+        public AdminController(IMotelService motelService, IReservationService reservationservice, IUserService userservice)
         {
             _MotelService = motelService;
+            _reservationservice = reservationservice;
+            _userservice = userservice;
         }
 
         public async Task<IActionResult> PropertyList()
@@ -197,5 +204,20 @@ namespace MicroMotel.Web.Controllers
             await _MotelService.UpdateProperty(pum);
             return RedirectToAction(nameof(PropertyDetails),new {Id=pum.Id});
         }
+
+        public async Task<IActionResult> AllRoomReservations()
+        {
+            var reservs = await _reservationservice.GetAll();
+            //    reservs.ForEach(async (x) => x.UserName = (await _userservice.getusername(x.UserID)).UserName) ;
+            var username = await _userservice.getusername("979ea7d9-265e-456d-bf34-bd6157e8e60d");
+            return View(reservs);
+        }
+
+        public async Task<IActionResult> DeleteRoomReserv(int id)
+        {
+            await _reservationservice.DeleteRoomReservation(id);
+            return RedirectToAction(nameof(AllRoomReservations));
+        }
+
     }
 }

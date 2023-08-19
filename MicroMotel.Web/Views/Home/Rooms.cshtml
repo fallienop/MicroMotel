@@ -1,0 +1,61 @@
+﻿@{
+    ViewData["Title"] = "Rooms";
+    Layout = "~/Views/Shared/_mainlayout.cshtml";
+    var count = 0;
+}
+
+@model List<PropertyWithRoomsViewModel>
+
+<div class="card-container">
+    @if (Model.Any())
+    {
+        @foreach (var item in Model)
+        {
+            count++;
+            if (count == 1 || (count % 3) == 1)
+            {
+                @Html.Raw("<div class='row row-cols-1 row-cols-md-3 g-4 mb-2 card-row'>")
+            }
+
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Room Number : @item.Number</h5>
+                        <p class="card-text">@item.Price$</p>
+                        <h4 style="color:@item.Color">@item.StatusText</h4>
+                        <div>
+
+                            <a asp-controller="Home" asp-action="RoomDetail" class="btn btn-success" asp-route-id="@item.Id">Detail</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            if (count % 3 == 0)
+            {
+                @Html.Raw("</div>")
+            }
+        }
+    }
+    else
+    {
+        <h3>Room not exists</h3>
+    }
+</div>
+
+
+<style>
+    .card {
+        border: 1px solid #bbb; /* İnce gri kenarlık */
+        border-radius: 8px; /* Kartın köşelerini yuvarla */
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Hafif bir gölge */
+        transition: border-color 0.3s, box-shadow 0.3s; /* Kenarlık ve gölge için yumuşak geçiş */
+    }
+
+        .card:hover {
+            border-color: #333; /* Kenarlık rengini siyaha dönüştür */
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Hafif gölgeyi artır */
+        }
+
+</style>

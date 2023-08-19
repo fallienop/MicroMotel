@@ -1,6 +1,7 @@
 ﻿using IdentityModel;
 using MicroMotel.IdentityServer.DTOs;
 using MicroMotel.IdentityServer.Models;
+using MicroMotel.Shared.ControllerBases;
 using MicroMotel.Shared.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -13,7 +14,7 @@ namespace MicroMotel.IdentityServer.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : CustomControllerr
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
@@ -51,9 +52,21 @@ namespace MicroMotel.IdentityServer.Controller
             var res = await _userManager.CreateAsync(user, sud.Password);
             if (!res.Succeeded)
             {
-                return BadRequest(Response<NoContent>.Fail(res.Errors.Select(x=>x.Description).ToList(),404));
+                return BadRequest(Response<NoContent>.Fail(res.Errors.Select(x => x.Description).ToList(), 404));
             }
             return NoContent();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserName(string userid)
+        {
+            var user=await _userManager.FindByIdAsync(userid);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            return Ok(user.UserName);
+           
         }
     }
 }

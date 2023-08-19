@@ -9,5 +9,6 @@ namespace MicroMotel.Shared.Services
     public interface ISharedIdentityService
     {
         public string getUserId { get; }
+        //public string getUserName { get; }
     }
 }
