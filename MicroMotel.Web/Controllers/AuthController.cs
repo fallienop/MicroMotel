@@ -55,7 +55,7 @@ namespace MicroMotel.Web.Controllers
             {
                 return View();
             }
-            return RedirectToAction("Index", nameof(HomeController));
+            return RedirectToAction("Index", "Home");
         }
     }
 }

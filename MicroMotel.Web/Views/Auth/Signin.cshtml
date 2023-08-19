@@ -1,38 +1,85 @@
-﻿@{
-    ViewData["Title"] = "Signin";
+﻿@model SigninInput
+@{
+    Layout = null;
 }
-@model SigninInput
 
-<div class="row">
-    <div class="col-md-4 offset-4">
+<!DOCTYPE html>
+<html lang="en">
 
-        <div class="card">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Skydash Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="~/skydash/vendors/feather/feather.css">
+    <link rel="stylesheet" href="~/skydash/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="~/skydash/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="~/skydash/css/vertical-layout-light/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="~/skydash/images/favicon.png" />
+</head>
 
-            <div class="card-body">
-
-                <h5 class="card-title">User Login</h5>
-                <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+<body>
+    <div class="container-scroller">
+        <div class="container-fluid page-body-wrapper full-page-wrapper">
+            <div class="content-wrapper d-flex align-items-center auth px-0">
+                <div class="row w-100 mx-0">
+                    <div class="col-lg-4 mx-auto">
+                        <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+                            <div class="brand-logo">
+                                <img src="~/skydash/images/logo.svg" alt="logo">
+                            </div>
+                           
+                            <h6 class="font-weight-light">Sign in to make a reservation</h6>
+                            <form class="pt-3" method="post">
+                                <div class="form-group">
+                                    <input asp-for="UserName" type="text" class="form-control form-control-lg" id="exampleInputEmail1" name="UserName" placeholder="Username">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" asp-for="Password" class="form-control form-control-lg" id="exampleInputPassword1" name="Password" placeholder="Şifreniz">
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">Giriş Yap</button>
+                                </div>
+                                <div class="my-2 d-flex justify-content-between align-items-center">
+                                    <div class="form-check">
+                                        <label asp-for="IsRemember" class="form-check-label text-muted">
+                                            <input asp-for="IsRemember" type="checkbox" class="form-check-input">
+                                            Remember me
+                                        </label>
+                                    </div>
+                                </div>
+                               
+                                <div class="text-center mt-4 font-weight-light">
+                                    Don't you have an account? <a href="/Auth/SignUp" class="text-primary">Create</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-
+            <!-- content-wrapper ends -->
         </div>
+        <!-- page-body-wrapper ends -->
     </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="~/skydash/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="~/skydash/js/off-canvas.js"></script>
+    <script src="~/skydash/js/hoverable-collapse.js"></script>
+    <script src="~/skydash/js/template.js"></script>
+    <script src="~/skydash/js/settings.js"></script>
+    <script src="~/skydash/js/todolist.js"></script>
+    <!-- endinject -->
+</body>
 
-</div>
-
-<form asp-controller="Auth" asp-action="Signin" method="post">
-    <div class="mb-3">
-        <label asp-for="UserName" class="form-label"></label>
-        <input type="text" value="fallien" asp-for="UserName" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-        <span class="text-danger" asp-validation-for="UserName"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Password" class="form-label"></label>
-        <input type="password" value="1_Paroll0" asp-for="Password" class="form-control" id="exampleInputPassword1">
-        <span class="text-danger" asp-validation-for="Password"></span>
-    </div>
-    <div class="mb-3 form-check">
-        <input asp-for="IsRemember" type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label asp-for="IsRemember" class="form-check-label" for="exampleCheck1"></label>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+</html>
