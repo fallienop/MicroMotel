@@ -6,5 +6,7 @@ namespace MicroMotel.IdentityServer.Models
     public class ApplicationUser : IdentityUser
     {
         public string City { get; set; }
+
+        public decimal? Budget { get;set; }
     }
 }

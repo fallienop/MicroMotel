@@ -12,6 +12,7 @@ namespace MicroMotel.Web.Validators
             _reservationservice = reservationService;
             RuleFor(x => x.ReservStart).Must(minimumtoday).WithMessage("cannot be less than today");
             RuleFor(x=>x).Must(endbiggerthanstart).WithMessage("bruhhhh");
+            RuleFor(x=>x).Must(diff3hour).WithMessage("minimum 2 hour");
             RuleFor(x => x).MustAsync(overlappingcontrol).WithMessage("this room is already reserved for this time interval");
             
         }
@@ -27,7 +28,7 @@ namespace MicroMotel.Web.Validators
         }
         private bool diff3hour (RoomRCreateInput rrci)
         {
-            return rrci.ReservStart < rrci.ReservEnd.AddHours(2);
+            return rrci.ReservStart.AddHours(2) < rrci.ReservEnd;
         }
 
         private async Task<bool> overlappingcontrol (RoomRCreateInput rrci,CancellationToken cancellationToken)

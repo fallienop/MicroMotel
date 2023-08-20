@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MicroMotel.IdentityServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230728135839_initial")]
-    partial class initial
+    [Migration("20230820124100_budget")]
+    partial class budget
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,6 +28,9 @@ namespace MicroMotel.IdentityServer.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<decimal?>("Budget")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");

@@ -55,7 +55,7 @@ namespace MicroMotel.Web.Services.Abstract
         }
         public async Task<bool> DeleteRoomReservation(int id)
         {
-            var response = await _httpClient.DeleteAsync($"roomr/{id}");
+            var response = await _httpClient.DeleteAsync($"roomr/delete/{id}");
             return response.IsSuccessStatusCode;
         }
 
@@ -124,7 +124,7 @@ namespace MicroMotel.Web.Services.Abstract
 
         public async Task<bool> DeleteMealReservation(int id)
         {
-            var response = await _httpClient.DeleteAsync($"mealr/{id}");
+            var response = await _httpClient.DeleteAsync($"mealr/delete/{id}");
             return response.IsSuccessStatusCode;
         }
 

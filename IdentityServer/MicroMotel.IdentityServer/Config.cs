@@ -2,12 +2,15 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Security.Cryptography;
+using static IdentityServer4.IdentityServerConstants;
 
 namespace MicroMotel.IdentityServer
 {
@@ -20,7 +23,11 @@ namespace MicroMotel.IdentityServer
             new ApiResource("resource_payment"){Scopes={"payment_fullpermission"}}, 
             new ApiResource("resource_reservation"){Scopes={ "reservation_fullpermission"} },
             new ApiResource("resource_gateway"){Scopes={"gateway_fullpermission" } },
-            new ApiResource(IdentityServerConstants.LocalApi.ScopeName)
+            new ApiResource(
+        LocalApi.ScopeName,
+        "Local Api",
+        new [] { ClaimTypes.Role }
+    )
         };
         public static IEnumerable<IdentityResource> IdentityResources =>
                    new IdentityResource[]
@@ -28,8 +35,12 @@ namespace MicroMotel.IdentityServer
                        new IdentityResources.Email(),
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                new IdentityResource(){Name="Roles",DisplayName="Roles",Description="User roles",UserClaims= new[]{"Roles"}},
-                new IdentityResource{Name="Admin", DisplayName="Admin Role", UserClaims=new[]{"Admin"}}
+           new IdentityResource
+{
+    Name = "roles",
+    DisplayName = "Roles",
+    UserClaims = { ClaimTypes.Role }
+}
                    };
 
         public static IEnumerable<ApiScope> ApiScopes =>
@@ -46,18 +57,18 @@ namespace MicroMotel.IdentityServer
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
-                
+
                 new Client
                 {
-                    
+
                     ClientName="for non-registered users",
                     ClientSecrets={new Secret("nonregister".Sha512()) },
                    ClientId="nonregistered",
                    AllowedGrantTypes=GrantTypes.ClientCredentials,
-                   
 
 
-                    AllowedScopes={IdentityServerConstants.LocalApi.ScopeName, "gateway_fullpermission", "motel_fullpermission", "photo_fullpermission" } 
+
+                    AllowedScopes={IdentityServerConstants.LocalApi.ScopeName, "gateway_fullpermission", "motel_fullpermission", "photo_fullpermission" }
                 } ,
                 new Client
                 {
@@ -65,14 +76,14 @@ namespace MicroMotel.IdentityServer
                     ClientId="forregistered",
                     ClientSecrets={new Secret ("register".Sha512()) },
                     AllowedGrantTypes=GrantTypes.ResourceOwnerPassword,
-                   
-                    AllowedScopes={IdentityServerConstants.StandardScopes.OfflineAccess,IdentityServerConstants.LocalApi.ScopeName,IdentityServerConstants.StandardScopes.Profile,IdentityServerConstants.StandardScopes.Email,IdentityServerConstants.StandardScopes.OpenId, "payment_fullpermission", "reservation_fullpermission", "gateway_fullpermission"},
+
+                    AllowedScopes={"roles",IdentityServerConstants.StandardScopes.OfflineAccess,IdentityServerConstants.LocalApi.ScopeName,IdentityServerConstants.StandardScopes.Profile,IdentityServerConstants.StandardScopes.Email,IdentityServerConstants.StandardScopes.OpenId, "payment_fullpermission", "reservation_fullpermission", "gateway_fullpermission"},
                     AllowOfflineAccess=true,
                     AccessTokenLifetime=3600,
                     RefreshTokenExpiration=TokenExpiration.Absolute,
                     AbsoluteRefreshTokenLifetime=(int)(DateTime.Now.AddDays(60)-DateTime.Now).TotalSeconds,
                         RefreshTokenUsage=TokenUsage.ReUse
-
+    
                 }
             };
     }

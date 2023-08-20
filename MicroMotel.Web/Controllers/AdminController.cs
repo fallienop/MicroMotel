@@ -1,25 +1,33 @@
-﻿using MicroMotel.Shared.Services;
+﻿using MicroMotel.Shared.DTOs;
+using MicroMotel.Shared.Services;
+using MicroMotel.Web.Attributes;
 using MicroMotel.Web.Models.Motel.Meal;
 using MicroMotel.Web.Models.Motel.Property;
 using MicroMotel.Web.Models.Motel.Room;
+using MicroMotel.Web.Models.Reservation.RoomR;
 using MicroMotel.Web.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using System.Net.Http;
 
 namespace MicroMotel.Web.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    [DynamicAuthorize("Admin")]
     public class AdminController : Controller
     {
         private readonly IMotelService _MotelService;
         private readonly IReservationService _reservationservice;
-        private readonly IUserService _userservice;
+        private readonly HttpClient _httpClient;
+        private readonly ISharedIdentityService _sharedIdentityService;
 
-        public AdminController(IMotelService motelService, IReservationService reservationservice, IUserService userservice)
+
+        public AdminController(IMotelService motelService, IReservationService reservationservice, HttpClient httpClient, ISharedIdentityService sharedIdentityService)
         {
             _MotelService = motelService;
             _reservationservice = reservationservice;
-            _userservice = userservice;
+            _httpClient = httpClient;
+            _sharedIdentityService = sharedIdentityService;
         }
 
         public async Task<IActionResult> PropertyList()
@@ -208,8 +216,15 @@ namespace MicroMotel.Web.Controllers
         public async Task<IActionResult> AllRoomReservations()
         {
             var reservs = await _reservationservice.GetAll();
-            //    reservs.ForEach(async (x) => x.UserName = (await _userservice.getusername(x.UserID)).UserName) ;
-            var username = await _userservice.getusername("979ea7d9-265e-456d-bf34-bd6157e8e60d");
+
+            reservs.ForEach(async(x) =>
+            {
+                var response = await _httpClient.GetAsync($"http://localhost:5001/api/user/{x.UserID}");
+               // response.EnsureSuccessStatusCode();
+               var s= await response.Content.ReadAsStringAsync();
+                x.UserName = s;
+            });
+          
             return View(reservs);
         }
 
@@ -219,5 +234,9 @@ namespace MicroMotel.Web.Controllers
             return RedirectToAction(nameof(AllRoomReservations));
         }
 
+
+
     }
 }
+
+

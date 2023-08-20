@@ -2,10 +2,12 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityModel;
 using IdentityServer4;
 using MicroMotel.IdentityServer.Data;
 using MicroMotel.IdentityServer.Models;
 using MicroMotel.IdentityServer.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +15,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using static IdentityServer4.IdentityServerConstants;
+using static System.Net.WebRequestMethods;
 
 namespace MicroMotel.IdentityServer
 {
@@ -29,6 +37,9 @@ namespace MicroMotel.IdentityServer
 
         public void ConfigureServices(IServiceCollection services)
         {
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+            services.AddScoped<ClaimsFactory>();    
             services.AddLocalApiAuthentication();
             services.AddControllersWithViews();
 
@@ -37,8 +48,7 @@ namespace MicroMotel.IdentityServer
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
+                .AddDefaultTokenProviders().AddClaimsPrincipalFactory<ClaimsFactory>();
             var builder = services.AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
@@ -58,18 +68,53 @@ namespace MicroMotel.IdentityServer
             builder.AddResourceOwnerValidator<IdentityServicePasswordValidator>();
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
-                
-            services.AddAuthentication()
-                .AddGoogle(options =>
+
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                //options.Authority = "http://localhost:5001"; // IdentityServer's base URL
+                //options.RequireHttpsMetadata = false; // For development purposes only, use HTTPS in production
+                //options.Audience = LocalApi.ScopeName; // The name of your API resource
+                #region problemler
+                //options.TokenValidationParameters = new TokenValidationParameters
+                //{
+
+                //    RoleClaimType = JwtClaimTypes.Role,
+
+                //}; 
+                #endregion
+
+                options.Events = new JwtBearerEvents
                 {
-                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                    
-                    // register your IdentityServer with Google at https://console.developers.google.com
-                    // enable the Google+ API
-                    // set the redirect URI to https://localhost:5001/signin-google
-                    options.ClientId = "copy client ID from Google here";
-                    options.ClientSecret = "copy client secret from Google here";
-                });
+                    OnTokenValidated = async context =>
+                    {
+                        var claims =  context.Principal.Claims.ToList();
+
+                        // Örnek: JWT içerisindeki "role" claim'ini haritalama
+                        var roleClaim = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
+                        if (roleClaim != null)
+                        {
+                            var identity = context.Principal.Identity as ClaimsIdentity;
+                            identity.AddClaim(new Claim(ClaimTypes.Role, roleClaim.Value));
+                        }
+
+                        // Diğer claim haritalamalarını buraya ekleyebilirsiniz
+                    }
+                };
+            }).AddGoogle(options =>
+            {
+                options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+
+                // register your IdentityServer with Google at https://console.developers.google.com
+                // enable the Google+ API
+                // set the redirect URI to https://localhost:5001/signin-google
+                options.ClientId = "copy client ID from Google here";
+                options.ClientSecret = "copy client secret from Google here";
+            }); 
         }
 
         public void Configure(IApplicationBuilder app)

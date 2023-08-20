@@ -15,6 +15,7 @@ namespace MicroMotel.Web.Services.Abstract
 
         public async Task<UserViewModel> GetUser()
         {
+            var res = await _httpClient.GetAsync("api/user/getuser");
             return await _httpClient.GetFromJsonAsync<UserViewModel>("api/user/getuser");
         }
 

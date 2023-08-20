@@ -39,7 +39,6 @@
                             </th>
                             <th></th>
                             <th></th>
-                            <th></th>
                            
                         </tr>
                     </thead>
@@ -52,7 +51,7 @@
 
 
                                 <td>
-                                    @item.UserID
+                                    @item.UserName
                                 </td>
                                 <td>
                                     @item.PropertyId
@@ -61,13 +60,12 @@
                                     @item.RoomId
                                 </td>
                                 <td>
-                                    @item.ReservStart
+                                    @item.ReservStart.ToString("yyyy-MM-dd HH:mm")
                                 </td>
                                 <td>
-                                    @item.ReservEnd
+                                    @item.ReservEnd.ToString("yyyy-MM-dd HH:mm")
                                 </td>
-                                <td><a href="/Admin/UpdateProperty/@item.Id" class="btn btn-warning btn-sm">Update</a></td>
-                                <td><a href="/Admin/DeleteProperty/@item.Id" class="btn btn-danger btn-sm">Delete</a></td>
+                                <td><a href="/Admin/DeleteRoomReserv/@item.Id" class="btn btn-danger btn-sm">Delete</a></td>
                             </tr>
                         }
                     </tbody>

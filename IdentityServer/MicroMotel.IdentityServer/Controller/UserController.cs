@@ -6,6 +6,7 @@ using MicroMotel.Shared.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,6 +40,8 @@ namespace MicroMotel.IdentityServer.Controller
             return Ok(new { Id = user.Id, UserName = user.UserName, City = user.City, Email = user.Email });
 
         }
+
+    
 
         [HttpPost]
         public async Task<IActionResult> NewUser(SignUpDTO sud)

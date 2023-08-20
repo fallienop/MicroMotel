@@ -35,22 +35,41 @@ namespace MicroMotel.Shared.Services
 
         }
 
-        //public string getUserName
-        //{
-        //    get
-        //    {
-        //        var user = _httpcontextaccessor.HttpContext?.User;
-        //        if (user != null)
-        //        {
-        //            var userNameClaim = user.FindFirst("username"); // Kullanıcı adının depolandığı anahtar
-        //            if (userNameClaim != null)
-        //            {
-        //                return userNameClaim.Value;
-        //            }
-        //        }
+        public string getUserName
+        {
+            get
+            {
+                var user = _httpcontextaccessor.HttpContext?.User;
+                if (user != null)
+                {
+                    var userNameClaim = user.FindFirst("name"); // Kullanıcı adının depolandığı anahtar
+                    if (userNameClaim != null)
+                    {
+                        return userNameClaim.Value;
+                    }
+                }
 
-        //        return null;
-        //    }
-        //}
+                return null;
+            }
+        }
+        public string getUserRole
+        {
+            get
+            {
+                var user = _httpcontextaccessor.HttpContext?.User;
+                if (user != null)
+                {
+                    var userNameClaim = user.FindFirst("http://schemas.microsoft.com/ws/2008/06/identity/claims/role"); // Kullanıcı adının depolandığı anahtar
+                    if (userNameClaim != null)
+                    {
+                        return userNameClaim.Value;
+                    }
+                }
+
+                return null;
+            }
+        }
+
+
     }
 }

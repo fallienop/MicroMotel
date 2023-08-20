@@ -58,6 +58,7 @@ namespace MicroMotel.Services.Reservation.Controllers
 
         }
         [HttpDelete]
+        [Route("Delete/{id}")]
         public async Task<IActionResult> Remove(int id)
         {
             var res = await _roomRService.DeleteRoomReservation(id);
