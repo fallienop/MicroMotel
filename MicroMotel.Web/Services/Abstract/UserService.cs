@@ -15,17 +15,23 @@ namespace MicroMotel.Web.Services.Abstract
 
         public async Task<UserViewModel> GetUser()
         {
-            var res = await _httpClient.GetAsync("api/user/getuser");
-            return await _httpClient.GetFromJsonAsync<UserViewModel>("api/user/getuser");
+           
+            return await _httpClient.GetFromJsonAsync<UserViewModel>($"api/user/getuser");
         }
 
-        public async Task<string> getusername(string userid)
+        public async Task<string> getusername(string id)
         {
-            //var res=await _httpClient.GetAsync($"api/user/GetUserName/{userid}");
+            var response = await _httpClient.GetAsync($"api/User/GetUserName/{id}");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
 
-            //return res.StatusCode.ToString();
-            return ""; 
 
+        }
+
+        public async Task<string> GetUserRole()
+        {
+            var response = await _httpClient.GetAsync($"api/User/getuserrole/role");
+            return await response.Content.ReadAsStringAsync();
         }
     }
 }   

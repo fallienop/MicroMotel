@@ -19,15 +19,16 @@ namespace MicroMotel.Web.Controllers
         private readonly IMotelService _MotelService;
         private readonly IReservationService _reservationservice;
         private readonly HttpClient _httpClient;
-        private readonly ISharedIdentityService _sharedIdentityService;
+       
+        private readonly IUserService _userservice;
 
-
-        public AdminController(IMotelService motelService, IReservationService reservationservice, HttpClient httpClient, ISharedIdentityService sharedIdentityService)
+        public AdminController(IMotelService motelService, IReservationService reservationservice, HttpClient httpClient, IUserService userservice)
         {
             _MotelService = motelService;
             _reservationservice = reservationservice;
             _httpClient = httpClient;
-            _sharedIdentityService = sharedIdentityService;
+            
+            _userservice = userservice;
         }
 
         public async Task<IActionResult> PropertyList()
@@ -216,15 +217,13 @@ namespace MicroMotel.Web.Controllers
         public async Task<IActionResult> AllRoomReservations()
         {
             var reservs = await _reservationservice.GetAll();
-
-            reservs.ForEach(async(x) =>
+            foreach (var reservation in reservs)
             {
-                var response = await _httpClient.GetAsync($"http://localhost:5001/api/user/{x.UserID}");
-               // response.EnsureSuccessStatusCode();
-               var s= await response.Content.ReadAsStringAsync();
-                x.UserName = s;
-            });
-          
+                reservation.UserName = await _userservice.getusername(reservation.UserID);
+            }
+
+
+
             return View(reservs);
         }
 

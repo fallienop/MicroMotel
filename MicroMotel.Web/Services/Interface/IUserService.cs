@@ -4,7 +4,8 @@ namespace MicroMotel.Web.Services.Interface
 {
     public interface IUserService
     {
-        Task<string> getusername(string userid);
+        Task<string> getusername(string id);
         Task<UserViewModel> GetUser();
+        Task<string> GetUserRole();
     }
 }
