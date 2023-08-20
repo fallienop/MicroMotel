@@ -7,5 +7,7 @@ namespace MicroMotel.Web.Services.Interface
         Task<string> getusername(string id);
         Task<UserViewModel> GetUser();
         Task<string> GetUserRole();
+        Task<List<UserViewModel>> GetAllUsers();
+        Task<bool> ChangeRole(string id);
     }
 }

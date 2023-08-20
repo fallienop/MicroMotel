@@ -19,7 +19,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     opt.LoginPath = "/Auth/Signin"; 
     opt.ExpireTimeSpan = TimeSpan.FromDays(60);
     opt.SlidingExpiration = true;
-    
+    opt.AccessDeniedPath = "/ErrorPage/unauthorized";
     opt.Cookie.Name = "micromotelcookie";
 });
 builder.Services.AddHttpContextAccessor();

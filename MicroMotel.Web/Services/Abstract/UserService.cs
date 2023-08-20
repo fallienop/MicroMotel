@@ -33,5 +33,18 @@ namespace MicroMotel.Web.Services.Abstract
             var response = await _httpClient.GetAsync($"api/User/getuserrole/role");
             return await response.Content.ReadAsStringAsync();
         }
+
+        public async Task<List<UserViewModel>> GetAllUsers()
+        {
+            return await _httpClient.GetFromJsonAsync<List<UserViewModel>>("api/User/getallusers/users");
+        }
+
+        public async Task<bool> ChangeRole(string id)
+        {
+            var response = await _httpClient.PutAsync($"/api/User/ChangeRole/changerole/{id}",null);
+          return  response.IsSuccessStatusCode;
+          
+
+        }
     }
 }   

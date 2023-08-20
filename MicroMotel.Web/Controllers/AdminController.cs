@@ -194,7 +194,7 @@ namespace MicroMotel.Web.Controllers
             return RedirectToAction(nameof(MealDetails), new { Id = mum.Id });
         }
 
-
+        
         public async Task<IActionResult> DeleteProperty(int id)
         {
             await _MotelService.DeleteProperty(id);
@@ -233,7 +233,20 @@ namespace MicroMotel.Web.Controllers
             return RedirectToAction(nameof(AllRoomReservations));
         }
 
+        [DynamicAuthorize("Supervisor")]
 
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var res =await _userservice.GetAllUsers();
+            return View(res);   
+        }
+        [DynamicAuthorize("Supervisor")]
+
+        public async Task<IActionResult> ChangeRole(string id)
+        {
+            var res =await _userservice.ChangeRole(id);
+            return RedirectToAction(nameof(GetAllUsers));   
+        }
 
     }
 }

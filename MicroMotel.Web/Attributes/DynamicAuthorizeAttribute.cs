@@ -25,6 +25,8 @@ namespace MicroMotel.Web.Attributes
         private readonly string _requiredRole;
 
         public DynamicAuthorizeFilter(ISharedIdentityService sharedIdentityService, IUserService userService, string requiredRole)
+        
+        
         {
             _sharedIdentityService = sharedIdentityService;
             _userService = userService;
@@ -35,11 +37,15 @@ namespace MicroMotel.Web.Attributes
         
         {
             var role= await _userService.GetUserRole();
+            var roles = role.Split(',');
             Regex rgx = new Regex("[^a-zA-Z0-9 -]");
-            role = rgx.Replace(role, "");
-            
+            for (int i = 0; i < roles.Length; i++)
+            {
+                roles[i] = rgx.Replace(roles[i], "");
+            }
 
-            if (role != _requiredRole)
+
+            if (!roles.Contains(_requiredRole))
             {
                 context.Result = new ForbidResult();
                 return;

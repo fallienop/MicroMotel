@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewData["Title"] = "GetAllUsers";
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+
+@model List<UserViewModel>
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="title-and-button-container">
+                <h4 class="card-title">Users</h4>
+
+                @*<a href="/Admin/AddProperty" class="btn btn-primary btn-sm"> + Add Property </a>*@
+
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+
+                            <th>
+                                Id
+                            </th>
+                            <th>
+                                Username
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                            <th>
+                                City
+                            </th>
+                           <th>
+                               Roles
+                           </th>
+                         <th>#</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+
+
+
+                                <td>
+                                    @item.Id
+                                </td>
+                                <td>
+                                    @item.UserName
+                                </td>
+                                <td>
+                                    @item.Email
+                                </td>
+                                <td>
+                                    @item.City
+                                </td>
+                              <td>
+                                  @if(@item.Roles.Any()){
+                                    @item.Roles.Aggregate((a, b) => a + ", " + b);
+                                      }
+
+                                </td>
+                                <td>
+                                    <a class="btn btn-outline-dribbble btn-sm" href="/admin/changerole/@item.Id">Change Role</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <a href="/admin/AllRoomReservations" class="btn btn-outline-youtube btn-sm">Reservs</a>
+        </div>
+    </div>
+</div>
+<style>
+    .add-property-button {
+        text-align: right;
+        margin-top: 10px;
+        display: flex;
+        justify-content: flex-end;
+        background-color: rgba(255, 255, 255, 0);
+    }
+
+    .title-and-button-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .card-title {
+        margin: 0; /* Remove default margin to align better with the button */
+    }
+</style>
