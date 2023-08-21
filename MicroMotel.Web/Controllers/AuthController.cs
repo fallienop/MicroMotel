@@ -14,11 +14,13 @@ namespace MicroMotel.Web.Controllers
     {
         private readonly IROPService _ropservice;
         private readonly ISignUpService _signupservice;
+        private readonly IUserService _userService;
 
-        public AuthController(IROPService ropservice, ISignUpService signupservice)
+        public AuthController(IROPService ropservice, ISignUpService signupservice, IUserService userService)
         {
             _ropservice = ropservice;
             _signupservice = signupservice;
+           _userService = userService;
         }
 
         public IActionResult Signin()
@@ -61,13 +63,19 @@ namespace MicroMotel.Web.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
-
-
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             await _ropservice.RevokeRefreshToken();
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
+
+        public async Task<IActionResult> getusersets()
+        {
+            var resp = await _userService.GetUser();
+            return View(resp);
+        }
+
+        
     }
 }

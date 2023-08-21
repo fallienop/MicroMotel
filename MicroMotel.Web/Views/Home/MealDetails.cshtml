@@ -24,8 +24,20 @@
 
         <p>Description : @Model.Description</p>
 
+        <script>
+            function customBackFunction() {
+                // Yapmak istediğiniz işlemleri burada gerçekleştirin
+                console.log("Özel geri tuşu işlevi çalıştı!");
+                // Örneğin, istediğiniz sayfaya yönlendirme yapabilirsiniz
+                // window.location.href = "istenenSayfaUrlsi";
+            }
 
-
+            window.addEventListener('popstate', function (event) {
+                // Tarayıcı geri tuşuna basıldığında tetiklenecek işlemler burada yapılır
+                window.location.href="/home/index";
+                customBackFunction();
+            });
+        </script>
 
 
 

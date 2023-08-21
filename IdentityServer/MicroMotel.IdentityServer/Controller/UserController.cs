@@ -40,6 +40,7 @@ namespace MicroMotel.IdentityServer.Controller
                 return BadRequest();
             }
             var user = await _userManager.FindByIdAsync(useridclaim.Value);
+           
             if (user == null)
             {
                 return BadRequest();
@@ -47,19 +48,77 @@ namespace MicroMotel.IdentityServer.Controller
             var role = await _userManager.GetRolesAsync(user);
             return Ok(new { Id = user.Id, UserName = user.UserName, City = user.City, Email = user.Email });
 
+
+        }
+        [HttpDelete]
+        public async Task<IActionResult> removeaccount(string id)
+        {
+            var useridclaim = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub);
+            var user = await _userManager.FindByIdAsync(useridclaim.Value);
+
+            var res = await _userManager.DeleteAsync(user);
+            
+            if (res.Succeeded)
+            {
+                return Ok();
+            }
+
+            else
+            {
+                return BadRequest();
+            }
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdatePassword(string oldpassword,string newpassword)
+        {
+            var useridclaim = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub);
+            var user = await _userManager.FindByIdAsync(useridclaim.Value);
+         var res=   await _userManager.ChangePasswordAsync(user, oldpassword, newpassword);
+            if (res.Succeeded)
+            {
+                return Ok();
+            }
 
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser(UserUpdateDTO userupdate)
+        {
+            var useridclaim = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub);
+            var user = await _userManager.FindByIdAsync(useridclaim.Value);
+            user.UserName = userupdate.Username;
+            user.City = userupdate.City;
+            user.Email = userupdate.Email;
+
+           var res= await _userManager.UpdateAsync(user);
+            if (res.Succeeded)
+            {
+                return Ok();
+            }
+
+            else
+            {
+                return BadRequest();
+            }
+
+        }
 
         [HttpPost]
         public async Task<IActionResult> NewUser(SignUpDTO sud)
         {
+            
             var user = new ApplicationUser()
             {
                 UserName = sud.Username,
                 City = sud.City,
                 Email = sud.Email
             };
+            
             var res = await _userManager.CreateAsync(user, sud.Password);
             if (!res.Succeeded)
             {
@@ -67,6 +126,8 @@ namespace MicroMotel.IdentityServer.Controller
             }
             return NoContent();
         }
+
+        
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserName(string id)
