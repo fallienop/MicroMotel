@@ -1,6 +1,7 @@
 ﻿using MicroMotel.Shared.DTOs;
 using MicroMotel.Web.Models.BaseModels;
 using MicroMotel.Web.Models.Motel.Meal;
+using MicroMotel.Web.Models.Reservation.MealR;
 using MicroMotel.Web.Models.Reservation.RoomR;
 using MicroMotel.Web.Services.Interface;
 
@@ -48,10 +49,11 @@ namespace MicroMotel.Web.Services.Abstract
             var roomrs = await response.Content.ReadFromJsonAsync<Response<List<RoomRViewModel>>>();
             return roomrs.Data;
         }
-        public async Task<bool> NewRoomReservation(RoomRCreateInput input)
+        public async Task<int> NewRoomReservation(RoomRCreateInput input)
         {
             var response = await _httpClient.PostAsJsonAsync("roomr",input);
-            return response.IsSuccessStatusCode;
+            var ints = await response.Content.ReadFromJsonAsync<Response<int>>();
+            return ints.Data;
         }
         public async Task<bool> DeleteRoomReservation(int id)
         {
@@ -116,7 +118,7 @@ namespace MicroMotel.Web.Services.Abstract
             var mealrs = await response.Content.ReadFromJsonAsync<Response<MealViewModel>>();
             return mealrs.Data;
         }
-        public async Task<bool> NewMealReservation(MealCreateInput input)
+        public async Task<bool> NewMealReservation(MealRCreateInput input)
         {
             var response = await _httpClient.PostAsJsonAsync("mealr", input);
             return response.IsSuccessStatusCode;

@@ -1,0 +1,63 @@
+﻿@using MicroMotel.Web.Models.Motel.Meal;
+
+@{
+    ViewData["Title"] = "MealR";
+    Layout = "~/Views/Shared/_mainlayout.cshtml";
+}
+
+@model MicroMotel.Web.Models.Reservation.MealR.MealRCreateInput
+
+
+<form asp-controller="Reservation" asp-action="MealR" method="post">
+
+    @Html.HiddenFor(x=>x.RoomRId)
+   
+    @*   <div class="form-group">
+    <label for="RoomId">Room:</label>
+    <select class="form-control" asp-for="RoomId">
+    <!-- Populate room options here -->
+    </select>
+    </div>*@
+
+    <div class="form-group">
+        <label for="ReservationDate">Meal Reservation Date and Time:</label>
+        <input type="datetime-local" class="form-control" asp-for="ReservationDate" format-value="yyyy-MM-ddTHH:mm" />
+    </div>
+
+  
+    @{
+        var rr = ViewData["meals"] as List<MealViewModel>;
+    }
+   
+    @if (rr != null && rr.Any())
+    {
+        <div class="form-group">
+            <label asp-for="MealId">Meals:</label>
+            <select class="form-control" asp-for="MealId">
+
+                @foreach (var meal in rr)
+                {
+                    <option value="@meal.Id">@meal.Name</option>
+                }
+            </select>
+              
+            
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">Create Reservation</button>
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (var modelState in ViewData.ModelState.Values)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                }
+            </ul>
+        </div>
+    }
+</form>

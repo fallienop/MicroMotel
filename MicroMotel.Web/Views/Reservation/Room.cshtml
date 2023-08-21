@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Room";
     Layout = "~/Views/Shared/_adminLayout.cshtml";
 }
@@ -10,28 +9,28 @@
 
 
 <form asp-controller="Reservation" asp-action="Room" method="post">
-    
-     @Html.HiddenFor(x=>x.PropertyId)
-     @Html.HiddenFor(x=>x.RoomId)
-     @Html.HiddenFor(x=>x.UserID)
- @*   <div class="form-group">
-        <label for="RoomId">Room:</label>
-        <select class="form-control" asp-for="RoomId">
-            <!-- Populate room options here -->
-        </select>
+
+    @Html.HiddenFor(x=>x.PropertyId)
+    @Html.HiddenFor(x=>x.RoomId)
+    @Html.HiddenFor(x=>x.UserID)
+    @*   <div class="form-group">
+    <label for="RoomId">Room:</label>
+    <select class="form-control" asp-for="RoomId">
+    <!-- Populate room options here -->
+    </select>
     </div>*@
 
     <div class="form-group">
         <label for="ReservStart">Reservation Start Date and Time:</label>
-        <input type="datetime-local" class="form-control" asp-for="ReservStart" format-value="yyyy-MM-ddTHH:mm"  />
+        <input type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" asp-for="ReservStart" format-value="yyyy-MM-ddTHH:mm" />
     </div>
 
     <div class="form-group">
         <label for="ReservEnd">Reservation End Date and Time:</label>
-        <input type="datetime-local" class="form-control" asp-for="ReservEnd" format-value="yyyy-MM-ddTHH:mm" />
+        <input type="datetime-local" value="@DateTime.Now.AddHours(2).ToString("yyyy-MM-ddTHH:mm")" min="@DateTime.Now.AddHours(2).ToString("yyyy-MM-ddTHH:mm")" class="form-control" asp-for="ReservEnd" format-value="yyyy-MM-ddTHH:mm" />
     </div>
     @{
-       var rr = ViewData["reservs"] as List<RoomRViewModel> ;
+        var rr = ViewData["reservs"] as List<RoomRViewModel>;
     }
     <!-- Display existing reservations for the selected room -->
     @if (rr != null && rr.Any())
@@ -41,27 +40,26 @@
             <ul>
                 @foreach (var reservation in rr)
                 {
-                    <li>@reservation.ReservStart - @reservation.ReservEnd</li>
+                    <li>@reservation.ReservStart.ToString("yyyy-MM-dd HH:mm") - @reservation.ReservEnd.ToString("yyyy-MM-dd HH:mm")</li>
                 }
             </ul>
         </div>
     }
 
     <button type="submit" class="btn btn-primary">Create Reservation</button>
-  @if(!ViewData.ModelState.IsValid){
-    <div class="alert alert-danger">
-        <ul>
-            @foreach (var modelState in ViewData.ModelState.Values)
-            {
-                foreach (var error in modelState.Errors)
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (var modelState in ViewData.ModelState.Values)
                 {
-                    <li>@error.ErrorMessage</li>
+                    foreach (var error in modelState.Errors)
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
                 }
-            }
-        </ul>
-    </div>
-  }
+            </ul>
+        </div>
+    }
 </form>
 <<!-- ... Önceki kodlar ... -->
-
-

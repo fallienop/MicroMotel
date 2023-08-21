@@ -34,7 +34,7 @@ namespace MicroMotel.Web.Validators
         private async Task<bool> overlappingcontrol (RoomRCreateInput rrci,CancellationToken cancellationToken)
         {
             var reservs=await _reservationservice.GetAllByRoomId(rrci.RoomId);
-            return !reservs.Any(existingres => rrci.ReservStart < existingres.ReservStart && rrci.ReservEnd > existingres.ReservStart);
+            return !reservs.Any(existingres => (existingres.ReservStart < rrci.ReservStart && rrci.ReservStart < existingres.ReservEnd)|| (existingres.ReservStart < rrci.ReservEnd && rrci.ReservEnd < existingres.ReservEnd));
         }
 
         

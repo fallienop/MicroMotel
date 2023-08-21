@@ -1,9 +1,11 @@
 ﻿using MicroMotel.Web.Models;
 using MicroMotel.Web.Models.BaseModels;
+using MicroMotel.Web.Services.Abstract;
 using MicroMotel.Web.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace MicroMotel.Web.Controllers
 {
@@ -13,14 +15,16 @@ namespace MicroMotel.Web.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IMotelService _motelService;
 
-        public HomeController(ILogger<HomeController> logger,IMotelService motelservice)
+        public HomeController(ILogger<HomeController> logger, IMotelService motelService)
         {
             _logger = logger;
-            _motelService = motelservice;
+            _motelService = motelService;
+           
         }
 
         public async Task<IActionResult> Index()
         {
+        
             return View(await _motelService.GetAllPropertiesAsync());
         }
         public async Task<IActionResult> Rooms(int id)

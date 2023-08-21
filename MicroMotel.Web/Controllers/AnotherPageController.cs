@@ -2,7 +2,7 @@
 
 namespace MicroMotel.Web.Controllers
 {
-    public class ErrorPageController : Controller
+    public class AnotherPageController : Controller
     {
         public IActionResult Index()
         {

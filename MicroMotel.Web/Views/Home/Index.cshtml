@@ -6,8 +6,16 @@
     var count = 0;
 }
 
+<div class="jumbotron jumbotron-fluid bg-primary text-white text-center">
+    <div class="container">
+        <h1 class="display-4">Welcome to MicroMotel</h1>
+        <p class="lead">Reserve Your Perfect Stay and Delightful Meals</p>
+    </div>
+</div>
+
+
 @model List<PropertyViewModel>
-<h2>Motels</h2>
+@*<h2>Motels</h2>*@
 <hr />
 <br />
 @if (Model.Any())
@@ -50,6 +58,10 @@
         cursor: pointer; /* Add cursor style to indicate the element is clickable */
     }
 
+    .jumbotron {
+        border-radius: 0;
+        margin-bottom: 0;
+    }
     .card:hover {
         border-color: #333;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);

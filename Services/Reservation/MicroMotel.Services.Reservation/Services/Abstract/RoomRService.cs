@@ -20,15 +20,15 @@ namespace MicroMotel.Services.Reservation.Services.Abstract
             _mapper = mapper;
         }
 
-        public async Task<Response<NoContent>> CreateReservation(RoomRCreateDTO Roomr)
+        public async Task<Response<int>> CreateReservation(RoomRCreateDTO Roomr)
         {
 
             var resp = _mapper.Map<RoomR>(Roomr);
 
-            await _reservationContext.AddAsync(resp);
-            
-            await _reservationContext.SaveChangesAsync();
-            return Response<NoContent>.Success(200);
+           await _reservationContext.AddAsync(resp);
+           await _reservationContext.SaveChangesAsync();
+            var id = resp.Id;
+            return Response<int>.Success(id,200);
         }
 
         public async Task<Response<NoContent>> DeleteRoomReservation(int id)
@@ -38,6 +38,7 @@ namespace MicroMotel.Services.Reservation.Services.Abstract
             {
                 return Response<NoContent>.Fail("error", 200);
             }
+           
             _reservationContext.Remove(room);
             await _reservationContext.SaveChangesAsync();
             return Response<NoContent>.Success(200);    

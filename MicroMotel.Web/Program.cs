@@ -19,7 +19,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     opt.LoginPath = "/Auth/Signin"; 
     opt.ExpireTimeSpan = TimeSpan.FromDays(60);
     opt.SlidingExpiration = true;
-    opt.AccessDeniedPath = "/ErrorPage/unauthorized";
+    opt.AccessDeniedPath = "/AnotherPage/unauthorized";
     opt.Cookie.Name = "micromotelcookie";
 });
 builder.Services.AddHttpContextAccessor();
@@ -77,9 +77,19 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    //pattern: "{controller=Admin}/{action=PropertyList}/{id?}");
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}"
+    );
 
+    endpoints.MapControllerRoute(
+        name: "admin",
+        pattern: "admin",
+        defaults: new { controller = "Admin", action = "PropertyList" }
+    );
+
+    endpoints.MapControllerRoute(name: "getuser", pattern: "getallusers", defaults: new {controller="admin",action= "GetAllUsers" });
+});
 app.Run();

@@ -1,4 +1,5 @@
 ﻿using MicroMotel.Web.Models.Motel.Meal;
+using MicroMotel.Web.Models.Reservation.MealR;
 using MicroMotel.Web.Models.Reservation.RoomR;
 
 namespace MicroMotel.Web.Services.Interface
@@ -16,7 +17,7 @@ namespace MicroMotel.Web.Services.Interface
 
 
 
-        Task<bool> NewRoomReservation(RoomRCreateInput input);
+        Task<int> NewRoomReservation(RoomRCreateInput input);
 
         Task<bool> DeleteRoomReservation(int id);
         #endregion
@@ -27,7 +28,7 @@ namespace MicroMotel.Web.Services.Interface
         Task<List<MealViewModel>> GetAllMealsByProperty(int propertyid);
         Task<List<MealViewModel>> GetAllMealsByRoom(int roomid);
         Task<MealViewModel> GetMealById(int id);
-        Task<bool> NewMealReservation(MealCreateInput input);
+        Task<bool> NewMealReservation(MealRCreateInput input);
         Task<bool> DeleteMealReservation(int id); 
         #endregion
 

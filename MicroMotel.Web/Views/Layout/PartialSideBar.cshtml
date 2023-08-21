@@ -1,14 +1,80 @@
-﻿<nav class="sidebar sidebar-offcanvas" id="sidebar">
+﻿
+@{
+    List<string> roles = new();
+
+    var roleClaim = User.FindFirst("http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
+    string strinnnn = roleClaim?.Value?.ToUpper() ?? "";
+    
+
+}
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
         <li class="nav-item">
-            <a class="nav-link" href="~/skydash/index.html">
+            <a class="nav-link" href="/home/index">
                 <i class="icon-grid menu-icon"></i>
-                <span class="menu-title">Dashboard</span>
+                <span class="menu-title">Home</span>
             </a>
         </li>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <li class="nav-item">
+                <a class="nav-link" href="/reservation/getownreservs">
+                    <i class="icon-columns menu-icon"></i>
+                    <span class="menu-title">My Reservations</span>
+                </a>
+            </li>
+
+
+        }
+
+
+        @if (strinnnn.Contains("SUPERVISOR"))
+        {
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/propertylist">
+                    <i class="icon-contract menu-icon"></i>
+                    <span class="menu-title">Edit Motels</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/GetAllUsers">
+                    <i class="icon-head menu-icon"></i>
+                    <span class="menu-title">Edit Users</span>
+                </a>
+            </li>
+        }
+       else if (strinnnn.ToUpper().Contains("ADMIN"))
+        {
+              <li class="nav-item">
+            <a class="nav-link" href="/anotherpage/propertylist">
+                    <i class="icon-contract menu-icon"></i>
+                <span class="menu-title">Edit Motels</span>
+            </a>
+        </li>
+
+          
+        
+
+
+ 
+
+        }
+
+      else{
+
+      }
         <li class="nav-item">
+            <a class="nav-link" href="/anotherpage/contact">
+                <i class="icon-grid menu-icon"></i>
+                <span class="menu-title">Contact</span>
+            </a>
+        </li>
+
+
+    @*    <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                <i class="icon-layout menu-icon"></i>
+                <i class="c"></i>
                 <span class="menu-title">UI Elements</span>
                 <i class="menu-arrow"></i>
             </a>
@@ -80,7 +146,7 @@
                     <li class="nav-item"> <a class="nav-link" href="~/skydash/pages/samples/register.html"> Register </a></li>
                 </ul>
             </div>
-        </li>
+        </li>   
         <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
                 <i class="icon-ban menu-icon"></i>
@@ -99,7 +165,7 @@
                 <i class="icon-paper menu-icon"></i>
                 <span class="menu-title">Documentation</span>
             </a>
-        </li>
+        </li>*@
     </ul>
 </nav>
  <style >

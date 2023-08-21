@@ -1,12 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MicroMotel.Web.Services.Abstract;
+using MicroMotel.Web.Services.Interface;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 namespace MicroMotel.Web.Controllers
 {
     public class LayoutController : Controller
     {
-        public PartialViewResult PartialSideBar()
+    
+
+        public  PartialViewResult PartialSideBar()
         {
+           
+
             return PartialView();
+
         
         }
 

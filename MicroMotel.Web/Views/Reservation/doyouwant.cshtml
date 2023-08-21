@@ -1,0 +1,72 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blurred Background Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url("/bgcolorful.jpeg"); /* Fotoğrafın yolu */
+           
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .overlay {
+           /*background-color: rgba(255, 255, 255, 0.5); /* Saydam beyaz arka plan rengi */*/
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 36px;
+            color:white;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+            
+.button-container a {
+    display: inline-block;
+    margin: 10px; /* Kenar boşluğunu artırabilirsiniz */
+    padding: 15px 30px; /* Daha büyük buton boyutları */
+    border: none;
+    border-radius: 10px;
+    font-size: 18px; /* Buton metin boyutu */
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+}
+        .yes-button {
+            background-color: green;
+        }
+
+        .no-button {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <h1>Do you want a meal?</h1>
+        <div class="button-container">
+            <a href="/reservation/mealr" class="yes-button">Yes</a>
+            <a  href="/home/index" class="no-button">No</a>
+        </div>
+    </div>
+</body>
+</html>

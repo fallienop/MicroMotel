@@ -30,7 +30,7 @@ namespace MicroMotel.Web.Controllers
             
             _userservice = userservice;
         }
-
+        
         public async Task<IActionResult> PropertyList()
         {
 
