@@ -76,36 +76,110 @@ namespace MicroMotel.Web.Controllers
 
         public async Task<IActionResult> MealR()
         {
-            ViewBag.mrstart = TempData["rrstart"];
+            try
+            {
+                ViewBag.mrstart = TempData["rrstart"];
             ViewBag.mrend  = TempData["rrend"];
             var meals = await _motelService.GetAllMealsByPropertyId(int.Parse(TempData["propid"].ToString()));
             ViewData["meals"] = meals;
             MealRCreateInput mci = new() { RoomRId = int.Parse(TempData["rid"].ToString()) };
 
             return View(mci);
+            }
+            catch
+            {
+                // Hata durumunda önceki sayfaya veya başka bir sayfaya yönlendirme yapabilirsiniz.
+                string referer = Request.Headers["Referer"].ToString();
+                return Redirect(referer);
+            }
         }
         [HttpPost]
-        public async  Task<IActionResult> MealR(MealRCreateInput mci)
+        [Consumes("application/json")]
+        public async Task<IActionResult> MealR([FromBody] List<SelectedMealViewModel> selectedMeals)
         {
-            var validator=new MealRCreateValidator(_reservationService);
-            var result = await validator.ValidateAsync(mci);
-           
-            if (result.IsValid)
+            try
             {
-                 await _reservationService.NewMealReservation(mci);
-
-            }
-            if (!result.IsValid)
-            {
-                foreach (var error in result.Errors)
+                var validator = new MealRCreateValidator(_reservationService);
+               
+                foreach (var selectedMeal in selectedMeals)
                 {
-                    ModelState.AddModelError("", error.ErrorMessage);
+                    MealRCreateInput mci = new()
+                    {
+                        MealId = selectedMeal.id,RoomRId=selectedMeal.roomrid,ReservationDate=selectedMeal.date
+                    };
+
+                    var result = await validator.ValidateAsync(mci);
+
+                    if (result.IsValid)
+                    {
+                     var r=   await _reservationService.NewMealReservation(mci);
+
+                        }
+                    if (!result.IsValid)
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError("", error.ErrorMessage);
+                        }
+
+                        return View(mci);
+                    }
+
+
                 }
+                    return RedirectToAction(nameof(HomeController.Index), "home");
 
-                return View(mci);
+                // İşlemler başarılıysa veya hata olmadıysa başka bir sayfaya yönlendirme yapabilirsiniz.
             }
-
-            return RedirectToAction(nameof(HomeController.Index), "home");
+            catch 
+            {
+                // Hata durumunda önceki sayfaya veya başka bir sayfaya yönlendirme yapabilirsiniz.
+                string referer = Request.Headers["Referer"].ToString();
+                return Redirect(referer);
+            }
         }
     }
+
+    public class SelectedMealViewModel
+    {
+        public int id { get; set; }  // Seçilen yemeğin ID'si
+        public DateTime date { get; set; } // Seçilen tarih
+        public int roomrid { get; set; } // Seçilen tarih
+
+    }
 }
+
+#region oldmealr
+//[httppost]
+//public async  task<iactionresult> mealr(mealrcreateinput mci)
+//{
+//    try
+//    {
+
+//        var validator = new mealrcreatevalidator(_reservationservice);
+//        var result = await validator.validateasync(mci);
+
+//        if (result.isvalid)
+//        {
+//            await _reservationservice.newmealreservation(mci);
+
+//        }
+//        if (!result.isvalid)
+//        {
+//            foreach (var error in result.errors)
+//            {
+//                modelstate.addmodelerror("", error.errormessage);
+//            }
+
+//            return view(mci);
+//        }
+
+//        return redirecttoaction(nameof(homecontroller.index), "home");
+//    }
+//    catch
+//    {
+//        string referer = request.headers["referer"].tostring();
+//        return redirect(referer);
+//    }
+//} 
+#endregion
