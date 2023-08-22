@@ -14,5 +14,9 @@ namespace MicroMotel.Web.Models.Motel.Property
                    
         public bool? HasParking { get; set; }
         public bool? HasOpenSpace { get; set; }
+        public string Picture { get;set; }
+    
+
+        public IFormFile PhotoFormFile { get; set; }
     }
 }

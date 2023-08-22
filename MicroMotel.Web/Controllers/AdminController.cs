@@ -13,6 +13,8 @@ using System.Net.Http;
 
 namespace MicroMotel.Web.Controllers
 {
+    [ResponseCache(NoStore = true, Duration = 0)]
+
     [DynamicAuthorize("Admin")]
     public class AdminController : Controller
     {
@@ -118,7 +120,6 @@ namespace MicroMotel.Web.Controllers
                 var room = await _MotelService.GetRoomById(id);
                 return View(room);
             }
-
             // Handle if property not found
             return RedirectToAction("PropertyNotFound");
         }
@@ -211,7 +212,7 @@ namespace MicroMotel.Web.Controllers
         public async Task<IActionResult> UpdateProperty(PropertyUpdateModel pum)
         {
             await _MotelService.UpdateProperty(pum);
-            return RedirectToAction(nameof(PropertyDetails),new {Id=pum.Id});
+            return RedirectToAction(nameof(PropertyList));
         }
 
         public async Task<IActionResult> AllRoomReservations()

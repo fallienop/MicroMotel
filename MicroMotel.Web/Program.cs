@@ -11,6 +11,7 @@ using MicroMotel.Web.Models.Reservation.RoomR;
 using MicroMotel.Web.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using MicroMotel.Web.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 var requriedauthorizepolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
@@ -34,10 +35,16 @@ builder.Services.AddScoped<CCTokenHandler>();
 builder.Services.AddHttpClient<ICCService, CCService>();
 builder.Services.AddHttpClient<IROPService, ROPService>();
 builder.Services.AddScoped<ISharedIdentityService, SharedIdentityService>();
+builder.Services.AddSingleton<PhotoHelper>();
 builder.Services.AddHttpClient<IReservationService, ReservationService>(opt => 
 {
     opt.BaseAddress = new Uri($"{serviceurls.GatewayURL}/{serviceurls.Reservation.Path}");
 }).AddHttpMessageHandler<ROPTokenHandler>();
+
+builder.Services.AddHttpClient<IPhotoStockService, PhotoStockService>(opt=>
+{
+    opt.BaseAddress = new Uri($"{serviceurls.GatewayURL}/{serviceurls.Photos.Path}");
+}).AddHttpMessageHandler<CCTokenHandler>();
 
 builder.Services.AddHttpClient<IMotelService, MotelService>(opt =>
 {

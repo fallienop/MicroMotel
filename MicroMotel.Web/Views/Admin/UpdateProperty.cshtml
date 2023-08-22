@@ -6,8 +6,9 @@
 
 @model MicroMotel.Web.Models.Motel.Property.PropertyViewModel
 
-<form class="form-group" method="post">
+<form class="form-group" method="post" id="myForm" enctype="multipart/form-data">
     @Html.HiddenFor(x=>x.Id)
+    @Html.HiddenFor(x=>x.Picture)
     @Html.Label("Name")
     <input type="text" name="Name" value="@Model.Name" class="form-control form-control-sm" />
     <br />
@@ -41,10 +42,40 @@
         <input type="text" id="Address.Street" name="Address.Street" value="@Model.Address.Street" class="form-control form-control-sm"  />
         <input type="text" id="Address.Building" name="Address.Building" value="@Model.Address.Building" class="form-control form-control-sm"  />
     </div>
+
+    <div class="mb-3">
+
+
+        <label class="form-label" asp-for="PhotoFormFile"></label>
+        <input type="file" asp-for="PhotoFormFile" class="form-control" />
+    </div>
     <br />
-    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+    <button type="submit" onclick="submitAndGoBack();" class="btn btn-primary mr-2">Submit</button>
 
+    <script>
+        document.getElementById("myForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Formun normal submit işlemini engelle
 
+            // Formu AJAX ile sunucuya gönder
+            var formData = new FormData(document.getElementById("myForm"));
+            fetch("@Url.Action("UpdateProperty", "Admin")", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Başarılı ise geri git
+                        history.go(-1);
+                    } else {
+                        // Hata durumunu ele al
+                        console.error("Bir hata oluştu: ", response);
+                    }
+                })
+                .catch(error => {
+                    console.error("Bir hata oluştu: ", error);
+                });
+        });
+    </script>
 </form>
 
 <style>

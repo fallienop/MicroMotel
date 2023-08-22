@@ -41,6 +41,9 @@ namespace MicroMotel.Services.Motel.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Picture")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<byte>("RoomCount")
                         .HasColumnType("tinyint");
 

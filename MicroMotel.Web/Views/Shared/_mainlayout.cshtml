@@ -24,7 +24,8 @@
                @await Html.PartialAsync("/Views/Layout/PartialSideBar.cshtml")
             
                <div class="main-panel">
-                   <div class="content-wrapper">
+                <div class="content-wrapper" style="padding:0px;margin-bottom: 50px;">
+
                        @*<div class="row">*@
    
    
@@ -34,17 +35,17 @@
    
    
                            
-                       @*</div>*@
-                   </div>
+                       </div>
+                   @*</div>*@
                  
                </div>
              
    
            </div>
-               @await Html.PartialAsync("/Views/Layout/PartialFooter.cshtml")
        </div>
       
        @await Html.PartialAsync("/Views/Layout/PartialScripts.cshtml")
+               @await Html.PartialAsync("/Views/Layout/PartialFooter.cshtml")
    
        
     

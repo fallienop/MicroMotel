@@ -4,11 +4,13 @@ using MicroMotel.Web.Services.Abstract;
 using MicroMotel.Web.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace MicroMotel.Web.Controllers
 {
+    [ResponseCache(NoStore = true, Duration = 0)]
     [AllowAnonymous]
     public class HomeController : Controller
     {

@@ -11,6 +11,7 @@
         public ServiceAPI Motel { get; set; }
         
         public ServiceAPI Reservation { get; set; }
+        public ServiceAPI Photos { get; set; }
 
     }
 

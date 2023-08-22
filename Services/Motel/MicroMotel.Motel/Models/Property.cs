@@ -16,6 +16,7 @@ using System.ComponentModel.DataAnnotations;
         
             public bool HasParking { get; set; }    
             public bool HasOpenSpace { get; set; } 
+            public string Picture { get; set; }
 
             public ICollection<Room> Rooms { get; set; }    
             

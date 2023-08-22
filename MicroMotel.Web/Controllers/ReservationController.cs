@@ -11,6 +11,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MicroMotel.Web.Controllers
 {
+        [ResponseCache(NoStore = true, Duration = 0)]
     public class ReservationController : Controller
     {
         private readonly IReservationService _reservationService;
@@ -52,6 +53,8 @@ namespace MicroMotel.Web.Controllers
                
                 TempData["rid"] =resp;
                 TempData["propid"] = rci.PropertyId;
+                TempData["rrstart"] = rci.ReservStart;
+                TempData["rrend"] = rci.ReservEnd;
             }
             if (!result.IsValid)
             {
@@ -73,6 +76,8 @@ namespace MicroMotel.Web.Controllers
 
         public async Task<IActionResult> MealR()
         {
+            ViewBag.mrstart = TempData["rrstart"];
+            ViewBag.mrend  = TempData["rrend"];
             var meals = await _motelService.GetAllMealsByPropertyId(int.Parse(TempData["propid"].ToString()));
             ViewData["meals"] = meals;
             MealRCreateInput mci = new() { RoomRId = int.Parse(TempData["rid"].ToString()) };

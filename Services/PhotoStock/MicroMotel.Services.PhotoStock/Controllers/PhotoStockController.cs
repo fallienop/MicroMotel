@@ -14,23 +14,26 @@ namespace MicroMotel.Services.PhotoStock.Controllers
         {
             if (photo != null && photo.Length > 0)
             {
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/photos", photo.FileName);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Photos", photo.FileName);
                 using var stream = new FileStream(path, FileMode.Create);
                 await photo.CopyToAsync(stream, cancellationToken: token);
-                return NoContent();
+                var returnpath = photo.FileName;
+                PhotosDTO photodto = new (){URL= returnpath};
+                return CustomActionResult(Response<PhotosDTO>.Success(photodto, 200));
+
             }
             return CustomActionResult(Response<PhotosDTO>.Fail("empty",400));
         }
-       
-        public async Task<IActionResult> Delete(string url)
+        [HttpDelete]
+        public  IActionResult Delete(string url)
         {
-            var dpath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/photos", url);
+            var dpath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", url);
             if(!System.IO.File.Exists(dpath))
             {
-                return CustomActionResult(Response<PhotosDTO>.Fail("not found", 404));
+                return CustomActionResult(Response<NoContent>.Fail("not found", 404));
             }
             System.IO.File.Delete(dpath);
-            return CustomActionResult(Response<PhotosDTO>.Success(200)) ;
+            return CustomActionResult(Response<NoContent>.Success(200)) ;
         }
     }
 }

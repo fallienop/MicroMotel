@@ -1,4 +1,5 @@
 ﻿using MicroMotel.Shared.DTOs;
+using MicroMotel.Web.Helpers;
 using MicroMotel.Web.Models.Motel.Meal;
 using MicroMotel.Web.Models.Motel.Property;
 using MicroMotel.Web.Models.Motel.Room;
@@ -9,13 +10,21 @@ namespace MicroMotel.Web.Services.Abstract
     public class MotelService : IMotelService
     {
         private readonly HttpClient _httpClient;
+        private readonly IPhotoStockService _photoStockService;
+        private readonly PhotoHelper _photohelper;
 
-        public MotelService(HttpClient httpClient)
+        public MotelService(HttpClient httpClient, IPhotoStockService photoStockService, PhotoHelper photohelper)
         {
             _httpClient = httpClient;
+            _photoStockService = photoStockService;
+            _photohelper = photohelper;
         }
 
-        
+
+
+
+
+
         #region Property
         public async Task<List<PropertyViewModel>> GetAllPropertiesAsync()
         {
@@ -26,6 +35,7 @@ namespace MicroMotel.Web.Services.Abstract
             }
             var r = await   response.Content.ReadAsStringAsync();
             var resp=await response.Content.ReadFromJsonAsync<Response<List<PropertyViewModel>>>();
+            resp.Data.ForEach(x => x.Picture = _photohelper.GetPhotoStockURL(x.Picture));
             return resp.Data;
         }
 
@@ -38,16 +48,29 @@ namespace MicroMotel.Web.Services.Abstract
             }
             var r = await response.Content.ReadAsStringAsync();
             var resp = await response.Content.ReadFromJsonAsync<Response<PropertyViewModel>>();
+            resp.Data.Picture=_photohelper.GetPhotoStockURL(resp.Data.Picture);
             return resp.Data;
         }
 
         public async Task<bool> CreateProperty(PropertyCreateInput pci)
         {
+            var resultphoto = await _photoStockService.UploadPhoto(pci.PhotoFormFile);
+            if(resultphoto != null)
+            {
+                pci.Picture = resultphoto.URL;
+            }
+
             var resp = await _httpClient.PostAsJsonAsync("property", pci);
             return resp.IsSuccessStatusCode;
         }
         public async Task<bool> UpdateProperty(PropertyUpdateModel pum)
         {
+            var resultphoto = await _photoStockService.UploadPhoto(pum.PhotoFormFile);
+            if (resultphoto != null)
+            {
+                await _photoStockService.DeletePhoto(pum.Picture);
+                pum.Picture = resultphoto.URL;
+            }
             var resp = await _httpClient.PutAsJsonAsync("property", pum);
             return resp.IsSuccessStatusCode;
         }

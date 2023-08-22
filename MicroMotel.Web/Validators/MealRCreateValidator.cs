@@ -11,7 +11,7 @@ namespace MicroMotel.Web.Validators
         public MealRCreateValidator(IReservationService reservationservice)
         {
             _reservationservice = reservationservice;
-            RuleFor(x => x).MustAsync(isroomridtimevalid);
+            RuleFor(x => x).MustAsync(isroomridtimevalid).WithMessage("Meal reservation is not in room reservation interval");
         }
 
         private async  Task<bool> isroomridtimevalid(MealRCreateInput mci ,CancellationToken token)

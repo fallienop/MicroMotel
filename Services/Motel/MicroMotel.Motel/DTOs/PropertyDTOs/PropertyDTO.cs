@@ -15,5 +15,7 @@ namespace MicroMotel.Motel.DTOs.PropertyDTOs
 
         public bool HasParking { get; set; }
         public bool HasOpenSpace { get; set; }
+        public string Picture { get; set; }
+
     }
 }
