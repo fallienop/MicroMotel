@@ -127,8 +127,7 @@ namespace MicroMotel.Web.Controllers
 
 
                 }
-                    return RedirectToAction(nameof(HomeController.Index), "home");
-
+                return RedirectToAction("Index","Home");
                 // İşlemler başarılıysa veya hata olmadıysa başka bir sayfaya yönlendirme yapabilirsiniz.
             }
             catch 
