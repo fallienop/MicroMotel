@@ -10,6 +10,7 @@ using MicroMotel.Web.Services.Interface;
 using MicroMotel.Web.Validators;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Net.Mail;
 
 namespace MicroMotel.Web.Controllers
 {
@@ -19,12 +20,14 @@ namespace MicroMotel.Web.Controllers
         private readonly IReservationService _reservationService;
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly IMotelService _motelService;
+        private readonly IPaymentService _paymentService;
 
-        public ReservationController(IReservationService reservationService, ISharedIdentityService sharedIdentityService, IMotelService motelService)
+        public ReservationController(IReservationService reservationService, ISharedIdentityService sharedIdentityService, IMotelService motelService, IPaymentService paymentService)
         {
             _reservationService = reservationService;
             _sharedIdentityService = sharedIdentityService;
             _motelService = motelService;
+            _paymentService = paymentService;
         }
 
         public async Task<IActionResult> Room(int id,int propertyid)
@@ -149,13 +152,14 @@ namespace MicroMotel.Web.Controllers
 
 
 
-        public IActionResult Payment()
+        public async Task<IActionResult> Payment()
         {
-         var propid=(int)TempData["rid"];
+            decimal total=0;
+         var roomid=(int)TempData["rid"];
        var reservstart=(DateTime)TempData["rrstart"] ;
            var reservend=(DateTime)TempData["rrend"] ;
-          
-            decimal total=0;
+            var room = await _motelService.GetRoomById(roomid);
+          int h=(int) (reservend - reservstart).TotalHours;
             if (TempData["prices"] != null)
             {
                 var totalmealprice = TempData["prices"] as List<decimal>;
@@ -164,14 +168,60 @@ namespace MicroMotel.Web.Controllers
                     total += mealprice;
                 }
             }
-           
-            return View();
+            total += room.Price * h;
+           PaymentInput payment=new PaymentInput()
+           {
+               TotalPrice = total,
+              
+           };
+            return View(payment);
         }
 
         [HttpPost]
         public async Task<IActionResult> Payment(PaymentInput payment)
         {
+           var r= await _paymentService.ReceivePayment(payment);
+            if (r)
+            {
+                var card = await _paymentService.GetCard(payment.CardNumber);
+                var randomcode = SendEmail(card.Email);
+                TempData["RandomCode"] = randomcode;
+                return RedirectToAction("PaymentConfirm");
+            }
+
+            
             return View();
+        }
+
+        public IActionResult PaymentConfirm()
+        {
+            string random = TempData["RandomCode"] as string;
+            return View(random);
+        
+        }
+        [HttpPost]
+        public IActionResult PaymentConfirm(string random)
+        {
+            return View();
+        
+        
+        }
+            private string SendEmail(string email)
+        {
+            Random r = new Random();
+            string random6 = (r.Next(100000, 999999)).ToString();
+            MailMessage mymessage=new MailMessage();
+            SmtpClient client = new();
+            client.Credentials = new System.Net.NetworkCredential("micromotelfp@outlook.com", "1_Micromotel");
+            client.Port = 587;
+            client.Host = "smtp-mail.outlook.com";
+            client.EnableSsl = true;
+            mymessage.To.Add(email);
+            mymessage.From = new MailAddress("micromotelfp@outlook.com");
+            mymessage.Subject = "Confirmation Code";
+            mymessage.Body = $"Your payment confirmation code : {random6}";
+
+            return random6;
         }
 
     }

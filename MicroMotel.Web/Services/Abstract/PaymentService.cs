@@ -13,6 +13,13 @@ namespace MicroMotel.Web.Services.Abstract
             _httpClient = httpClient;
         }
 
+        public async Task<Card> GetCard(string cardnumber)
+        {
+            var response = await _httpClient.GetFromJsonAsync<Response<Card>>("fakepayment");
+            var card =response.Data;
+            return card;
+        }
+
         public async Task<bool> ReceivePayment(PaymentInput paymentInput)
         {
             var response = await _httpClient.PostAsJsonAsync("fakepayment",paymentInput);

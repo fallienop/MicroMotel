@@ -5,6 +5,7 @@ using MicroMotel.Shared.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 
 namespace MicroMotel.Services.FakePayment.Controllers
 {
@@ -42,8 +43,14 @@ namespace MicroMotel.Services.FakePayment.Controllers
                     response = false;   
                 }
             }
-          
+         
             return CustomActionResult(Response<bool>.Success(response,200));
         } 
+
+        public async Task<IActionResult>GetCard(string cardnumber)
+        {
+           var card=await _cardDbContext.Cards.Where(x=>x.CardNumber==cardnumber).FirstAsync();
+            return CustomActionResult(Response<Card>.Success(card,200));    
+        }
     }
 }
