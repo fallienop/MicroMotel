@@ -1,5 +1,7 @@
 ﻿
 using MicroMotel.Shared.Services;
+using MicroMotel.Web.Models.FakePayment;
+using MicroMotel.Web.Models.Motel.Meal;
 using MicroMotel.Web.Models.Motel.Room;
 using MicroMotel.Web.Models.Reservation.MealR;
 using MicroMotel.Web.Models.Reservation.RoomR;
@@ -51,10 +53,11 @@ namespace MicroMotel.Web.Controllers
             {
                 var resp =await _reservationService.NewRoomReservation(rci);
                
-                TempData["rid"] =resp;
                 TempData["propid"] = rci.PropertyId;
+                TempData["rid"] =resp;
                 TempData["rrstart"] = rci.ReservStart;
                 TempData["rrend"] = rci.ReservEnd;
+                
             }
             if (!result.IsValid)
             {
@@ -97,6 +100,7 @@ namespace MicroMotel.Web.Controllers
         [Consumes("application/json")]
         public async Task<IActionResult> MealR([FromBody] List<SelectedMealViewModel> selectedMeals)
         {
+            List<decimal> prices = new();
             try
             {
                 var validator = new MealRCreateValidator(_reservationService);
@@ -107,14 +111,14 @@ namespace MicroMotel.Web.Controllers
                     {
                         MealId = selectedMeal.id,RoomRId=selectedMeal.roomrid,ReservationDate=selectedMeal.date
                     };
-
                     var result = await validator.ValidateAsync(mci);
-
+                    var meal = await _motelService.GetMealById(mci.MealId);
+                    prices.Add(meal.Price);
                     if (result.IsValid)
                     {
                      var r=   await _reservationService.NewMealReservation(mci);
 
-                        }
+                     }
                     if (!result.IsValid)
                     {
                         foreach (var error in result.Errors)
@@ -127,6 +131,8 @@ namespace MicroMotel.Web.Controllers
 
 
                 }
+
+                TempData["prices"] = prices;
                 return RedirectToAction("Index","Home");
                 // İşlemler başarılıysa veya hata olmadıysa başka bir sayfaya yönlendirme yapabilirsiniz.
             }
@@ -134,11 +140,83 @@ namespace MicroMotel.Web.Controllers
             {
                 // Hata durumunda önceki sayfaya veya başka bir sayfaya yönlendirme yapabilirsiniz.
                 string referer = Request.Headers["Referer"].ToString();
-                return Redirect(referer);
+                return Redirect(referer); 
             }
         }
+
+
+
+
+
+
+        public IActionResult Payment()
+        {
+         var propid=(int)TempData["rid"];
+       var reservstart=(DateTime)TempData["rrstart"] ;
+           var reservend=(DateTime)TempData["rrend"] ;
+          
+            decimal total=0;
+            if (TempData["prices"] != null)
+            {
+                var totalmealprice = TempData["prices"] as List<decimal>;
+                foreach (var mealprice in totalmealprice)
+                {
+                    total += mealprice;
+                }
+            }
+           
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Payment(PaymentInput payment)
+        {
+            return View();
+        }
+
     }
 
+   
+    
+    
+    
+    
+    
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public class SelectedMealViewModel
     {
         public int id { get; set; }  // Seçilen yemeğin ID'si
@@ -147,6 +225,38 @@ namespace MicroMotel.Web.Controllers
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #region oldmealr
 //[httppost]

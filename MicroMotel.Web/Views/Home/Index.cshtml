@@ -32,8 +32,8 @@
                     <div class="card-body">
                         <a asp-controller="Home" asp-action="PropertyDetail" asp-route-id="@item.Id" class="card-link">
                             <h5 class="card-title">@item.Address.City</h5>
-                            <p class="card-text">@item.Name</p>
-                            <h4 class="text-primary">@item.FloorCount TL</h4>
+                            <h6 class="card-text">@item.Name</h6>
+                            <label>@item.Address.District</label>
                         </a>
                         <div>
                             <a asp-controller="Home" asp-action="Rooms" class="btn btn-success" asp-route-id="@item.Id">Rooms</a>

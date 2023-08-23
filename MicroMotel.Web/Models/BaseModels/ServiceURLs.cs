@@ -12,6 +12,7 @@
         
         public ServiceAPI Reservation { get; set; }
         public ServiceAPI Photos { get; set; }
+        public ServiceAPI Payment { get; set; }
 
     }
 

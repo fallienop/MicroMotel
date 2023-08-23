@@ -6,6 +6,7 @@ using MicroMotel.Web.Models.Motel.Property;
 using MicroMotel.Web.Models.Motel.Room;
 using MicroMotel.Web.Models.Reservation.RoomR;
 using MicroMotel.Web.Services.Interface;
+using MicroMotel.Web.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -90,9 +91,22 @@ namespace MicroMotel.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddRoom(RoomCreateInput rci)
         {
+            var validator = new RoomCreateValidator(_MotelService);
+            var result=await validator.ValidateAsync(rci);
+            if (result.IsValid)
+            {
+                await _MotelService.CreateNewRoom(rci);
+                return RedirectToAction("propertylist");
+            }
+            else 
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.ErrorMessage);
+                }
 
-            await _MotelService.CreateNewRoom(rci);
-            return RedirectToAction("propertylist");
+                return View(rci);
+            }
 
         }
 

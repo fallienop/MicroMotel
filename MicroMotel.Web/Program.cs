@@ -36,6 +36,11 @@ builder.Services.AddHttpClient<ICCService, CCService>();
 builder.Services.AddHttpClient<IROPService, ROPService>();
 builder.Services.AddScoped<ISharedIdentityService, SharedIdentityService>();
 builder.Services.AddSingleton<PhotoHelper>();
+
+builder.Services.AddHttpClient<IPaymentService, PaymentService>(opt =>
+{
+    opt.BaseAddress = new Uri($"{serviceurls.GatewayURL}/{serviceurls.Payment.Path}");
+}).AddHttpMessageHandler<ROPTokenHandler>();
 builder.Services.AddHttpClient<IReservationService, ReservationService>(opt => 
 {
     opt.BaseAddress = new Uri($"{serviceurls.GatewayURL}/{serviceurls.Reservation.Path}");

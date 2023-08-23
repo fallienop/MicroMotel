@@ -75,7 +75,19 @@
         </div>*@
 
         <a href="/Admin/UpdateRoom?id=@Model.Id&propid=@Model.PropertyId" class="btn btn-warning">Update</a>
-        <a href="/Admin/DeleteRoom/@Model.Id" class="btn btn-danger">Delete</a>
+        <a href="/Admin/DeleteRoom/@Model.Id" class="btn btn-danger" onclick="deleteRoom()">Delete</a>
+
+        <script>
+            function deleteRoom() {
+                // Burada gerekli delete işlemini yapabilirsiniz
+                // ...
+
+                // Delete işlemi tamamlandıktan sonra 2 adım geri git
+                history.go(-2);
+                return false;
+            }
+        </script>
+
  
     </div>
 </div>
