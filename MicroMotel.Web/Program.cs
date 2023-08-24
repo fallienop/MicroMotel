@@ -73,7 +73,7 @@ builder.Services.AddHttpClient<IUserService, UserService>(opt =>
     opt.BaseAddress = new Uri($"{serviceurls.IdentityServerURL}");
 }).AddHttpMessageHandler<ROPTokenHandler>();
 
-
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -88,7 +88,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseSession();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(

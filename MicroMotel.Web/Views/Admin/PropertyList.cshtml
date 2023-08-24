@@ -26,15 +26,15 @@
                                 District
                             </th>
                             <th>
-                                Room Count
+                                Rooms
                             </th>
                             <th>
-                                Floor Count
+                                Floors
                             </th>
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th></th>
+                         @*   <th></th>*@
                         </tr>
                     </thead>
                     <tbody>
@@ -44,7 +44,9 @@
 
 
                            <td>
-                                    <img src="@item.Picture" style="width:80px ;height:50px;border-radius:8%" >
+                                    <a href="/Admin/PropertyDetails/@item.Id">
+                                        <img src="@item.Picture" style="width: 80px; height: 50px; border-radius: 8%;" />
+                                    </a>
                               
                            </td>
 
@@ -62,7 +64,7 @@
                                 </td>
                                 <td><a href="/Admin/UpdateProperty/@item.Id" class="btn btn-warning btn-sm">Update</a></td>
                                 <td><a href="/Admin/DeleteProperty/@item.Id" class="btn btn-danger btn-sm">Delete</a></td>
-                                <td><a href="/Admin/PropertyDetails/@item.Id" class="btn btn-info btn-sm">Details</a></td>
+                                @*<td><a href="/Admin/PropertyDetails/@item.Id" class="btn btn-info btn-sm">Details</a></td>*@
                             </tr>
                         }
                     </tbody>

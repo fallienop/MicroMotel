@@ -8,6 +8,7 @@ using MicroMotel.Web.Models.Reservation.RoomR;
 using MicroMotel.Web.Services.Abstract;
 using MicroMotel.Web.Services.Interface;
 using MicroMotel.Web.Validators;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Net.Mail;
@@ -52,14 +53,16 @@ namespace MicroMotel.Web.Controllers
             var result=await validator.ValidateAsync(rci);
                 var reservations = await _reservationService.GetAllByRoomId(rci.RoomId);
                 ViewData["reservs"] = reservations;
+
+            
             if(result.IsValid) 
             {
                 var resp =await _reservationService.NewRoomReservation(rci);
-               
-                TempData["propid"] = rci.PropertyId;
-                TempData["rid"] =resp;
-                TempData["rrstart"] = rci.ReservStart;
-                TempData["rrend"] = rci.ReservEnd;
+
+                HttpContext.Session.SetString("propid", rci.PropertyId.ToString()); 
+               HttpContext.Session.SetString("resp", resp.ToString()); 
+               HttpContext.Session.SetString("reservstart", (rci.ReservStart.ToString()));
+               HttpContext.Session.SetString("reservend", (rci.ReservEnd).ToString());  
                 
             }
             if (!result.IsValid)
@@ -84,11 +87,12 @@ namespace MicroMotel.Web.Controllers
         {
             try
             {
-                ViewBag.mrstart = TempData["rrstart"];
-            ViewBag.mrend  = TempData["rrend"];
-            var meals = await _motelService.GetAllMealsByPropertyId(int.Parse(TempData["propid"].ToString()));
+
+                ViewBag.mrstart = Convert.ToDateTime(HttpContext.Session.GetString("reservstart"));
+            ViewBag.mrend  = Convert.ToDateTime(HttpContext.Session.GetString("reservend"));
+                var meals = await _motelService.GetAllMealsByPropertyId(int.Parse(HttpContext.Session.GetString("propid")));
             ViewData["meals"] = meals;
-            MealRCreateInput mci = new() { RoomRId = int.Parse(TempData["rid"].ToString()) };
+            MealRCreateInput mci = new() { RoomRId = int.Parse(HttpContext.Session.GetString("resp")) };
 
             return View(mci);
             }
@@ -136,7 +140,7 @@ namespace MicroMotel.Web.Controllers
                 }
 
                 TempData["prices"] = prices;
-                return RedirectToAction("Index","Home");
+                return RedirectToAction(nameof(Payment));
                 // İşlemler başarılıysa veya hata olmadıysa başka bir sayfaya yönlendirme yapabilirsiniz.
             }
             catch 
@@ -155,9 +159,9 @@ namespace MicroMotel.Web.Controllers
         public async Task<IActionResult> Payment()
         {
             decimal total=0;
-         var roomid=(int)TempData["rid"];
-       var reservstart=(DateTime)TempData["rrstart"] ;
-           var reservend=(DateTime)TempData["rrend"] ;
+         var roomid= int.Parse(HttpContext.Session.GetString("resp"));
+            var reservstart= Convert.ToDateTime(HttpContext.Session.GetString("reservstart"));
+            var reservend= Convert.ToDateTime(HttpContext.Session.GetString("reservend"));
             var room = await _motelService.GetRoomById(roomid);
           int h=(int) (reservend - reservstart).TotalHours;
             if (TempData["prices"] != null)
@@ -196,17 +200,32 @@ namespace MicroMotel.Web.Controllers
         public IActionResult PaymentConfirm()
         {
             string random = TempData["RandomCode"] as string;
-            return View(random);
+            int rand = int.Parse(random);
+            ViewBag.RandomCode = rand;
+            return View();
         
         }
         [HttpPost]
-        public IActionResult PaymentConfirm(string random)
+        public IActionResult PaymentConfirm(int verificationCode)
         {
-            return View();
-        
-        
+            int rand = ViewBag.RandomCode; // ViewBag üzerinden random kodu alıyoruz
+            bool isCodeCorrect = rand == verificationCode;
+
+            if (isCodeCorrect)
+            {
+                // Verification code is correct, do something
+                // Örneğin, işlem başarılı olduğunda bir yönlendirme yapabilirsiniz
+                return RedirectToAction("Homes");
+            }
+            else
+            {
+                // Verification code is incorrect, handle accordingly
+                // Örneğin, işlem başarısız olduğunda kullanıcıya hata mesajı gösterebilirsiniz
+                ModelState.AddModelError("verificationCode", "Doğrulama kodu yanlış.");
+                return View();
+            }
         }
-            private string SendEmail(string email)
+        private string SendEmail(string email)
         {
             Random r = new Random();
             string random6 = (r.Next(100000, 999999)).ToString();
