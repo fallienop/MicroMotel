@@ -1,113 +1,113 @@
-﻿@using MicroMotel.Web.Models.Motel.Meal;
+﻿    @using MicroMotel.Web.Models.Motel.Meal;
 
-@{
-    ViewData["Title"] = "MealR";
-    Layout = "~/Views/Shared/_mainlayout.cshtml";
-}
+    @{
+        ViewData["Title"] = "MealR";
+        Layout = "~/Views/Shared/_mainlayout.cshtml";
+    }
 
-@model MicroMotel.Web.Models.Reservation.MealR.MealRCreateInput
+    @model MicroMotel.Web.Models.Reservation.MealR.MealRCreateInput
 
 
-<form asp-controller="Reservation" asp-action="MealR" method="post">
+    <form asp-controller="Reservation" asp-action="MealR" method="post">
 
-    @Html.HiddenFor(x=>x.RoomRId)
-    <input type="hidden" asp-for="RoomRId" name="RoomRId" value="@Model.RoomRId" id="selectedroomr"/>
+        @Html.HiddenFor(x=>x.RoomRId)
+        <input type="hidden" asp-for="RoomRId" name="RoomRId" value="@Model.RoomRId" id="selectedroomr"/>
  
     
     
-    <div class="form-group">
-        <label for="SelectedDate" asp-for="ReservationDate">Meal Reservation Date and Time:</label>
-        <input type="datetime-local" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" class="form-control" asp-for="ReservationDate" format-value="yyyy-MM-ddTHH:mm" id="selectedDate" />
-    </div>
-    <label>Room reservation interval: @Convert.ToDateTime(ViewBag.mrstart).ToString("yyyy-MM-dd HH:mm") -  @Convert.ToDateTime(ViewBag.mrend).ToString("yyyy-MM-dd HH:mm")</label>
-                                     
-    @{
-        var rr = ViewData["meals"] as List<MealViewModel>;
-    }
-   
-    @if (rr != null && rr.Any())
-    {
         <div class="form-group">
-            <label asp-for="MealId">Meals:</label>
-            <select class="form-control" asp-for="MealId" id="mealSelect">
+            <label for="SelectedDate" asp-for="ReservationDate">Meal Reservation Date and Time:</label>
+            <input type="datetime-local" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" class="form-control" asp-for="ReservationDate" format-value="yyyy-MM-ddTHH:mm" id="selectedDate" />
+        </div>
+        <label>Room reservation interval: @Convert.ToDateTime(ViewBag.mrstart).ToString("yyyy-MM-dd HH:mm") -  @Convert.ToDateTime(ViewBag.mrend).ToString("yyyy-MM-dd HH:mm")</label>
+                                     
+        @{
+            var rr = ViewData["meals"] as List<MealViewModel>;
+        }
+   
+        @if (rr != null && rr.Any())
+        {
+            <div class="form-group">
+                <label asp-for="MealId">Meals:</label>
+                <select class="form-control" asp-for="MealId" id="mealSelect">
 
-                @foreach (var meal in rr)
-                {
-                    <option value="@meal.Id">@meal.Name</option>
-                }
-            </select>
+                    @foreach (var meal in rr)
+                    {
+                        <option value="@meal.Id">@meal.Name</option>
+                    }
+                </select>
               
             
-        </div>
-    }
+            </div>
+        }
 
-    <button type="button" id="addMealButton" class="btn btn-primary">Add Meal</button>
-    <button type="submit" class="btn btn-success" id="submitMealsButton">Submit All Meals</button>
-    <br />
+        <button type="button" id="addMealButton" class="btn btn-primary">Add Meal</button>
+        <button type="submit" class="btn btn-success" id="submitMealsButton">Submit All Meals</button>
+        <br />
 
-    <div id="selectedMealsDisplay"></div>
+        <div id="selectedMealsDisplay"></div>
     
-    <script>
-        const mealSelect = document.getElementById('mealSelect');
-        const selectedDateInput = document.getElementById('selectedDate');
-        const selectedroomrInput = document.getElementById('selectedroomr');
-        const addMealButton = document.getElementById('addMealButton');
-        const submitMealsButton = document.getElementById('submitMealsButton');
-        const selectedMeals = [];
-        const selectedMealsDisplay = document.getElementById('selectedMealsDisplay');
 
-        addMealButton.addEventListener('click', () => {
-            const selectedMealId = parseInt(mealSelect.value);
-            const selectedDate = selectedDateInput.value;
-            const selectedroomrid = selectedroomrInput.value;
-            if (selectedMealId && selectedDate && selectedroomrid) {
-                selectedMeals.push({ id: selectedMealId, date: selectedDate, roomrid: selectedroomrid });
-                // Display selected meals to the user
-                selectedMealsDisplay.innerHTML = selectedMeals.map(meal => `Selected Meal ID: ${meal.id}, Date: ${meal.date}<br>`).join('');
-                console.log(selectedMeals);
-            }
-        });
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach (var modelState in ViewData.ModelState.Values)
+                    {
+                        foreach (var error in modelState.Errors)
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+    </form>
 
-        submitMealsButton.addEventListener('click', () => {
-            // Convert selectedMeals array to JSON
-            const selectedMealsJSON = JSON.stringify(selectedMeals);
+        <script>
+            const mealSelect = document.getElementById('mealSelect');
+            const selectedDateInput = document.getElementById('selectedDate');
+            const selectedroomrInput = document.getElementById('selectedroomr');
+            const addMealButton = document.getElementById('addMealButton');
+            const submitMealsButton = document.getElementById('submitMealsButton');
+            const selectedMeals = [];
+            const selectedMealsDisplay = document.getElementById('selectedMealsDisplay');
 
-            // Send the JSON data to the server using AJAX
-            fetch('/Reservation/MealR', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: selectedMealsJSON
-            })
-                .then(response => {
-                    if (response.success) {
-                        // Redirect to PaymentConfirm
-                       history.go(-3);
-                    } else {
-                        console.error('An error occurred:', response);
+            addMealButton.addEventListener('click', () => {
+                const selectedMealId = parseInt(mealSelect.value);
+                const selectedDate = selectedDateInput.value;
+                const selectedroomrid = selectedroomrInput.value;
+                if (selectedMealId && selectedDate && selectedroomrid) {
+                    selectedMeals.push({ id: selectedMealId, date: selectedDate, roomrid: selectedroomrid });
+                    // Display selected meals to the user
+                    selectedMealsDisplay.innerHTML = selectedMeals.map(meal => `Selected Meal ID: ${meal.id}, Date: ${meal.date}<br>`).join('');
+                    console.log(selectedMeals);
+                }
+            });
+
+            submitMealsButton.addEventListener('click', () => {
+                // Convert selectedMeals array to JSON
+                const selectedMealsJSON = JSON.stringify(selectedMeals);
+
+                // Send the JSON data to the server using AJAX
+                fetch('/Reservation/MealR', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: selectedMealsJSON
+                })
+            .then(response => {
+                if (response.ok) {
+                    window.location = '/'; // Add this line to redirect
+                } else {
+                        // Hata durumunu ele al
+                        console.error("Bir hata oluştu: ", response);
                     }
                 })
-
                 .catch(error => {
                     console.error("Bir hata oluştu: ", error);
                 });
           
-        });
-    </script>
-
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <div class="alert alert-danger">
-            <ul>
-                @foreach (var modelState in ViewData.ModelState.Values)
-                {
-                    foreach (var error in modelState.Errors)
-                    {
-                        <li>@error.ErrorMessage</li>
-                    }
-                }
-            </ul>
-        </div>
-    }
-</form>
+            });
+        </script>

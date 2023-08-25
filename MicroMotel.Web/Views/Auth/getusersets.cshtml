@@ -1,21 +1,38 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "getusersets";
     Layout = "~/Views/Shared/_mainlayout.cshtml";
 }
 @model UserViewModel
 
-<h1>User Information</h1>
+<h3>User Information</h3>
 
-<ul>
-    <li><strong>User ID:</strong> @Model.Id</li>
-    <li><strong>User Name:</strong> @Model.UserName</li>
-    <li><strong>Email:</strong> @Model.Email</li>
-    <li><strong>City:</strong> @Model.City</li>
+<style>
+    .user-info {
+        list-style: none;
+        padding: 0;
+    }
+
+        .user-info li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .user-info strong {
+            min-width: 100px; /* Adjust this value as needed */
+        }
+
+    .add-balance-button {
+        margin-left: 30px;
+    }
+</style>
+
+<ul class="user-info">
+    <li><strong>User ID:</strong><span>@Model.Id</span></li>
+    <li><strong>Username:</strong><span>@Model.UserName</span></li>
+    <li><strong>Email:</strong><span>@Model.Email</span></li>
+    <li><strong>City:</strong><span>@Model.City</span></li>
+    <li><strong>Balance:</strong><span>@Model.Budget</span><a asp-action="Payment" asp-controller="Reservation" class="btn btn-link btn-sm add-balance-button">Add Balance</a></li>
 </ul>
 
-<a class="btn btn-warning btn-sm " >Update info</a>
-<a class="btn btn-danger btn-sm " >Delete Account</a>
-
-
-<a asp-page="/Index">Back to Home</a>
+<a asp-action="updateuser" asp-controller="auth" class="btn btn-warning btn-sm">Update info</a>

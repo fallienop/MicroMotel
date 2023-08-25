@@ -35,20 +35,21 @@
 
             // Formu AJAX ile sunucuya gönder
             var formData = new FormData(document.getElementById("myForm"));
-            fetch("@Url.Action("AddMealS", "Admin")", {
+            fetch("@Url.Action("AddMeal", "Admin")", {
                 method: "POST",
                 body: formData
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        window.location.href = data.redirectUrl;
+                .then(response => {
+                    if (response.ok) {
+                        // Başarılı ise geri git
+                        history.go(-1);
                     } else {
-                        // Handle error
+                        // Hata durumunu ele al
+                        console.error("Bir hata oluştu: ", response);
                     }
                 })
                 .catch(error => {
-                    console.error("An error occurred: ", error);
+                    console.error("Bir hata oluştu: ", error);
                 });
         });
     </script>

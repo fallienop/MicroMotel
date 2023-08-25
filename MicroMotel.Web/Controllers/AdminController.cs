@@ -179,7 +179,8 @@ namespace MicroMotel.Web.Controllers
         {
             await _MotelService.CreateNewMeal(mci);
 
-            return RedirectToAction(nameof(PropertyWithMeals),new {Id=mci.PropertyId});
+            return RedirectToAction("propertylist");
+
         }
 
         public async Task<IActionResult> DeleteMeal(int id,int propid)

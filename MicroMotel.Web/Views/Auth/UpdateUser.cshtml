@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewData["Title"] = "UpdateUser";
+    Layout = "~/Views/Shared/_mainlayout.cshtml";
+}
+@model UserViewModel
+<form class="form-group" method="post">
+    @Html.LabelFor(x=>x.Email,"Email")
+    @Html.TextBoxFor(x=>x.Email,new {@class="form-control"})
+    <br />
+    @Html.LabelFor(x=>x.UserName,"Username")
+    @Html.TextBoxFor(x=>x.UserName,new {@class="form-control"})
+    <br />
+    @Html.LabelFor(x=>x.City,"City")
+    @Html.TextBoxFor(x=>x.City,new {@class="form-control"})
+    <br />
+    <button type="submit" class="btn btn-success btn-sm">Update</button>
+</form>

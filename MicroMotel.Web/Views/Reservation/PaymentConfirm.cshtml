@@ -64,11 +64,11 @@
 <body>
   <form asp-action="paymentconfirm" asp-controller="Reservation" method="post">  <div class="container">
         <h2>Code has sent to your email</h2>
-        <div class="input-container">
-            <label for="verificationCode">Verification code:</label>
-            <input type="number" asp-for="@Model.Code" placeholder="Enter code">
-            @*@Html.ValidationMessageFor(model => model) <!-- Doğrulama hatası mesajı görüntülenir -->*@
-        </div>
+            <<div class="input-container">
+                <label for="verificationCode">Verification code:</label>
+                <input type="text" asp-for="@Model.Code" placeholder="Enter code">
+                <span class="text-danger">@Html.ValidationMessageFor(model => model.Code)</span>
+            </div>
         <button class="btn btn-sm btn-outline-behance" type="submit" >Verify</button>
     </div>
     </form>

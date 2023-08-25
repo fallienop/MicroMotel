@@ -77,5 +77,19 @@ namespace MicroMotel.Web.Controllers
         }
 
         
+        public async Task<IActionResult> UpdateUser()
+        {
+            var resp = await _userService.GetUser();
+            return View(resp);
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateUser(UserUpdateModel uum)
+        {
+
+            var resp = await _userService.UpdateUser(uum);
+            return RedirectToAction(nameof(getusersets));
+
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MicroMotel.Shared.Services;
+using MicroMotel.Web.Models;
 using MicroMotel.Web.Models.FakePayment;
 using MicroMotel.Web.Models.Motel.Meal;
 using MicroMotel.Web.Models.Motel.Room;
@@ -21,13 +22,15 @@ namespace MicroMotel.Web.Controllers
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly IMotelService _motelService;
         private readonly IPaymentService _paymentService;
+        private readonly IUserService _userservice;
 
-        public ReservationController(IReservationService reservationService, ISharedIdentityService sharedIdentityService, IMotelService motelService, IPaymentService paymentService)
+        public ReservationController(IReservationService reservationService, ISharedIdentityService sharedIdentityService, IMotelService motelService, IPaymentService paymentService, IUserService userservice)
         {
             _reservationService = reservationService;
             _sharedIdentityService = sharedIdentityService;
             _motelService = motelService;
             _paymentService = paymentService;
+            _userservice = userservice;
         }
 
         public async Task<IActionResult> Room(int id,int propertyid)
@@ -137,9 +140,10 @@ namespace MicroMotel.Web.Controllers
 
                 }
 
-                TempData["prices"] = prices;
-                return Json(new { success = true, redirectUrl = Url.Action("Payment", "Reservation") });
-
+               // TempData["prices"] = prices;
+                
+               // return Json(new { success = true, redirectUrl = Url.Action("Payment", "Reservation") });
+               return RedirectToAction("Index");    
             }
             catch 
             {
@@ -155,9 +159,7 @@ namespace MicroMotel.Web.Controllers
 
 
             public async Task<IActionResult> Payment()
-            
-        
-        {
+            {
                 //decimal total=0;
              //var roomid= int.Parse(HttpContext.Session.GetString("resp"));
                 //var reservstart= Convert.ToDateTime(HttpContext.Session.GetString("reservstart"));
@@ -176,7 +178,7 @@ namespace MicroMotel.Web.Controllers
                 PaymentInput payment = new PaymentInput()
                 {
                     // TotalPrice = total,
-                    TotalPrice = 100
+                    TotalPrice = 0
                };
                 return View(payment);
             }
@@ -184,11 +186,14 @@ namespace MicroMotel.Web.Controllers
             [HttpPost]
             public async Task<IActionResult> Payment(PaymentInput payment)
             {
+
                var r= await _paymentService.ReceivePayment(payment);
           
                 if (r)
                 {
                     var card = await _paymentService.GetCard(payment.CardNumber);
+                var amount = payment.TotalPrice;
+                HttpContext.Session.SetString("Amount", amount.ToString());
                     var randomcode = SendEmail(card.Email);
                     TempData["RandomCode"] = randomcode;
                     return RedirectToAction("PaymentConfirm");
@@ -205,23 +210,29 @@ namespace MicroMotel.Web.Controllers
             VerificationCode vc = new VerificationCode() { Code=0 };
             HttpContext.Session.SetInt32("randomcode", rand);
             return View(vc);
-        
         }
+        
         [HttpPost]
-        public IActionResult PaymentConfirm(VerificationCode vc)
+        public async Task<IActionResult> PaymentConfirm(VerificationCode vc)
         {
             int? rand = HttpContext.Session.GetInt32("randomcode");
             bool isCodeCorrect = rand == vc.Code;
 
+
             if (isCodeCorrect)
             {
-               
+                var user = await _userservice.GetUser();
+                decimal money = Convert.ToDecimal(HttpContext.Session.GetString("Amount"));
+                user.Budget += money;
+                UserUpdateModel usr = new UserUpdateModel() { Budget=user.Budget,City=user.City,Email=user.Email,Username=user.UserName };
+
+              await _userservice.AddBalance(usr);
                 return RedirectToAction("Index","Home");
             }
             else
             {
             
-                ModelState.AddModelError("verificationCode", "Doğrulama kodu yanlış.");
+                ModelState.AddModelError("verificationCode", "Verification code is wrong");
                 return View();
             }
         }

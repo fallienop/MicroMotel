@@ -46,7 +46,7 @@ namespace MicroMotel.IdentityServer.Controller
                 return BadRequest();
             }
             var role = await _userManager.GetRolesAsync(user);
-            return Ok(new { Id = user.Id, UserName = user.UserName, City = user.City, Email = user.Email });
+            return Ok(new { Id = user.Id, UserName = user.UserName, City = user.City, Email = user.Email,Budget=user.Budget });
 
 
         }
@@ -94,7 +94,7 @@ namespace MicroMotel.IdentityServer.Controller
             user.UserName = userupdate.Username;
             user.City = userupdate.City;
             user.Email = userupdate.Email;
-
+         
            var res= await _userManager.UpdateAsync(user);
             if (res.Succeeded)
             {
@@ -108,6 +108,25 @@ namespace MicroMotel.IdentityServer.Controller
 
         }
 
+        [HttpPut]
+        public async Task<IActionResult> AddBalance(UserUpdateDTO balanceupdate)
+        {
+
+            var useridclaim=User.Claims.FirstOrDefault(x=>x.Type== JwtRegisteredClaimNames.Sub);
+            var user = await _userManager.FindByIdAsync(useridclaim.Value);
+            user.Budget = balanceupdate.Budget;
+            var res = await _userManager.UpdateAsync(user);
+            if (res.Succeeded)
+            {
+                return Ok();
+            }
+
+            else
+            {
+                return BadRequest();
+            }
+
+        }
         [HttpPost]
         public async Task<IActionResult> NewUser(SignUpDTO sud)
         {
@@ -116,7 +135,8 @@ namespace MicroMotel.IdentityServer.Controller
             {
                 UserName = sud.Username,
                 City = sud.City,
-                Email = sud.Email
+                Email = sud.Email,
+                Budget=0
             };
             
             var res = await _userManager.CreateAsync(user, sud.Password);
@@ -185,6 +205,7 @@ namespace MicroMotel.IdentityServer.Controller
 
         }
 
+      
         
         [HttpPut("changerole/{id}")]
        public async Task<IActionResult> ChangeRole(string id)

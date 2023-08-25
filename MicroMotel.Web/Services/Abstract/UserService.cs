@@ -29,6 +29,12 @@ namespace MicroMotel.Web.Services.Abstract
 
         }
 
+        public async Task<bool> AddBalance(UserUpdateModel uum)
+        {
+            var response=await _httpClient.PutAsJsonAsync<UserUpdateModel>($"api/User/AddBalance",uum);
+            return response.IsSuccessStatusCode;
+        }
+
         public async Task<string> GetUserRole()
         {
             var response = await _httpClient.GetAsync($"api/User/getuserrole/role");
