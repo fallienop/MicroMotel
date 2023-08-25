@@ -15,7 +15,7 @@ namespace MicroMotel.Web.Services.Abstract
 
         public async Task<Card> GetCard(string cardnumber)
         {
-            var response = await _httpClient.GetFromJsonAsync<Response<Card>>("fakepayment");
+            var response = await _httpClient.GetFromJsonAsync<Response<Card>>($"fakepayment/{cardnumber}");
             var card =response.Data;
             return card;
         }

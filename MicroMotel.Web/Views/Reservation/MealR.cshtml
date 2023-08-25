@@ -12,12 +12,7 @@
 
     @Html.HiddenFor(x=>x.RoomRId)
     <input type="hidden" asp-for="RoomRId" name="RoomRId" value="@Model.RoomRId" id="selectedroomr"/>
-    @*   <div class="form-group">
-    <label for="RoomId">Room:</label>
-    <select class="form-control" asp-for="RoomId">
-    <!-- Populate room options here -->
-    </select>
-    </div>*@
+ 
     
     
     <div class="form-group">
@@ -51,42 +46,7 @@
     <br />
 
     <div id="selectedMealsDisplay"></div>
-    @*<script>
-        const mealSelect = document.getElementById('mealSelect');
-        const selectedDateInput = document.getElementById('selectedDate');
-        const selectedroomrInput = document.getElementById('selectedroomr');
-        const addMealButton = document.getElementById('addMealButton');
-        const submitMealsButton = document.getElementById('submitMealsButton');
-        const selectedMeals = [];
-        const selectedMealsDisplay = document.getElementById('selectedMealsDisplay');
-        addMealButton.addEventListener('click', () => {
-            const selectedMealId = parseInt(mealSelect.value);
-            const selectedDate = selectedDateInput.value;
-            const selectedroomrid = selectedroomrInput.value;
-            if (selectedMealId && selectedDate && selectedroomrid) {
-                selectedMeals.push({ id: selectedMealId, date: selectedDate, roomrid: selectedroomrid });
-                // Display selected meals to the user
-                selectedMealsDisplay.innerHTML = selectedMeals.map(meal => `Selected Meal ID: ${meal.id}, Date: ${meal.date}<br>`).join('');
-                console.log(selectedMeals);
-            }
-        });
-
-        submitMealsButton.addEventListener('click', () => {
-            // Convert selectedMeals array to JSON
-            const selectedMealsJSON = JSON.stringify(selectedMeals);
-
-            // Create a hidden input to hold the JSON data
-            const selectedMealsInput = document.createElement('input');
-            selectedMealsInput.type = 'hidden';
-            selectedMealsInput.name = 'selectedMealsJson';
-            selectedMealsInput.value = selectedMealsJSON;
-
-            // Append the input to the form and submit the form
-            const form = document.querySelector('form');
-            form.appendChild(selectedMealsInput);
-            form.submit();
-        });
-    </script>*@
+    
     <script>
         const mealSelect = document.getElementById('mealSelect');
         const selectedDateInput = document.getElementById('selectedDate');
@@ -120,35 +80,19 @@
                 },
                 body: selectedMealsJSON
             })
-                //.then(response => response.json())
-                //.then(data => {
-                //    // Handle the response from the server if needed
-                //    console.log(data);
-                //    if (response.ok) {
-                //        console.log('Submission successful');
-                //        // Attempt redirection
-                //        //window.location.reload();
+                .then(response => {
+                    if (response.success) {
+                        // Redirect to PaymentConfirm
+                       history.go(-3);
+                    } else {
+                        console.error('An error occurred:', response);
+                    }
+                })
 
-                //    } else {
-                //        console.log('Submission failed');
-                //        return response.json();
-                //    }
-                //})
-                //.catch(error => {   
-                //    console.error('An error occurred:', error);
-                //});
-                //.then(response => {
-                //    if (response.ok) {
-                //        // Başarılı ise geri git
-                //        history.go(-4);
-                //    } else {
-                //        // Hata durumunu ele al
-                //        console.error("Bir hata oluştu: ", response);
-                //    }
-                //})
-                //.catch(error => {
-                //    console.error("Bir hata oluştu: ", error);
-                //});
+                .catch(error => {
+                    console.error("Bir hata oluştu: ", error);
+                });
+          
         });
     </script>
 

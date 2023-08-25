@@ -1,5 +1,4 @@
-﻿
-using MicroMotel.Shared.Services;
+﻿using MicroMotel.Shared.Services;
 using MicroMotel.Web.Models.FakePayment;
 using MicroMotel.Web.Models.Motel.Meal;
 using MicroMotel.Web.Models.Motel.Room;
@@ -98,7 +97,6 @@ namespace MicroMotel.Web.Controllers
             }
             catch
             {
-                // Hata durumunda önceki sayfaya veya başka bir sayfaya yönlendirme yapabilirsiniz.
                 string referer = Request.Headers["Referer"].ToString();
                 return Redirect(referer);
             }
@@ -140,12 +138,12 @@ namespace MicroMotel.Web.Controllers
                 }
 
                 TempData["prices"] = prices;
-                return RedirectToAction(nameof(Payment));
-                // İşlemler başarılıysa veya hata olmadıysa başka bir sayfaya yönlendirme yapabilirsiniz.
+                return Json(new { success = true, redirectUrl = Url.Action("Payment", "Reservation") });
+
             }
             catch 
             {
-                // Hata durumunda önceki sayfaya veya başka bir sayfaya yönlendirme yapabilirsiniz.
+          
                 string referer = Request.Headers["Referer"].ToString();
                 return Redirect(referer); 
             }
@@ -156,71 +154,73 @@ namespace MicroMotel.Web.Controllers
 
 
 
-        public async Task<IActionResult> Payment()
+            public async Task<IActionResult> Payment()
+            
+        
         {
-            decimal total=0;
-         var roomid= int.Parse(HttpContext.Session.GetString("resp"));
-            var reservstart= Convert.ToDateTime(HttpContext.Session.GetString("reservstart"));
-            var reservend= Convert.ToDateTime(HttpContext.Session.GetString("reservend"));
-            var room = await _motelService.GetRoomById(roomid);
-          int h=(int) (reservend - reservstart).TotalHours;
-            if (TempData["prices"] != null)
-            {
-                var totalmealprice = TempData["prices"] as List<decimal>;
-                foreach (var mealprice in totalmealprice)
+                //decimal total=0;
+             //var roomid= int.Parse(HttpContext.Session.GetString("resp"));
+                //var reservstart= Convert.ToDateTime(HttpContext.Session.GetString("reservstart"));
+                //var reservend= Convert.ToDateTime(HttpContext.Session.GetString("reservend"));
+                //var room = await _motelService.GetRoomById(roomid);
+              //int h=(int) (reservend - reservstart).TotalHours;
+                //if (TempData["prices"] != null)
+                //{
+                    //var totalmealprice = TempData["prices"] as List<decimal>;
+                    //foreach (var mealprice in totalmealprice)
+                    //{
+                        //total += mealprice;
+                    //}
+                //}
+                //total += room.Price * h;
+                PaymentInput payment = new PaymentInput()
                 {
-                    total += mealprice;
-                }
+                    // TotalPrice = total,
+                    TotalPrice = 100
+               };
+                return View(payment);
             }
-            total += room.Price * h;
-           PaymentInput payment=new PaymentInput()
-           {
-               TotalPrice = total,
-              
-           };
-            return View(payment);
-        }
 
-        [HttpPost]
-        public async Task<IActionResult> Payment(PaymentInput payment)
-        {
-           var r= await _paymentService.ReceivePayment(payment);
-            if (r)
+            [HttpPost]
+            public async Task<IActionResult> Payment(PaymentInput payment)
             {
-                var card = await _paymentService.GetCard(payment.CardNumber);
-                var randomcode = SendEmail(card.Email);
-                TempData["RandomCode"] = randomcode;
-                return RedirectToAction("PaymentConfirm");
-            }
+               var r= await _paymentService.ReceivePayment(payment);
+          
+                if (r)
+                {
+                    var card = await _paymentService.GetCard(payment.CardNumber);
+                    var randomcode = SendEmail(card.Email);
+                    TempData["RandomCode"] = randomcode;
+                    return RedirectToAction("PaymentConfirm");
+                }
 
             
-            return View();
-        }
+                return View();
+            }
 
         public IActionResult PaymentConfirm()
         {
             string random = TempData["RandomCode"] as string;
             int rand = int.Parse(random);
-            ViewBag.RandomCode = rand;
-            return View();
+            VerificationCode vc = new VerificationCode() { Code=0 };
+            HttpContext.Session.SetInt32("randomcode", rand);
+            return View(vc);
         
         }
         [HttpPost]
-        public IActionResult PaymentConfirm(int verificationCode)
+        public IActionResult PaymentConfirm(VerificationCode vc)
         {
-            int rand = ViewBag.RandomCode; // ViewBag üzerinden random kodu alıyoruz
-            bool isCodeCorrect = rand == verificationCode;
+            int? rand = HttpContext.Session.GetInt32("randomcode");
+            bool isCodeCorrect = rand == vc.Code;
 
             if (isCodeCorrect)
             {
-                // Verification code is correct, do something
-                // Örneğin, işlem başarılı olduğunda bir yönlendirme yapabilirsiniz
-                return RedirectToAction("Homes");
+               
+                return RedirectToAction("Index","Home");
             }
             else
             {
-                // Verification code is incorrect, handle accordingly
-                // Örneğin, işlem başarısız olduğunda kullanıcıya hata mesajı gösterebilirsiniz
+            
                 ModelState.AddModelError("verificationCode", "Doğrulama kodu yanlış.");
                 return View();
             }
@@ -231,133 +231,26 @@ namespace MicroMotel.Web.Controllers
             string random6 = (r.Next(100000, 999999)).ToString();
             MailMessage mymessage=new MailMessage();
             SmtpClient client = new();
-            client.Credentials = new System.Net.NetworkCredential("micromotelfp@outlook.com", "1_Micromotel");
+            client.Credentials = new System.Net.NetworkCredential("sahin.b.03@outlook.com", "1Parola7");
             client.Port = 587;
             client.Host = "smtp-mail.outlook.com";
             client.EnableSsl = true;
             mymessage.To.Add(email);
-            mymessage.From = new MailAddress("micromotelfp@outlook.com");
+            mymessage.From = new MailAddress("sahin.b.03@outlook.com");
             mymessage.Subject = "Confirmation Code";
             mymessage.Body = $"Your payment confirmation code : {random6}";
-
+            client.Send(mymessage);
             return random6;
         }
 
     }
+    
 
-   
-    
-    
-    
-    
-    
-   
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     public class SelectedMealViewModel
     {
-        public int id { get; set; }  // Seçilen yemeğin ID'si
-        public DateTime date { get; set; } // Seçilen tarih
-        public int roomrid { get; set; } // Seçilen tarih
+        public int id { get; set; }  
+        public DateTime date { get; set; }
+        public int roomrid { get; set; } 
 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#region oldmealr
-//[httppost]
-//public async  task<iactionresult> mealr(mealrcreateinput mci)
-//{
-//    try
-//    {
-
-//        var validator = new mealrcreatevalidator(_reservationservice);
-//        var result = await validator.validateasync(mci);
-
-//        if (result.isvalid)
-//        {
-//            await _reservationservice.newmealreservation(mci);
-
-//        }
-//        if (!result.isvalid)
-//        {
-//            foreach (var error in result.errors)
-//            {
-//                modelstate.addmodelerror("", error.errormessage);
-//            }
-
-//            return view(mci);
-//        }
-
-//        return redirecttoaction(nameof(homecontroller.index), "home");
-//    }
-//    catch
-//    {
-//        string referer = request.headers["referer"].tostring();
-//        return redirect(referer);
-//    }
-//} 
-#endregion

@@ -24,7 +24,7 @@ namespace MicroMotel.Services.FakePayment.Controllers
         public async Task<IActionResult> Payment(PaymentInputDTO paymentInput)
         {
             bool response=false;
-            if (_cardDbContext.Cards.Any(x => x.CardNumber == paymentInput.CardNumber && x.CardExpiration == paymentInput.CardExpiration && x.CVV == paymentInput.CVV){
+            if (_cardDbContext.Cards.Any(x => x.CardNumber == paymentInput.CardNumber && x.CardExpiration == paymentInput.CardExpiration && x.CVV == paymentInput.CVV)){
               var card=  await _cardDbContext.Cards.Where(x => x.CardNumber == paymentInput.CardNumber).FirstAsync();
          
                 card.Balance-=paymentInput.TotalPrice;  
@@ -45,8 +45,9 @@ namespace MicroMotel.Services.FakePayment.Controllers
             }
          
             return CustomActionResult(Response<bool>.Success(response,200));
-        } 
+        }
 
+        [HttpGet("{cardnumber}")]
         public async Task<IActionResult>GetCard(string cardnumber)
         {
            var card=await _cardDbContext.Cards.Where(x=>x.CardNumber==cardnumber).FirstAsync();

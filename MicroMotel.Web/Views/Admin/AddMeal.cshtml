@@ -5,7 +5,7 @@
 }
 
 @model MicroMotel.Web.Models.Motel.Meal.MealCreateInput
-<form class="form-group" method="post">
+<form id="myForm" class="form-group" method="post">
 
     @Html.HiddenFor(x=>x.PropertyId)
 
@@ -25,9 +25,33 @@
     <textarea name="Description"></textarea>
     <br />
     <br />
-    <button class="btn btn-success btn-sm">Save</button>
+
+    <button type="submit" class="btn btn-success btn-sm">Save</button>
     <span class="space-between-buttons"></span> <!-- Boşluk -->
     <a href="/admin/propertywithmeals/@Model.PropertyId" class="btn btn-outline-dark btn-sm">Cancel</a>
+    <script>
+        document.getElementById("myForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Formun normal submit işlemini engelle
+
+            // Formu AJAX ile sunucuya gönder
+            var formData = new FormData(document.getElementById("myForm"));
+            fetch("@Url.Action("AddMealS", "Admin")", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = data.redirectUrl;
+                    } else {
+                        // Handle error
+                    }
+                })
+                .catch(error => {
+                    console.error("An error occurred: ", error);
+                });
+        });
+    </script>
 </form>
 <style>
     /* Stil textarea */

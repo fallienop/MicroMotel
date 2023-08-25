@@ -6,6 +6,8 @@
 
 @model PaymentInput
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap">
+<form asp-controller="Reservation" asp-action="Payment" method="post">
+    <input type="hidden" asp-for="TotalPrice" />
 <div class="container p-0" style="color:white">
     <div class="card px-4">
         <p class="h8 py-3">Payment Details</p>
@@ -13,38 +15,36 @@
             <div class="col-12">
                 <div class="d-flex flex-column">
                     <p class="text mb-1">Person Name</p>
-                    <input asp-for="Owner" class="form-control mb-3" type="text" placeholder="Name" value="Barry Allen">
+                    <input asp-for="Owner" class="form-control mb-3" type="text"  placeholder="Name" value="Shahin">
                 </div>
             </div>
             <div class="col-12">
                 <div class="d-flex flex-column">
                     <p class="text mb-1">Card Number</p>
-                    <input asp-for="CardNumber" class="form-control mb-3" type="text" placeholder="1234 5678 435678">
+                        <input asp-for="CardNumber" class="form-control mb-3" type="text" value="1020304010203040" placeholder="1234 5678 435678">
                 </div>
             </div>
             <div class="col-6">
                 <div class="d-flex flex-column">
                     <p class="text mb-1">Expiry</p>
-                    <input asp-for="CardExpiration" class="form-control mb-3" type="text" placeholder="MM/YYYY">
+                        <input asp-for="CardExpiration" class="form-control mb-3" value="02/26" type="text" placeholder="MM/YYYY">
                 </div>
             </div>
             <div class="col-6">
                 <div class="d-flex flex-column">
                     <p class="text mb-1">CVV/CVC</p>
-                    <input asp-for="CVV" class="form-control mb-3 pt-2 " type="password" placeholder="***">
+                        <input asp-for="CVV" class="form-control mb-3 pt-2 " value="200" type="password" placeholder="***">
                 </div>
             </div>
             <br />
             <div class="col-12">
-                <div class="btn btn-primary mb-3">
-                    <span class="ps-3">Pay $243</span>
-                    <span class="fas fa-arrow-right"></span>
-                </div>
+              <button  type="submit" class="btn btn-primary mb-3">Pay @Model.TotalPrice</button>
+                 
             </div>
         </div>
     </div>
 </div>
-
+</form>
                 <style>
 
 * {
