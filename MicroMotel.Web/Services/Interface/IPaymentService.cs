@@ -6,5 +6,6 @@ namespace MicroMotel.Web.Services.Interface
     {
         Task<bool> ReceivePayment(PaymentInput paymentInput);
         Task<Card> GetCard(string cardnumber);
+        Task<bool> TestCard(PaymentInput paymentInput);
     }
 }

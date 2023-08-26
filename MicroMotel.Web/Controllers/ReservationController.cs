@@ -1,21 +1,17 @@
 ﻿using MicroMotel.Shared.Services;
 using MicroMotel.Web.Models;
 using MicroMotel.Web.Models.FakePayment;
-using MicroMotel.Web.Models.Motel.Meal;
-using MicroMotel.Web.Models.Motel.Room;
 using MicroMotel.Web.Models.Reservation.MealR;
 using MicroMotel.Web.Models.Reservation.RoomR;
-using MicroMotel.Web.Services.Abstract;
 using MicroMotel.Web.Services.Interface;
 using MicroMotel.Web.Validators;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Net.Mail;
+using System.Text.Json;
 
 namespace MicroMotel.Web.Controllers
 {
-        [ResponseCache(NoStore = true, Duration = 0)]
+    [ResponseCache(NoStore = true, Duration = 0)]
     public class ReservationController : Controller
     {
         private readonly IReservationService _reservationService;
@@ -59,13 +55,29 @@ namespace MicroMotel.Web.Controllers
             
             if(result.IsValid) 
             {
+                
                 var resp =await _reservationService.NewRoomReservation(rci);
 
                 HttpContext.Session.SetString("propid", rci.PropertyId.ToString()); 
                HttpContext.Session.SetString("resp", resp.ToString()); 
                HttpContext.Session.SetString("reservstart", (rci.ReservStart.ToString()));
-               HttpContext.Session.SetString("reservend", (rci.ReservEnd).ToString());  
-                
+               HttpContext.Session.SetString("reservend", (rci.ReservEnd).ToString());
+                var room = await _motelService.GetRoomById(rci.RoomId);
+                decimal total = ((decimal)(((rci.ReservEnd - rci.ReservStart).TotalMinutes) / 60) * room.Price);
+                var user = await _userservice.GetUser();
+                if (user.Budget < total)
+                {
+                    ModelState.AddModelError(string.Empty, "insufficient balance");
+                    return RedirectToAction("getusersets", "auth");
+
+                }
+                else
+                {
+                    user.Budget -= total;
+                    UserUpdateModel usr = new UserUpdateModel() { Budget = user.Budget, City = user.City, Email = user.Email, Username = user.UserName };
+
+                    await _userservice.AddBalance(usr);
+                }
             }
             if (!result.IsValid)
             {
@@ -124,8 +136,24 @@ namespace MicroMotel.Web.Controllers
                     prices.Add(meal.Price);
                     if (result.IsValid)
                     {
-                     var r=   await _reservationService.NewMealReservation(mci);
+                        decimal total = prices.Sum();
+                        var user = await _userservice.GetUser();
 
+                        if (user.Budget < total)
+                        {
+                            ModelState.AddModelError(string.Empty, "insufficient balance");
+                            return RedirectToAction("getusersets", "auth");
+
+                        }
+                        else
+                        {
+                            user.Budget -= total;
+                            UserUpdateModel usr = new UserUpdateModel() { Budget = user.Budget, City = user.City, Email = user.Email, Username = user.UserName };
+
+                            await _userservice.AddBalance(usr);
+
+                            var r = await _reservationService.NewMealReservation(mci);
+                        }
                      }
                     if (!result.IsValid)
                     {
@@ -142,8 +170,7 @@ namespace MicroMotel.Web.Controllers
 
                // TempData["prices"] = prices;
                 
-               // return Json(new { success = true, redirectUrl = Url.Action("Payment", "Reservation") });
-               return RedirectToAction("Index");    
+               return Json(new { success = true, redirectUrl = Url.Action("Payment", "Reservation") });
             }
             catch 
             {
@@ -187,8 +214,8 @@ namespace MicroMotel.Web.Controllers
             public async Task<IActionResult> Payment(PaymentInput payment)
             {
 
-               var r= await _paymentService.ReceivePayment(payment);
-          
+              HttpContext.Session.SetString("paymentobj",JsonSerializer.Serialize(payment));
+            var r = await _paymentService.TestCard(payment);
                 if (r)
                 {
                     var card = await _paymentService.GetCard(payment.CardNumber);
@@ -225,8 +252,9 @@ namespace MicroMotel.Web.Controllers
                 decimal money = Convert.ToDecimal(HttpContext.Session.GetString("Amount"));
                 user.Budget += money;
                 UserUpdateModel usr = new UserUpdateModel() { Budget=user.Budget,City=user.City,Email=user.Email,Username=user.UserName };
-
-              await _userservice.AddBalance(usr);
+                var paymentobject = JsonSerializer.Deserialize<PaymentInput>(HttpContext.Session.GetString("paymentobj"));
+                await _paymentService.ReceivePayment(paymentobject);
+                await _userservice.AddBalance(usr);
                 return RedirectToAction("Index","Home");
             }
             else

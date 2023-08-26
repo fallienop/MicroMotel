@@ -26,5 +26,11 @@ namespace MicroMotel.Web.Services.Abstract
             var resp = await response.Content.ReadFromJsonAsync<Response<bool>>();
             return resp.Data;
         }
+        public async Task<bool> TestCard(PaymentInput paymentInput)
+        {
+            var response = await _httpClient.PostAsJsonAsync("fakepayment/getcard", paymentInput);
+            var resp = await response.Content.ReadFromJsonAsync<Response<bool>>();
+            return resp.Data;
+        }
     }
 }

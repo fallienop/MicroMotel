@@ -5,8 +5,8 @@ namespace MicroMotel.Web.Models.Motel.Property
     public class PropertyViewModel
     {
         public int Id { get; set; }
-        public string? Name { get; set; }
-        public AddressViewModel? Address { get; set; }
+        public string Name { get; set; }
+        public AddressViewModel Address { get; set; }
 
         public byte? RoomCount { get; set; }
                    

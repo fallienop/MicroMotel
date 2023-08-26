@@ -20,32 +20,55 @@ namespace MicroMotel.Services.FakePayment.Controllers
             _cardDbContext = cardDbContext;
         }
 
-        [HttpPost] 
+        [HttpPost]
         public async Task<IActionResult> Payment(PaymentInputDTO paymentInput)
         {
-            bool response=false;
-            if (_cardDbContext.Cards.Any(x => x.CardNumber == paymentInput.CardNumber && x.CardExpiration == paymentInput.CardExpiration && x.CVV == paymentInput.CVV)){
-              var card=  await _cardDbContext.Cards.Where(x => x.CardNumber == paymentInput.CardNumber).FirstAsync();
-         
-                card.Balance-=paymentInput.TotalPrice;  
-                if(card.Balance < 0)
+            bool response = false;
+            if (_cardDbContext.Cards.Any(x => x.CardNumber == paymentInput.CardNumber && x.CardExpiration == paymentInput.CardExpiration && x.CVV == paymentInput.CVV)) {
+                var card = await _cardDbContext.Cards.Where(x => x.CardNumber == paymentInput.CardNumber).FirstAsync();
+
+                card.Balance -= paymentInput.TotalPrice;
+                if (card.Balance < 0)
                 {
-                    response= false;
+                    response = false;
                 }
-               _cardDbContext.Update(card);
-               var resp= await _cardDbContext.SaveChangesAsync();
+                _cardDbContext.Update(card);
+                var resp = await _cardDbContext.SaveChangesAsync();
                 if (resp > 0)
                 {
-                    response=true;
+                    response = true;
                 }
                 else
                 {
-                    response = false;   
+                    response = false;
                 }
             }
-         
-            return CustomActionResult(Response<bool>.Success(response,200));
+
+            return CustomActionResult(Response<bool>.Success(response, 200));
         }
+
+        [HttpPost("getcard")]
+        public async Task<IActionResult> Getcard(PaymentInputDTO paymentInput)
+        {
+            bool response = false;
+            if (_cardDbContext.Cards.Any(x => x.CardNumber == paymentInput.CardNumber && x.CardExpiration == paymentInput.CardExpiration && x.CVV == paymentInput.CVV))
+            {
+                var card = await _cardDbContext.Cards.Where(x => x.CardNumber == paymentInput.CardNumber).FirstAsync();
+
+             
+                if (card !=null)
+                {
+                    response = true;
+                }
+                else
+                {
+                    response = false;
+                }
+            }
+
+            return CustomActionResult(Response<bool>.Success(response, 200));
+        }
+
 
         [HttpGet("{cardnumber}")]
         public async Task<IActionResult>GetCard(string cardnumber)

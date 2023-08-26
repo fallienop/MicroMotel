@@ -50,6 +50,11 @@ namespace MicroMotel.Web.Controllers
             var room = await _motelService.GetRoomById(id);
             return View(room);
         }
+
+        public IActionResult Contact()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
