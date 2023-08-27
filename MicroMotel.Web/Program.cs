@@ -24,6 +24,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     opt.Cookie.Name = "micromotelcookie";
 });
 builder.Services.AddHttpContextAccessor();
+
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
 builder.Services.AddAccessTokenManagement();    
 var serviceurls = builder.Configuration.GetSection("ServiceURLs").Get<ServiceURLs>();

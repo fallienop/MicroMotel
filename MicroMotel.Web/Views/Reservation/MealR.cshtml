@@ -42,7 +42,7 @@
         }
 
         <button type="button" id="addMealButton" class="btn btn-primary">Add Meal</button>
-        <button type="submit" class="btn btn-success" id="submitMealsButton">Submit All Meals</button>
+    <button type="submit" id="getUserSetsButton" class="btn btn-success" id="submitMealsButton">Submit All Meals</button>
         <br />
 
         <div id="selectedMealsDisplay"></div>
@@ -63,7 +63,26 @@
             </div>
         }
     </form>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var getUserSetsButton = document.getElementById("getUserSetsButton");
 
+        if (getUserSetsButton) {
+            getUserSetsButton.addEventListener("click", function (event) {
+                event.preventDefault(); // Butonun varsayılan tıklama davranışını engelle
+
+                var confirmed = confirm("Are you sure you want to create this reservation?");
+                if (confirmed) {
+                    // Formu submit et
+                    document.querySelector("form").submit();
+                } else {
+                    window.location.href = "/home/index"; // Eğer iptal edilirse başka bir sayfaya yönlendirme
+                }
+            });
+        }
+    });
+
+</script>
         <script>
             const mealSelect = document.getElementById('mealSelect');
             const selectedDateInput = document.getElementById('selectedDate');

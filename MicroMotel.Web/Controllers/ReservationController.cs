@@ -32,6 +32,12 @@ namespace MicroMotel.Web.Controllers
         public async Task<IActionResult> Room(int id,int propertyid)
         {
             var reservations = await _reservationService.GetAllByRoomId(id);
+            var user = await _userservice.GetUser();
+            HttpContext.Session.SetString("userbudget", user.Budget.ToString()); 
+            HttpContext.Session.SetString("roomprice", (await _motelService.GetRoomById(id)).Price.ToString()); 
+
+
+
             RoomRCreateInput rci = new()
             {
                 RoomId = id,
@@ -46,7 +52,8 @@ namespace MicroMotel.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Room(RoomRCreateInput rci)
         {
-            
+            var user = await _userservice.GetUser();
+
             var validator = new RoomRCreateValidator(_reservationService);
             var result=await validator.ValidateAsync(rci);
                 var reservations = await _reservationService.GetAllByRoomId(rci.RoomId);
@@ -56,23 +63,28 @@ namespace MicroMotel.Web.Controllers
             if(result.IsValid) 
             {
                 
-                var resp =await _reservationService.NewRoomReservation(rci);
 
-                HttpContext.Session.SetString("propid", rci.PropertyId.ToString()); 
-               HttpContext.Session.SetString("resp", resp.ToString()); 
-               HttpContext.Session.SetString("reservstart", (rci.ReservStart.ToString()));
-               HttpContext.Session.SetString("reservend", (rci.ReservEnd).ToString());
+
                 var room = await _motelService.GetRoomById(rci.RoomId);
                 decimal total = ((decimal)(((rci.ReservEnd - rci.ReservStart).TotalMinutes) / 60) * room.Price);
-                var user = await _userservice.GetUser();
+          
+             
+
                 if (user.Budget < total)
                 {
                     ModelState.AddModelError(string.Empty, "insufficient balance");
                     return RedirectToAction("getusersets", "auth");
-
+                    
+                    //ViewData["TotalAmount"] = total;
+                    //return View("InsufficientBalanceConfirmation", rci);
                 }
                 else
                 {
+                    HttpContext.Session.SetString("propid", rci.PropertyId.ToString());
+                    HttpContext.Session.SetString("reservstart", (rci.ReservStart.ToString()));
+                    HttpContext.Session.SetString("reservend", (rci.ReservEnd).ToString());
+                    var resp = await _reservationService.NewRoomReservation(rci);
+                    HttpContext.Session.SetString("resp", resp.ToString());
                     user.Budget -= total;
                     UserUpdateModel usr = new UserUpdateModel() { Budget = user.Budget, City = user.City, Email = user.Email, Username = user.UserName };
 

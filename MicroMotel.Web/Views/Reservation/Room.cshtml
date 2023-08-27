@@ -1,6 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Room";
     Layout = "~/Views/Shared/_adminLayout.cshtml";
+
+    decimal price = Convert.ToDecimal(Context.Session.GetString("roomprice"));
+    decimal budget = Convert.ToDecimal(Context.Session.GetString("userbudget"));
+
 }
 
 
@@ -8,7 +12,7 @@
 @model MicroMotel.Web.Models.Reservation.RoomR.RoomRCreateInput
 
 
-<form asp-controller="Reservation" asp-action="Room" method="post">
+<form id="reservationForm" asp-controller="Reservation" asp-action="Room" method="post">
 
     @Html.HiddenFor(x=>x.PropertyId)
     @Html.HiddenFor(x=>x.RoomId)
@@ -19,15 +23,15 @@
     <!-- Populate room options here -->
     </select>
     </div>*@
-
+    
     <div class="form-group">
         <label for="ReservStart">Reservation Start Date and Time:</label>
-        <input type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" asp-for="ReservStart" format-value="yyyy-MM-ddTHH:mm" />
+        <input type="datetime-local" id="ReservStart" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" asp-for="ReservStart" format-value="yyyy-MM-ddTHH:mm" />
     </div>
 
     <div class="form-group">
         <label for="ReservEnd">Reservation End Date and Time:</label>
-        <input type="datetime-local" value="@DateTime.Now.AddHours(2).ToString("yyyy-MM-ddTHH:mm")" min="@DateTime.Now.AddHours(2).ToString("yyyy-MM-ddTHH:mm")" class="form-control" asp-for="ReservEnd" format-value="yyyy-MM-ddTHH:mm" />
+        <input type="datetime-local" Id="ReservEnd" value="@DateTime.Now.AddHours(2).ToString("yyyy-MM-ddTHH:mm")" min="@DateTime.Now.AddHours(2).ToString("yyyy-MM-ddTHH:mm")" class="form-control" asp-for="ReservEnd" format-value="yyyy-MM-ddTHH:mm" />
     </div>
     @{
         var rr = ViewData["reservs"] as List<RoomRViewModel>;
@@ -46,7 +50,7 @@
         </div>
     }
 
-    <button type="submit" class="btn btn-primary">Create Reservation</button>
+    <button id="getUserSetsButton" type="submit" class="btn btn-primary">Create Reservation</button>
     @if (!ViewData.ModelState.IsValid)
     {
         <div class="alert alert-danger">
@@ -61,5 +65,43 @@
             </ul>
         </div>
     }
+
+    
+    
+    <script>
+        var roomprice = @price
+                var userbudget = @budget
+        document.addEventListener("DOMContentLoaded", function () {
+            var getUserSetsButton = document.getElementById("getUserSetsButton");
+         
+            if (getUserSetsButton) {
+
+                getUserSetsButton.addEventListener("click", function (event) {
+                    event.preventDefault();
+
+                        var reservstartinput = document.querySelector("#ReservStart");
+
+                        var reservendinput = document.querySelector("#ReservEnd");
+                        var reservstart = new Date(reservstartinput.value).getTime();
+                        var reservend = new Date(reservendinput.value).getTime();
+                        var total = ((reservend - reservstart) / (1000 * 60 * 60)) * roomprice;
+                        console.log((reservend - reservstart) / (1000 * 60 * 60))
+                        console.log(total)
+                        console.log(reservend)
+                        console.log(reservstart)
+                    var confirmed = confirm( userbudget<total ? "Insufficient balance. You need more balance. Do you want to proceed? " : "Are you sure you want to create this reservation?" + userbudget +" " +total);
+                    if (confirmed) {
+                        // Formu submit et
+                        document.querySelector("form").submit();
+                    } 
+                  
+                    else {
+                        window.location.href = "/home/index"; // Eğer iptal edilirse başka bir sayfaya yönlendirme
+                    }
+                });
+            }
+        });
+
+    </script>
 </form>
 <!-- ... Önceki kodlar ... -->
