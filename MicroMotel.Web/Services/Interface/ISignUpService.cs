@@ -1,9 +1,10 @@
-﻿using MicroMotel.Web.Models;
+﻿using MicroMotel.Shared.DTOs;
+using MicroMotel.Web.Models;
 
 namespace MicroMotel.Web.Services.Interface
 {
     public interface ISignUpService
     {
-        Task<bool> SignUpAsync(UserSignUpViewModel usuvm);
+        Task<Response<List<string>>> SignUpAsync(UserSignUpViewModel usuvm);
     }
 }

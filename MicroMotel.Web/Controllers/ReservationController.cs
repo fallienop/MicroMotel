@@ -195,32 +195,18 @@ namespace MicroMotel.Web.Controllers
 
 
 
-
-
-            public async Task<IActionResult> Payment()
+            public IActionResult Payment()
             {
-                //decimal total=0;
-             //var roomid= int.Parse(HttpContext.Session.GetString("resp"));
-                //var reservstart= Convert.ToDateTime(HttpContext.Session.GetString("reservstart"));
-                //var reservend= Convert.ToDateTime(HttpContext.Session.GetString("reservend"));
-                //var room = await _motelService.GetRoomById(roomid);
-              //int h=(int) (reservend - reservstart).TotalHours;
-                //if (TempData["prices"] != null)
-                //{
-                    //var totalmealprice = TempData["prices"] as List<decimal>;
-                    //foreach (var mealprice in totalmealprice)
-                    //{
-                        //total += mealprice;
-                    //}
-                //}
-                //total += room.Price * h;
+              
                 PaymentInput payment = new PaymentInput()
                 {
-                    // TotalPrice = total,
+                   
                     TotalPrice = 0
                };
                 return View(payment);
             }
+
+
 
             [HttpPost]
             public async Task<IActionResult> Payment(PaymentInput payment)

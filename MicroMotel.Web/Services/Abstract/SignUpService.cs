@@ -1,6 +1,7 @@
-﻿using MicroMotel.Web.Models;
+﻿using MicroMotel.Shared.DTOs;
+using MicroMotel.Web.Models;
 using MicroMotel.Web.Services.Interface;
-using System.Net.Http.Json;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace MicroMotel.Web.Services.Abstract
 {
@@ -13,10 +14,14 @@ namespace MicroMotel.Web.Services.Abstract
             _httpClient = httpClient;
         }
 
-        public async Task<bool> SignUpAsync(UserSignUpViewModel usuvm)
+        public async Task<Response<List<string>>> SignUpAsync(UserSignUpViewModel usuvm)
         {
-            var resp = await _httpClient.PostAsJsonAsync<UserSignUpViewModel>("api/user",usuvm);
-            return resp.IsSuccessStatusCode;
+            var resp = await _httpClient.PostAsJsonAsync<UserSignUpViewModel>("api/user/newuser",usuvm);
+          var respp=await resp.Content.ReadAsStringAsync();
+            
+            var response = await resp.Content.ReadFromJsonAsync<Response<List<string>>>();
+            
+            return response;
         }
     }
 }

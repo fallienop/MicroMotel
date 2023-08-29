@@ -77,8 +77,8 @@ namespace MicroMotel.Services.Motel.Services.Abstract
         {
             var updmeal = _mapper.Map<Meal>(mud);
             _context.Update(updmeal);
-            var r = _context.SaveChangesAsync();
-            if (r.Result > 0)
+            var r =await _context.SaveChangesAsync();
+            if (r>0)
             {
                 return Response<NoContent>.Success(200);
 

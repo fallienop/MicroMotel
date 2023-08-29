@@ -1,12 +1,19 @@
-﻿
-@{
-    List<string> roles = new();
+﻿@using System.Security.Claims;
 
-    var roleClaim = User.FindFirst("http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
-    string strinnnn = roleClaim?.Value?.ToUpper() ?? "";
-    
+@{
+
+    var rolesss = User.FindAll("http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
+    var claimslist = rolesss.ToList();
+    var claimvalues = new List<string>();
+    foreach(var item in claimslist)
+    {
+        claimvalues.Add(item?.Value?.ToUpper() ?? "");
+    }  
 
 }
+   
+    
+
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
         <li class="nav-item">
@@ -28,7 +35,7 @@
         }
 
 
-        @if (strinnnn.Contains("SUPERVISOR"))
+        @if (claimvalues.Contains("SUPERVISOR"))
         {
             <li class="nav-item">
                 <a class="nav-link" href="/admin/propertylist">
@@ -43,18 +50,29 @@
                     <span class="menu-title">Edit Users</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/AllRoomReservations">
+                    <i class="icon-contract menu-icon"></i>
+                    <span class="menu-title">CRUD Reservations</span>
+                </a>
+            </li>
         }
-       else if (strinnnn.ToUpper().Contains("ADMIN"))
+        else if (claimvalues.Contains("ADMIN"))
         {
-              <li class="nav-item">
+         <li class="nav-item">
             <a class="nav-link" href="/admin/propertylist">
                     <i class="icon-contract menu-icon"></i>
-                <span class="menu-title">Edit Motels</span>
+                <span class="menu-title">CRUD Motels</span>
             </a>
         </li>
 
-          
-        
+
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/AllRoomReservations">
+                    <i class="icon-contract menu-icon"></i>
+                    <span class="menu-title">CRUD Reservations</span>
+                </a>
+            </li>
 
 
  

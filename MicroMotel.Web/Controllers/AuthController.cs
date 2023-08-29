@@ -57,9 +57,14 @@ namespace MicroMotel.Web.Controllers
         public async Task<IActionResult> SignUp(UserSignUpViewModel usuvm)
         {
             var resp = await _signupservice.SignUpAsync(usuvm);
-            if (!resp)
+            if (resp.Data is null)
             {
+                foreach(var error in resp.Errors)
+                {
+                    ModelState.AddModelError("", error);
+                }
                 return View();
+                
             }
             return RedirectToAction("Index", "Home");
         }

@@ -40,7 +40,9 @@ namespace MicroMotel.IdentityServer.Controller
                 return BadRequest();
             }
             var user = await _userManager.FindByIdAsync(useridclaim.Value);
-           
+
+         
+        
             if (user == null)
             {
                 return BadRequest();
@@ -140,11 +142,14 @@ namespace MicroMotel.IdentityServer.Controller
             };
             
             var res = await _userManager.CreateAsync(user, sud.Password);
-            if (!res.Succeeded)
-            {
-                return BadRequest(Response<NoContent>.Fail(res.Errors.Select(x => x.Description).ToList(), 404));
+           
+            if (!res.Succeeded) { 
+                var falseresp = Response<List<string>>.Fail(res.Errors.Select(x => x.Description).ToList(), 400);
+                IActionResult resss = CustomActionResult(falseresp);
+                return resss;
             }
-            return NoContent();
+            var trueresp = Response<List<string>>.Success(new List<string>() { "errorlessssss" }, 200);
+            return CustomActionResult(trueresp);
         }
 
         
