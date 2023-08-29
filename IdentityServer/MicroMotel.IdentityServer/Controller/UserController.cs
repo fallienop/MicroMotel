@@ -140,7 +140,13 @@ namespace MicroMotel.IdentityServer.Controller
                 Email = sud.Email,
                 Budget=0
             };
-            
+        var userbyemail= await _userManager.FindByEmailAsync(user.Email);
+            if (userbyemail != null)
+            {
+                var falseemailresp = Response<List<string>>.Fail("This email is already taken", 400);
+                IActionResult emailinvalidres = CustomActionResult(falseemailresp);
+                return emailinvalidres;
+            }
             var res = await _userManager.CreateAsync(user, sud.Password);
            
             if (!res.Succeeded) { 
