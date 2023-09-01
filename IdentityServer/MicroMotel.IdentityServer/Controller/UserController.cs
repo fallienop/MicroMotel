@@ -41,14 +41,14 @@ namespace MicroMotel.IdentityServer.Controller
             }
             var user = await _userManager.FindByIdAsync(useridclaim.Value);
 
-         
-        
+
+
             if (user == null)
             {
                 return BadRequest();
             }
             var role = await _userManager.GetRolesAsync(user);
-            return Ok(new { Id = user.Id, UserName = user.UserName, City = user.City, Email = user.Email,Budget=user.Budget });
+            return Ok(new { Id = user.Id, UserName = user.UserName, City = user.City, Email = user.Email, Budget = user.Budget });
 
 
         }
@@ -59,7 +59,7 @@ namespace MicroMotel.IdentityServer.Controller
             var user = await _userManager.FindByIdAsync(useridclaim.Value);
 
             var res = await _userManager.DeleteAsync(user);
-            
+
             if (res.Succeeded)
             {
                 return Ok();
@@ -72,11 +72,11 @@ namespace MicroMotel.IdentityServer.Controller
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdatePassword(string oldpassword,string newpassword)
+        public async Task<IActionResult> UpdatePassword(string oldpassword, string newpassword)
         {
             var useridclaim = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub);
             var user = await _userManager.FindByIdAsync(useridclaim.Value);
-         var res=   await _userManager.ChangePasswordAsync(user, oldpassword, newpassword);
+            var res = await _userManager.ChangePasswordAsync(user, oldpassword, newpassword);
             if (res.Succeeded)
             {
                 return Ok();
@@ -96,8 +96,8 @@ namespace MicroMotel.IdentityServer.Controller
             user.UserName = userupdate.Username;
             user.City = userupdate.City;
             user.Email = userupdate.Email;
-         
-           var res= await _userManager.UpdateAsync(user);
+
+            var res = await _userManager.UpdateAsync(user);
             if (res.Succeeded)
             {
                 return Ok();
@@ -114,7 +114,7 @@ namespace MicroMotel.IdentityServer.Controller
         public async Task<IActionResult> AddBalance(UserUpdateDTO balanceupdate)
         {
 
-            var useridclaim=User.Claims.FirstOrDefault(x=>x.Type== JwtRegisteredClaimNames.Sub);
+            var useridclaim = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub);
             var user = await _userManager.FindByIdAsync(useridclaim.Value);
             user.Budget = balanceupdate.Budget;
             var res = await _userManager.UpdateAsync(user);
@@ -132,15 +132,15 @@ namespace MicroMotel.IdentityServer.Controller
         [HttpPost]
         public async Task<IActionResult> NewUser(SignUpDTO sud)
         {
-            
+
             var user = new ApplicationUser()
             {
                 UserName = sud.Username,
                 City = sud.City,
                 Email = sud.Email,
-                Budget=0
+                Budget = 0
             };
-        var userbyemail= await _userManager.FindByEmailAsync(user.Email);
+            var userbyemail = await _userManager.FindByEmailAsync(user.Email);
             if (userbyemail != null)
             {
                 var falseemailresp = Response<List<string>>.Fail("This email is already taken", 400);
@@ -148,8 +148,8 @@ namespace MicroMotel.IdentityServer.Controller
                 return emailinvalidres;
             }
             var res = await _userManager.CreateAsync(user, sud.Password);
-           
-            if (!res.Succeeded) { 
+
+            if (!res.Succeeded) {
                 var falseresp = Response<List<string>>.Fail(res.Errors.Select(x => x.Description).ToList(), 400);
                 IActionResult resss = CustomActionResult(falseresp);
                 return resss;
@@ -157,9 +157,27 @@ namespace MicroMotel.IdentityServer.Controller
             var trueresp = Response<List<string>>.Success(new List<string>() { "errorlessssss" }, 200);
             return CustomActionResult(trueresp);
         }
-
-        
-
+        [HttpPost("{id}")]
+        public async Task<IActionResult> AddMotelRole(int id)
+        {
+            var role = new IdentityRole();
+            role.Name = id.ToString();
+          var r=  await _roleManager.CreateAsync(role);
+       
+                return NoContent();
+           
+        }
+        [HttpDelete]
+        public async Task<IActionResult> RemoveMotelRole(int id)
+        {
+            var role = await _roleManager.FindByNameAsync(id.ToString());
+            if (role !=null)
+            {
+                await _roleManager.DeleteAsync(role);
+            }
+           
+            return NoContent();
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserName(string id)
         {
@@ -167,7 +185,7 @@ namespace MicroMotel.IdentityServer.Controller
 
             if (user == null)
             {
-                return BadRequest();
+                return Ok("_deleted_");
             }
            
             return Ok(user.UserName);
@@ -205,7 +223,7 @@ namespace MicroMotel.IdentityServer.Controller
                     UserName = user.UserName,
                     City = user.City,
                     Email = user.Email,
-                    Roles=await _userManager.GetRolesAsync(user),
+                    Roles=await _userManager.GetRolesAsync(user)
                 };
 
                 userdtos.Add(userdto);
@@ -216,64 +234,92 @@ namespace MicroMotel.IdentityServer.Controller
 
         }
 
-      
-        
-        [HttpPut("changerole/{id}")]
-       public async Task<IActionResult> ChangeRole(string id)
+
+
+        #region previouschangerole
+        // [HttpPut("changerole/{id}")]
+        //public async Task<IActionResult> ChangeRole(string id)
+        // {
+        //     var user = await _userManager.FindByIdAsync(id);
+
+        //     var r=IdentityResult.Success;
+        //     if (user == null)
+        //     {
+        //         return BadRequest();
+        //     }
+        //     if (await _userManager.IsInRoleAsync(user, "Admin"))
+        //     {
+        //         var removeResult = await _userManager.RemoveFromRoleAsync(user, "Admin");
+
+        //         if (removeResult.Succeeded)
+        //         {
+        //             await _userManager.UpdateAsync(user); // Veritabanında değişikliği kaydet
+
+        //         }
+        //         else
+        //         {
+        //             return BadRequest();
+        //         }
+        //     }
+        //    else if (!await _userManager.IsInRoleAsync(user, "Admin"))
+        //     {
+
+        //         try
+        //         {
+        //             var addResult = await _userManager.AddToRoleAsync(user, "Admin".Normalize());
+        //             if (addResult.Succeeded)
+        //             {
+        //                 await _userManager.UpdateAsync(user); // Veritabanında değişikliği kaydet
+        //                 return Ok();
+        //             }
+        //             else
+        //             {
+        //                 // Rol ekleme işlemi başarısız oldu, hatayı loglama
+        //                 foreach (var error in addResult.Errors)
+        //                 {
+        //                     // Hata mesajını loglama kodu buraya ekleyebilirsiniz.
+        //                     Console.WriteLine(error.Description);
+        //                 }
+        //                 return BadRequest("Failed to add Admin role.");
+        //             }
+        //         }
+        //         catch (Exception ex)
+        //         {
+        //             // Rol ekleme işlemi sırasında bir hata oluştu, hatayı loglama
+        //             Console.WriteLine(ex.Message);
+        //             return BadRequest("An error occurred while adding Admin role.");
+        //         }
+        //     }
+
+        //     return Ok();
+
+        // } 
+        #endregion
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeRole(UserRoleChangerDTO rc)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            
-            var r=IdentityResult.Success;
+
+            var user = await _userManager.FindByIdAsync(rc.UserID);
             if (user == null)
             {
                 return BadRequest();
             }
-            if (await _userManager.IsInRoleAsync(user, "Admin"))
-            {
-                var removeResult = await _userManager.RemoveFromRoleAsync(user, "Admin");
-                
-                if (removeResult.Succeeded)
-                {
-                    await _userManager.UpdateAsync(user); // Veritabanında değişikliği kaydet
-                 
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-           else if (!await _userManager.IsInRoleAsync(user, "Admin"))
-            {
-              
-                try
-                {
-                    var addResult = await _userManager.AddToRoleAsync(user, "Admin".Normalize());
-                    if (addResult.Succeeded)
-                    {
-                        await _userManager.UpdateAsync(user); // Veritabanında değişikliği kaydet
-                        return Ok();
-                    }
-                    else
-                    {
-                        // Rol ekleme işlemi başarısız oldu, hatayı loglama
-                        foreach (var error in addResult.Errors)
-                        {
-                            // Hata mesajını loglama kodu buraya ekleyebilirsiniz.
-                            Console.WriteLine(error.Description);
-                        }
-                        return BadRequest("Failed to add Admin role.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Rol ekleme işlemi sırasında bir hata oluştu, hatayı loglama
-                    Console.WriteLine(ex.Message);
-                    return BadRequest("An error occurred while adding Admin role.");
-                }
-            }
 
-            return Ok();
-
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles.Any())
+            {
+                await _userManager.RemoveFromRolesAsync(user, roles.ToArray());
+            }
+            var response = await _userManager.AddToRoleAsync(user, rc.NewRole);
+            if (response.Succeeded)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

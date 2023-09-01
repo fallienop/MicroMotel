@@ -9,10 +9,12 @@ namespace MicroMotel.Web.Services.Interface
         Task<UserViewModel> GetUser();
         Task<string> GetUserRole();
         Task<List<UserViewModel>> GetAllUsers();
-        Task<bool> ChangeRole(string id);
+        Task<bool> ChangeRole(UserRoleChangerViewModel rc);
         Task<bool> AddBalance(UserUpdateModel uum);
         Task<bool> DeleteUser();
         Task<bool> UpdateUser(UserUpdateModel user);
-        Task<bool> ChangePassword(string oldPassword, string newPassword);  
+        Task<bool> ChangePassword(string oldPassword, string newPassword);
+        Task<bool> AddMotelRole(int id);
+        Task<bool> DeleteMotelRole(int id);
     }
 }

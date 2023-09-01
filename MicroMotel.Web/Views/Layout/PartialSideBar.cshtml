@@ -11,7 +11,9 @@
     }  
 
 }
-   
+@{
+    int id = 0;
+}
     
 
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
@@ -75,13 +77,23 @@
             </li>
 
 
- 
+
 
         }
-
-      else{
-
-      }
+        
+        else if(claimvalues.Any(x=>int.TryParse(x,out @id)))
+        {
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/PropertyDetails/@id">
+                    <i class="icon-contract menu-icon"></i>
+                    <span class="menu-title">CRUD Motel @id</span>
+                </a>
+            </li>
+            
+        }
+        else
+        {
+        }
         <li class="nav-item">
             <a class="nav-link" href="/home/contact">
                 <i class="icon-grid menu-icon"></i>

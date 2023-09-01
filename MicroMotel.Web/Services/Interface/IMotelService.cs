@@ -9,7 +9,7 @@ namespace MicroMotel.Web.Services.Interface
         #region Property
         Task<List<PropertyViewModel>> GetAllPropertiesAsync();
         Task<PropertyViewModel> GetPropertybyId(int id);
-        Task<bool> CreateProperty(PropertyCreateInput pci);
+        Task<int> CreateProperty(PropertyCreateInput pci);
         Task<bool> UpdateProperty(PropertyUpdateModel pum);
         Task<bool> DeleteProperty(int id);
         #endregion

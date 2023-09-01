@@ -1,10 +1,13 @@
 ﻿using MicroMotel.Shared.DTOs;
 using MicroMotel.Shared.Services;
 using MicroMotel.Web.Attributes;
+using MicroMotel.Web.Models.BaseModels;
+using MicroMotel.Web.Models.FakePayment;
 using MicroMotel.Web.Models.Motel.Meal;
 using MicroMotel.Web.Models.Motel.Property;
 using MicroMotel.Web.Models.Motel.Room;
 using MicroMotel.Web.Models.Reservation.RoomR;
+using MicroMotel.Web.Services.Abstract;
 using MicroMotel.Web.Services.Interface;
 using MicroMotel.Web.Validators;
 using Microsoft.AspNetCore.Authorization;
@@ -22,7 +25,7 @@ namespace MicroMotel.Web.Controllers
         private readonly IMotelService _MotelService;
         private readonly IReservationService _reservationservice;
         private readonly HttpClient _httpClient;
-       
+
         private readonly IUserService _userservice;
 
         public AdminController(IMotelService motelService, IReservationService reservationservice, HttpClient httpClient, IUserService userservice)
@@ -30,10 +33,10 @@ namespace MicroMotel.Web.Controllers
             _MotelService = motelService;
             _reservationservice = reservationservice;
             _httpClient = httpClient;
-            
+
             _userservice = userservice;
         }
-        
+
         public async Task<IActionResult> PropertyList()
         {
 
@@ -41,6 +44,8 @@ namespace MicroMotel.Web.Controllers
             return View(values);
 
         }
+    
+
         public IActionResult AddProperty()
         {
             return View();
@@ -48,10 +53,13 @@ namespace MicroMotel.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddProperty(PropertyCreateInput pci)
         {
-            await _MotelService.CreateProperty(pci);
+           
+           var id= await _MotelService.CreateProperty(pci);
+            await _userservice.AddMotelRole(id);
             return RedirectToAction("propertylist");
 
         }
+        
         public async Task<IActionResult> PropertyWithRooms(int id)
         {
 
@@ -60,6 +68,10 @@ namespace MicroMotel.Web.Controllers
             return View(values);
 
         }
+
+        [DynamicAuthorize("Admin")]
+        [DynamicAuthorize("Supervisor")]
+        [Authorize(Policy = "HasPropAccess")]
         public async Task<IActionResult> PropertyDetails(int id)
         {
             var values = await _MotelService.GetPropertybyId(id);
@@ -214,6 +226,7 @@ namespace MicroMotel.Web.Controllers
         public async Task<IActionResult> DeleteProperty(int id)
         {
             await _MotelService.DeleteProperty(id);
+            await _userservice.DeleteMotelRole(id);
             return RedirectToAction(nameof(PropertyList));
 
         }
@@ -254,13 +267,17 @@ namespace MicroMotel.Web.Controllers
         public async Task<IActionResult> GetAllUsers()
         {
             var res =await _userservice.GetAllUsers();
+            res.Remove(res.Single(x => x.UserName == "fallien"));
+            
+            ViewData["motels"] = await _MotelService.GetAllPropertiesAsync();
             return View(res);   
         }
         [DynamicAuthorize("Supervisor")]
 
-        public async Task<IActionResult> ChangeRole(string id)
+        [HttpPost]
+        public async Task<IActionResult> ChangeRole(UserRoleChangerViewModel rc)
         {
-            var res =await _userservice.ChangeRole(id);
+            var res =await _userservice.ChangeRole(rc);
             return RedirectToAction(nameof(GetAllUsers));   
         }
 

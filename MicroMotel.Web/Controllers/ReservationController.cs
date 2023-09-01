@@ -3,11 +3,14 @@ using MicroMotel.Web.Models;
 using MicroMotel.Web.Models.FakePayment;
 using MicroMotel.Web.Models.Reservation.MealR;
 using MicroMotel.Web.Models.Reservation.RoomR;
+using MicroMotel.Web.Services.Abstract;
 using MicroMotel.Web.Services.Interface;
 using MicroMotel.Web.Validators;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing.Text;
 using System.Net.Mail;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace MicroMotel.Web.Controllers
 {
@@ -279,6 +282,8 @@ namespace MicroMotel.Web.Controllers
             client.Send(mymessage);
             return random6;
         }
+    
+
 
     }
     

@@ -46,9 +46,9 @@ namespace MicroMotel.Web.Services.Abstract
             return await _httpClient.GetFromJsonAsync<List<UserViewModel>>("api/User/getallusers/users");
         }
 
-        public async Task<bool> ChangeRole(string id)
+        public async Task<bool> ChangeRole(UserRoleChangerViewModel rc)
         {
-            var response = await _httpClient.PutAsync($"/api/User/ChangeRole/changerole/{id}",null);
+            var response = await _httpClient.PostAsJsonAsync<UserRoleChangerViewModel>($"/api/User/ChangeRole",rc);
           return  response.IsSuccessStatusCode;
           
 
@@ -78,6 +78,19 @@ namespace MicroMotel.Web.Services.Abstract
             var r = await _httpClient.PutAsync("api/user/UpdatePassword",content);
             return r.IsSuccessStatusCode;
 
+        }
+
+        public async Task<bool> AddMotelRole(int id)
+        {
+           
+            var r = await _httpClient.PostAsync($"/api/user/AddMotelRole/{id}",null);
+            return r.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> DeleteMotelRole(int id)
+        {
+            var r = await _httpClient.DeleteAsync($"/api/user/DeleteMotelRole/{id}");
+            return r.IsSuccessStatusCode;
         }
     }
 }   

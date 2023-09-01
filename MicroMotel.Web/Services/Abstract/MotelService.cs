@@ -52,7 +52,7 @@ namespace MicroMotel.Web.Services.Abstract
             return resp.Data;
         }
 
-        public async Task<bool> CreateProperty(PropertyCreateInput pci)
+        public async Task<int> CreateProperty(PropertyCreateInput pci)
         {
             var resultphoto = await _photoStockService.UploadPhoto(pci.PhotoFormFile);
             if(resultphoto != null)
@@ -61,7 +61,9 @@ namespace MicroMotel.Web.Services.Abstract
             }
 
             var resp = await _httpClient.PostAsJsonAsync("property", pci);
-            return resp.IsSuccessStatusCode;
+            var response=await resp.Content.ReadFromJsonAsync<Response<int>>();
+            var propid = response.Data;
+            return propid;
         }
         public async Task<bool> UpdateProperty(PropertyUpdateModel pum)
         {

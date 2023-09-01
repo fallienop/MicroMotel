@@ -21,19 +21,13 @@ namespace MicroMotel.Services.Motel.Services.Abstract
             _mapper = mapper;
         }
 
-        public async Task<Response<NoContent>> CreateNewProperty(PropertyCreateDTO pcd)
+        public async Task<Response<int>> CreateNewProperty(PropertyCreateDTO pcd)
         {
             var prop = _mapper.Map<Property>(pcd);
             var response = await _context.AddAsync(prop);
             var booll = await _context.SaveChangesAsync();
-            if (booll > 0)
-            {
-                return Response<NoContent>.Success(200);
-            }
-            else
-            {
-                return Response<NoContent>.Fail("cannot saved", 500);
-            }
+            var id = prop.Id;
+            return Response<int>.Success(id, 200);
         }
    
         public async Task<Response<NoContent>> DeletePropertyById(int id)

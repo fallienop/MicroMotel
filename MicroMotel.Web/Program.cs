@@ -12,6 +12,7 @@ using MicroMotel.Web.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using MicroMotel.Web.Helpers;
+using MicroMotel.Web.Attributes;
 
 var builder = WebApplication.CreateBuilder(args);
 var requriedauthorizepolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
@@ -73,6 +74,12 @@ builder.Services.AddHttpClient<IUserService, UserService>(opt =>
 {
     opt.BaseAddress = new Uri($"{serviceurls.IdentityServerURL}");
 }).AddHttpMessageHandler<ROPTokenHandler>();
+
+builder.Services.AddTransient<IAuthorizationHandler, MotelAccessHandler>();
+builder.Services.AddAuthorization(opt =>
+{
+    opt.AddPolicy("HasPropAccess", policy => policy.Requirements.Add(new MotelAccessRequirementbyId()));
+});
 
 builder.Services.AddSession();
 
