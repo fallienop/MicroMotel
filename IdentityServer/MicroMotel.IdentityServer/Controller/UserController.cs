@@ -233,7 +233,7 @@ namespace MicroMotel.IdentityServer.Controller
             return Ok(userdtos);
 
         }
-
+      
 
 
         #region previouschangerole
@@ -321,5 +321,8 @@ namespace MicroMotel.IdentityServer.Controller
                 return BadRequest();
             }
         }
+
+        
+
     }
 }

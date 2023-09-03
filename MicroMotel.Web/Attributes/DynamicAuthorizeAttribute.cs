@@ -6,6 +6,7 @@ using MicroMotel.Shared.Services;
 using MicroMotel.Web.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace MicroMotel.Web.Attributes
@@ -20,23 +21,24 @@ namespace MicroMotel.Web.Attributes
 
     public class DynamicAuthorizeFilter : IAsyncAuthorizationFilter
     {
-        private readonly ISharedIdentityService _sharedIdentityService;
         private readonly IUserService _userService;
         private readonly string _requiredRole;
 
-        public DynamicAuthorizeFilter(ISharedIdentityService sharedIdentityService, IUserService userService, string requiredRole)
-        
-        
+        public DynamicAuthorizeFilter(IUserService userService, string requiredRole)
         {
-            _sharedIdentityService = sharedIdentityService;
             _userService = userService;
             _requiredRole = requiredRole;
         }
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
-        
         {
-            var role= await _userService.GetUserRole();
+            bool isallowanonymous = false;
+            if (context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any()){
+                isallowanonymous= true;
+            }
+
+            var propid = context.HttpContext.GetRouteValue("id")?.ToString();
+            var role = await _userService.GetUserRole();
             var roles = role.Split(',');
             Regex rgx = new Regex("[^a-zA-Z0-9 -]");
             for (int i = 0; i < roles.Length; i++)
@@ -45,7 +47,7 @@ namespace MicroMotel.Web.Attributes
             }
 
 
-            if (!roles.Contains(_requiredRole))
+            if (!(roles.Contains(_requiredRole)||roles.Contains(propid)||isallowanonymous))
             {
                 context.Result = new ForbidResult();
                 return;

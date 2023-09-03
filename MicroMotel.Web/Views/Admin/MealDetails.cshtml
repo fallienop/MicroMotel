@@ -57,8 +57,18 @@
         </div>*@
 
         <a href="/Admin/UpdateMeal/@Model.Id" class="btn btn-warning">Update</a>
-        <a href="/Admin/DeleteMeal?id=@Model.Id&propid=@Model.PropertyId" class="btn btn-danger">Delete</a>
+        <a href="/Admin/DeleteMeal?id=@Model.Id&propid=@Model.PropertyId" onclick="deleteMeal()" class="btn btn-danger">Delete</a>
 
+        <script>
+            function deleteMeal() {
+                // Burada gerekli delete işlemini yapabilirsiniz
+                // ...
+
+                // Delete işlemi tamamlandıktan sonra 2 adım geri git
+                history.go(-2);
+                return false;
+            }
+        </script>
     </div>
 </div>
 

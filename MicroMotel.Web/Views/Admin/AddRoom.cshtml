@@ -5,7 +5,7 @@
 }
 
 <form class="form-group" id="myForm" method="post">
-     
+     @Html.ValidationSummary()
     @Html.Hidden("PropertyId")
     @Html.Label("Price")
     <input type="text" name="Price" class="form-control form-control-sm" />

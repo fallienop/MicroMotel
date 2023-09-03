@@ -9,20 +9,34 @@ namespace MicroMotel.Web.Attributes
 
     public class MotelAccessHandler : AuthorizationHandler<MotelAccessRequirementbyId>
     {
-        public MotelAccessHandler()
+        private  readonly IHttpContextAccessor _contextAccessor;
+
+        public MotelAccessHandler(IHttpContextAccessor contextAccessor)
         {
+            _contextAccessor = contextAccessor;
         }
 
+      
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, MotelAccessRequirementbyId requirement)
         {
-           if(context.Resource is AuthorizationFilterContext authcontext)
+           if(context.Resource is HttpContext contextt)
             {
-                var propid = (int)authcontext.RouteData.Values["id"];
-
-                if (context.User.IsInRole(propid.ToString()))
+                
+                var propid = contextt.GetRouteValue("id")?.ToString();
+                var rolesss = contextt.User.FindAll("http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
+                var claimvalues = new List<string>();
+                foreach(var item in rolesss)
                 {
-                    context.Succeed(requirement);
+                    claimvalues.Add(item?.Value?.ToUpper() ?? "");  
                 }
+              
+                if (claimvalues.Contains(propid))
+                {
+                       context.Succeed(requirement);
+
+                }
+
+            
                 else
                 {
                     context.Fail();

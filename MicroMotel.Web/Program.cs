@@ -75,11 +75,7 @@ builder.Services.AddHttpClient<IUserService, UserService>(opt =>
     opt.BaseAddress = new Uri($"{serviceurls.IdentityServerURL}");
 }).AddHttpMessageHandler<ROPTokenHandler>();
 
-builder.Services.AddTransient<IAuthorizationHandler, MotelAccessHandler>();
-builder.Services.AddAuthorization(opt =>
-{
-    opt.AddPolicy("HasPropAccess", policy => policy.Requirements.Add(new MotelAccessRequirementbyId()));
-});
+
 
 builder.Services.AddSession();
 
