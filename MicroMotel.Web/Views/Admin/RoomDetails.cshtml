@@ -1,139 +1,144 @@
 ﻿
-@model MicroMotel.Web.Models.Motel.Room.RoomViewModel
-@{
-    ViewData["Title"] = "RoomDetails";
-    Layout = "~/Views/Shared/_adminLayout.cshtml";
-}
+    @model MicroMotel.Web.Models.Motel.Room.RoomViewModel
+    @{
+        ViewData["Title"] = "RoomDetails";
+        Layout = "~/Views/Shared/_adminLayout.cshtml";
+    }
 
-<div class="container">
+    <div class="container">
 
-    <div class="title-and-button-container">
+        <div class="title-and-button-container">
 
-        <a class="btn btn-outline-behance btn-sm mr-2" style="float: left" href="/admin/PropertyWithRooms/@Model.PropertyId">←</a>
-        <h3 class="mb-0">Room Details</h3>
+            <a class="btn btn-outline-behance btn-sm mr-2" style="float: left" href="/admin/PropertyWithRooms/@Model.PropertyId">←</a>
+            <h3 class="mb-0">Room Details</h3>
 
-    </div>
-    <div class="room-details">
-        <div class="room-info">
-            <div class="room-label">Room ID:</div>
-            <div class="room-value">@Model.Id</div>
         </div>
-        <div class="room-info">
-            <div class="room-label">Room Number:</div>
-            <div class="room-value">@Model.Number</div>
-        </div>
-        <div class="room-info">
-            <div class="room-label">Price:</div>
-            <div class="room-value">@Model.Price</div>
-        </div>
-        <div class="room-info">
-            <div class="room-label">Bed Count:</div>
-            <div class="room-value">@Model.BedCount</div>
-        </div>
-        <div class="room-info">
-            <div class="room-label">Has Bath:</div>
-            <div class="room-value">@Model.HasBath</div>
-        </div>
-        <div class="room-info">
-            <div class="room-label">Has Fridge:</div>
-            <div class="room-value">@Model.HasFridge</div>
-        </div>
-        <div class="room-info">
-            <div class="room-label">Has TV:</div>
-            <div class="room-value">@Model.HasTv</div>
-        </div>
-        <div class="room-info">
-            <div class="room-label">Has Network:</div>
-            <div class="room-value">@Model.HasNetwork</div>
-        </div>
-        <div class="room-info">
-            <div class="room-label">Has AC:</div>
-            <div class="room-value">@Model.HasAC</div>
-        </div>
-        <div class="room-info">
-            <div class="room-label">Floor:</div>
-            <div class="room-value">@Model.Floor</div>
-        </div>
-        <div class="room-info">
-            <div class="room-label">Status:</div>
-            <div class="room-value">@Model.Status</div>
-        </div>
-        <div class="room-info">
-            <div class="room-label">Property ID:</div>
-            <div class="room-value">@Model.PropertyId</div>
-        </div>
-@*
-        <div class="buttons-container">
-            @{
-                var id = Model.Id;
-                var propid = Model.PropertyId;
-                string link = id + "_" + propid;
-                <a href="/Admin/UpdateRoom/@link" class="btn btn-warning">Update</a>
-                <a href="/Admin/DeleteRoom/@Model.Id" class="btn btn-danger">Delete</a>
-            }
-           
-        </div>*@
+        <div class="room-details">
+            <div class="room-info">
+                <div class="room-label">Room ID:</div>
+                <div class="room-value">@Model.Id</div>
+            </div>
+            <div class="room-info">
+                <div class="room-label">Room Number:</div>
+                <div class="room-value">@Model.Number</div>
+            </div>
+            <div class="room-info">
+                <div class="room-label">Price:</div>
+                <div class="room-value">@Model.Price</div>
+            </div>
+            <div class="room-info">
+                <div class="room-label">Bed Count:</div>
+                <div class="room-value">@Model.BedCount</div>
+            </div>
+            <div class="room-info">
+                <div class="room-label">Has Bath:</div>
+                <div class="room-value">@Model.HasBath</div>
+            </div>
+            <div class="room-info">
+                <div class="room-label">Has Fridge:</div>
+                <div class="room-value">@Model.HasFridge</div>
+            </div>
+            <div class="room-info">
+                <div class="room-label">Has TV:</div>
+                <div class="room-value">@Model.HasTv</div>
+            </div>
+            <div class="room-info">
+                <div class="room-label">Has Network:</div>
+                <div class="room-value">@Model.HasNetwork</div>
+            </div>
+            <div class="room-info">
+                <div class="room-label">Has AC:</div>
+                <div class="room-value">@Model.HasAC</div>
+            </div>
+            <div class="room-info">
+                <div class="room-label">Floor:</div>
+                <div class="room-value">@Model.Floor</div>
+            </div>
+            <div class="room-info">
+                <div class="room-label">Status:</div>
+                <div class="room-value">@Model.Status</div>
+            </div>
+            <div class="room-info">
+                <div class="room-label">Property ID:</div>
+                <div class="room-value">@Model.PropertyId</div>
+            </div>
 
-        <a href="/Admin/UpdateRoom?id=@Model.Id&propid=@Model.PropertyId" class="btn btn-warning">Update</a>
-        <a href="/Admin/DeleteRoom/@Model.Id" class="btn btn-danger" onclick="deleteRoom()">Delete</a>
 
-       @* <script>
-            function deleteRoom() {
-                // Burada gerekli delete işlemini yapabilirsiniz
-                // ...
+            <a href="/Admin/UpdateRoom?id=@Model.Id&propid=@Model.PropertyId" class="btn btn-warning">Update</a>
+        <button class="btn btn-danger" id="deleteButton">Delete</button>
 
-                // Delete işlemi tamamlandıktan sonra 2 adım geri git
-                history.go(-2);
-                return false;
-            }
-        </script>*@
+        <script>
+            document.getElementById("deleteButton").addEventListener("click", function () {
+               
+              
+                    fetch("/Admin/DeleteRoom?id=@Model.Id", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    })
+               
+                        .then(response => {
+                            if (response.ok) {
+                                history.go(-2);
+                            } else {
+                                console.error("Bir hata oluştu: ", response);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Bir hata oluştu: ", error);
+                        });
+                
+            });
+        </script>
 
+         
  
+        </div>
     </div>
-</div>
 
-<style>
+    <style>
 
-    .title-and-button-container h3 {
-        margin-right: 20px; /* İstenilen boşluğu ayarlayın */
-    }
+        .title-and-button-container h3 {
+            margin-right: 20px; 
+        }
 
-    .title-and-button-container .btn {
-        width: 40px;
-        padding: 6px 7px;
-        margin-left: 10px; /*  Bu satırı kaldırın veya düşürün */
-    }
+        .title-and-button-container .btn {
+            width: 40px;
+            padding: 6px 7px;
+            margin-left: 10px; 
+        }
 
-    .room-details {
-        border: 1px solid #ddd;
-        padding: 20px;
-        margin: 20px 0;
-    }
+        .room-details {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+        }
 
-     .buttons-container {
-        display: grid;
-        grid-template-columns: repeat(2, auto); /* 2 sütun oluşturun */
-        gap: 20px; /* İstenilen boşluğu ayarlayın */
-        margin-top: 20px;
-    }
+         .buttons-container {
+            display: grid;
+            grid-template-columns: repeat(2, auto); 
+            gap: 20px;
+            margin-top: 20px;
+        }
 
-    .btn {
-        width: 300px;
-        padding: 8px 10px;
-        text-align: center;
-        margin-left: 60px; /* Add a little margin to the left */
-    }
-    .room-info {
-        display: flex;
-        margin-bottom: 10px;
-    }
+        .btn {
+            width: 300px;
+            padding: 8px 10px;
+            text-align: center;
+            margin-left: 60px; 
+        }
+        .room-info {
+            display: flex;
+            margin-bottom: 10px;
+        }
 
-    .room-label {
-        width: 120px;
-        font-weight: bold;
-    }
+        .room-label {
+            width: 120px;
+            font-weight: bold;
+        }
 
-    .room-value {
-        flex: 1;
-    }
-</style>
+        .room-value {
+            flex: 1;
+        }
+    </style>

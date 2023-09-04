@@ -5,7 +5,7 @@
 }
 
 @model MicroMotel.Web.Models.Motel.Meal.MealViewModel
-<form class="form-group" method="post">
+<form id="mealupdate" class="form-group" method="post">
 
     @Html.HiddenFor(x=>x.PropertyId)
     @Html.HiddenFor(x=>x.Id)
@@ -30,10 +30,33 @@
   
 
 
-    <button class="btn btn-success btn-sm">Save</button>
+    <button type="submit" class="btn btn-success btn-sm">Save</button>
 
 
+    <script>
+        document.getElementById("mealupdate").addEventListener("submit", function (event) {
+            event.preventDefault(); // Formun normal submit işlemini engelle
 
+            // Formu AJAX ile sunucuya gönder
+            var formData = new FormData(document.getElementById("mealupdate"));
+            fetch("@Url.Action("UpdateMeal", "Admin")", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Başarılı ise geri git
+                        history.go(-1);
+                    } else {
+                        // Hata durumunu ele al
+                        console.error("Bir hata oluştu: ", response);
+                    }
+                })
+                .catch(error => {
+                    console.error("Bir hata oluştu: ", error);
+                });
+        });
+    </script>
 
 
 

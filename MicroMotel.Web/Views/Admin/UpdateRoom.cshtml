@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_adminLayout.cshtml";
 }
 @model MicroMotel.Web.Models.Motel.Room.RoomViewModel
-<form class="form-group" method="post">
+<form id="roomupdate" class="form-group" method="post">
 
     @Html.HiddenFor(x=>x.PropertyId)
     @Html.HiddenFor(x=>x.Id)
@@ -74,10 +74,33 @@
         }
     </select>
     <br />
-    <button class="btn btn-success btn-sm">Save</button>
+    <button type="submit" class="btn btn-success btn-sm">Save</button>
 
 
+    <script>
+        document.getElementById("roomupdate").addEventListener("submit", function (event) {
+            event.preventDefault(); // Formun normal submit işlemini engelle
 
+            // Formu AJAX ile sunucuya gönder
+            var formData = new FormData(document.getElementById("roomupdate"));
+            fetch("@Url.Action("UpdateRoom", "Admin")", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Başarılı ise geri git
+                        history.go(-1);
+                    } else {
+                        // Hata durumunu ele al
+                        console.error("Bir hata oluştu: ", response);
+                    }
+                })
+                .catch(error => {
+                    console.error("Bir hata oluştu: ", error);
+                });
+        });
+    </script>
 
 
 

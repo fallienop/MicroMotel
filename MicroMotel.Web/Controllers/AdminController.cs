@@ -101,7 +101,7 @@ namespace MicroMotel.Web.Controllers
                 return Unauthorized();
             }
             await _MotelService.DeleteRoom(id);
-            return Redirect(Request.Headers["Referer"].ToString());
+            return RedirectToAction("index","home");
         }
         public async Task<IActionResult> AddRoom(int id)
         {
@@ -226,7 +226,7 @@ namespace MicroMotel.Web.Controllers
             await _MotelService.DeleteMeal(id);
             
 
-            return Redirect(Request.Headers["Referer"].ToString());
+            return RedirectToAction("index","home");
 
 
         }

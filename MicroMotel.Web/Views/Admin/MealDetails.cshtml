@@ -44,34 +44,46 @@
             </div>
         </div>
       
-        @*
-        <div class="buttons-container">
-        @{
-        var id = Model.Id;
-        var propid = Model.PropertyId;
-        string link = id + "_" + propid;
-        <a href="/Admin/UpdateMeal/@link" class="btn btn-warning">Update</a>
-        <a href="/Admin/DeleteMeal/@Model.Id" class="btn btn-danger">Delete</a>
-        }
-
-        </div>*@
+   
 
         <a href="/Admin/UpdateMeal/@Model.Id" class="btn btn-warning">Update</a>
-        <a href="/Admin/DeleteMeal?id=@Model.Id&propid=@Model.PropertyId" onclick="deleteMeal()" class="btn btn-danger">Delete</a>
+        <button class="btn btn-danger" id="deleteButton">Delete</button>
 
         <script>
-            function deleteMeal() {
-                // Burada gerekli delete işlemini yapabilirsiniz
-                // ...
+            document.getElementById("deleteButton").addEventListener("click", function () {
 
-                // Delete işlemi tamamlandıktan sonra 2 adım geri git
-                history.go(-2);
-                return false;
-            }
+
+                fetch("/Admin/DeleteMeal?id=@Model.Id", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+
+                    .then(response => {
+                        if (response.ok) {
+                            history.go(-2);
+                        } else {
+                            console.error("Bir hata oluştu: ", response);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Bir hata oluştu: ", error);
+                    });
+
+            });
         </script>
+
+    
     </div>
 </div>
-
+<script>
+    function deleteMeal() {
+       
+        history.go(-1);
+        return false;
+    }
+</script>
 <style>
     .title-and-button-container h3 {
         margin-right: 20px; /* İstenilen boşluğu ayarlayın */

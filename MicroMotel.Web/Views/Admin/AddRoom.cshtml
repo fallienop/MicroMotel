@@ -5,7 +5,8 @@
 }
 
 <form class="form-group" id="myForm" method="post">
-     @Html.ValidationSummary()
+    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+
     @Html.Hidden("PropertyId")
     @Html.Label("Price")
     <input type="text" name="Price" class="form-control form-control-sm" />
@@ -77,9 +78,8 @@
 
     <script>
         document.getElementById("myForm").addEventListener("submit", function (event) {
-            event.preventDefault(); // Formun normal submit işlemini engelle
+            event.preventDefault(); 
 
-            // Formu AJAX ile sunucuya gönder
             var formData = new FormData(document.getElementById("myForm"));
             fetch("@Url.Action("AddRoom", "Admin")", {
                 method: "POST",
@@ -87,10 +87,8 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        // Başarılı ise geri git
                         history.go(-1);
                     } else {
-                        // Hata durumunu ele al
                         console.error("Bir hata oluştu: ", response);
                     }
                 })
