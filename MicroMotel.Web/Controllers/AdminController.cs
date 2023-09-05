@@ -96,12 +96,12 @@ namespace MicroMotel.Web.Controllers
         {
             var room = await _MotelService.GetRoomById(id);
             var roles = getroles();
-            if (!(roles.Contains(room.PropertyId.ToString())||roles.Contains("Admin")))
+            if (!(roles.Contains(room.PropertyId.ToString()) || roles.Contains("Admin")))
             {
                 return Unauthorized();
             }
             await _MotelService.DeleteRoom(id);
-            return RedirectToAction("index","home");
+            return RedirectToAction("index", "home");
         }
         public async Task<IActionResult> AddRoom(int id)
         {
@@ -114,32 +114,54 @@ namespace MicroMotel.Web.Controllers
             };
             return View(roomcreate);
         }
+        //[HttpPost]
+        //public async Task<IActionResult> AddRoom(RoomCreateInput rci)
+        //{
+
+        //    var validator = new RoomCreateValidator(_MotelService);
+        //    var result = await validator.ValidateAsync(rci);
+        //    if (result.IsValid)
+        //    {
+        //        await _MotelService.CreateNewRoom(rci);
+        //        return RedirectToAction(nameof(PropertyWithRooms),rci.PropertyId ) ;
+        //    }
+        //    else
+        //    {
+        //        foreach (var error in result.Errors)
+        //        {
+        //            ModelState.AddModelError("", error.ErrorMessage);
+        //        }
+
+        //        return View(rci);
+        //    }
+
+        //}
+
         [HttpPost]
         public async Task<IActionResult> AddRoom(RoomCreateInput rci)
         {
-            
             var validator = new RoomCreateValidator(_MotelService);
-            var result=await validator.ValidateAsync(rci);
+            var result = await validator.ValidateAsync(rci);
+
             if (result.IsValid)
             {
                 await _MotelService.CreateNewRoom(rci);
-                return RedirectToAction("propertylist");
+                return Json(new { status = 200 });
             }
-            else 
+            else
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.ErrorMessage);
-                }
 
-                return View(rci);
+                // Return an HTTP 400 status code
+                Response.StatusCode = 400;
+                var errors = result.Errors.ToList();
+                return Json(errors);
             }
-
         }
+
         [AllowAnonymous]
-        public async Task<IActionResult> UpdateRoom(int id,int propid)
+        public async Task<IActionResult> UpdateRoom(int id, int propid)
         {
-                var room = await _MotelService.GetRoomById(id);
+            var room = await _MotelService.GetRoomById(id);
             var roles = getroles();
             if (!(roles.Contains("Admin") || roles.Contains(room.PropertyId.ToString())))
             {
@@ -156,6 +178,7 @@ namespace MicroMotel.Web.Controllers
             }
             return RedirectToAction("PropertyNotFound");
         }
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> UpdateRoom(RoomUpdateModel rum)
         {
@@ -186,7 +209,7 @@ namespace MicroMotel.Web.Controllers
         {
             var roles = getroles();
             var meal = await _MotelService.GetMealById(id);
-            if (!(roles.Contains(meal.PropertyId.ToString())||roles.Contains("Admin")))
+            if (!(roles.Contains(meal.PropertyId.ToString()) || roles.Contains("Admin")))
             {
                 return Unauthorized();
 
@@ -194,13 +217,13 @@ namespace MicroMotel.Web.Controllers
             return View(meal);
         }
 
-        public  IActionResult AddMeal(int id)
+        public IActionResult AddMeal(int id)
         {
             var mealcreate = new MealCreateInput()
             {
                 PropertyId = id
             };
-            
+
             return View(mealcreate);
         }
 
@@ -224,32 +247,41 @@ namespace MicroMotel.Web.Controllers
             }
 
             await _MotelService.DeleteMeal(id);
-            
 
-            return RedirectToAction("index","home");
+
+            return RedirectToAction("index", "home");
 
 
         }
-
+        [AllowAnonymous]
         public async Task<IActionResult> UpdateMeal(int id)
         {
             var meal = await _MotelService.GetMealById(id);
-
+            var roles = getroles();
+            if (!(roles.Contains("Admin") || roles.Contains(meal.PropertyId.ToString())))
+            {
+                return Unauthorized();
+            }
 
             return View(meal);
-            
+
         }
 
-        
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> UpdateMeal(MealUpdateModel mum)
         {
+            var roles = getroles();
+            if (!(roles.Contains("Admin") || roles.Contains(mum.PropertyId.ToString())))
+            {
+                return Unauthorized();
+            }
             await _MotelService.UpdateMeal(mum);
             return RedirectToAction(nameof(MealDetails), new { Id = mum.Id });
         }
 
-        
+
         public async Task<IActionResult> DeleteProperty(int id)
         {
             await _MotelService.DeleteProperty(id);
@@ -273,18 +305,33 @@ namespace MicroMotel.Web.Controllers
         public async Task<IActionResult> AllRoomReservations()
         {
             var reservs = await _reservationservice.GetAll();
+            var roles = getroles();
+
             foreach (var reservation in reservs)
             {
+
                 reservation.UserName = await _userservice.getusername(reservation.UserID);
             }
+            int b = 0;
+            if (roles.Any(x => int.TryParse(x, out b)))
+            {
 
+                reservs.RemoveAll(x => x.PropertyId != b);
+            }
 
 
             return View(reservs);
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteRoomReserv(int id)
         {
+            var r = await _reservationservice.GetRoomRById(id);
+            var roles = getroles();
+            if (!(roles.Contains("Admin") || roles.Contains(r.PropertyId.ToString())))
+            {
+                return Unauthorized();
+            }
             await _reservationservice.DeleteRoomReservation(id);
             return RedirectToAction(nameof(AllRoomReservations));
         }

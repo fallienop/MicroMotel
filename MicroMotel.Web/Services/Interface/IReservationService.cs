@@ -13,7 +13,7 @@ namespace MicroMotel.Web.Services.Interface
         Task<List<RoomRViewModel>> GetAllByPropertyId(int propertyId);
         Task<List<RoomRViewModel>> GetAllByRoomId(int roomId);
 
-        Task<RoomRViewModel> GetRoomById(int id);
+        Task<RoomRViewModel> GetRoomRById(int id);
 
 
 

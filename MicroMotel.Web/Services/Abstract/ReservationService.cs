@@ -28,7 +28,7 @@ namespace MicroMotel.Web.Services.Abstract
             var roomrs = await response.Content.ReadFromJsonAsync<Response<List<RoomRViewModel>>>();
             return roomrs.Data;
         }
-        public async Task<RoomRViewModel> GetRoomById(int id)
+        public async Task<RoomRViewModel> GetRoomRById(int id)
         {
             var response = await _httpClient.GetAsync($"roomr/{id}");
             if(!response.IsSuccessStatusCode) 

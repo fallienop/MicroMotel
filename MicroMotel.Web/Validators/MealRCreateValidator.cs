@@ -16,7 +16,7 @@ namespace MicroMotel.Web.Validators
 
         private async  Task<bool> isroomridtimevalid(MealRCreateInput mci ,CancellationToken token)
         {
-            var roomr =await _reservationservice.GetRoomById(mci.RoomRId);
+            var roomr =await _reservationservice.GetRoomRById(mci.RoomRId);
             return roomr.ReservStart<=mci.ReservationDate&&mci.ReservationDate.AddHours(1)<roomr.ReservEnd;
         }
     }

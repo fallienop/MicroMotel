@@ -12,11 +12,11 @@ namespace MicroMotel.Web.Validators
         {
             _motelService = motelService;
 
-            RuleFor(x => x).MustAsync(roomidexists).WithMessage("There is room with this number");
+            RuleFor(x => x).MustAsync(roomidnotexists).WithMessage("There is room with this number");
         }
 
 
-        private async Task<bool> roomidexists(RoomCreateInput rci,CancellationToken token)
+        private async Task<bool> roomidnotexists(RoomCreateInput rci,CancellationToken token)
         {
             var rooms = await _motelService.GetPropertyWithRoomsAsync(rci.PropertyId);
             var roomnumbers=rooms.Select(x=>x.Number).ToList();

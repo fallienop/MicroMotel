@@ -75,7 +75,20 @@
     </select>
     <br />
     <button type="submit" class="btn btn-success btn-sm">Save</button>
-
+    @if (!ViewData.ModelState.IsValid)
+    {
+        
+            <ul>
+                @foreach (var modelState in ViewData.ModelState.Values)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                }
+            </ul>
+       
+    }
     <script>
         document.getElementById("myForm").addEventListener("submit", function (event) {
             event.preventDefault(); 
@@ -85,15 +98,32 @@
                 method: "POST",
                 body: formData
             })
+                //.then(response => {
+                //    if (response.ok) {
+                //        history.go(-1);
+                //    } else {
+                //        console.error("Bir hata oluştu: ", response);
+                //    }
+                //})
+                //.catch(error => {
+                //    console.error("Bir hata oluştu: ", error);
+                //});
                 .then(response => {
                     if (response.ok) {
-                        history.go(-1);
+                        return response.json();
+                    } else if (response.status === 400) {
+                        return response.json().then(err => { throw err; });
                     } else {
-                        console.error("Bir hata oluştu: ", response);
+                        throw Error(response.statusText);
                     }
                 })
+                .then(data => {
+                    // data will have the redirect URL
+                    window.location.href = data.redirectUrl;
+                })
                 .catch(error => {
-                    console.error("Bir hata oluştu: ", error);
+                    console.error("An error occurred: ", error);
+                    // Display ModelState errors on your page here
                 });
         });
     </script>
