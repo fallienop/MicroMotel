@@ -89,42 +89,31 @@
             </ul>
        
     }
+
     <script>
         document.getElementById("myForm").addEventListener("submit", function (event) {
-            event.preventDefault(); 
+            event.preventDefault();
 
             var formData = new FormData(document.getElementById("myForm"));
             fetch("@Url.Action("AddRoom", "Admin")", {
                 method: "POST",
                 body: formData
-            })
-                //.then(response => {
-                //    if (response.ok) {
-                //        history.go(-1);
-                //    } else {
-                //        console.error("Bir hata oluştu: ", response);
-                //    }
-                //})
-                //.catch(error => {
-                //    console.error("Bir hata oluştu: ", error);
-                //});
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else if (response.status === 400) {
-                        return response.json().then(err => { throw err; });
-                    } else {
-                        throw Error(response.statusText);
-                    }
-                })
-                .then(data => {
-                    // data will have the redirect URL
-                    window.location.href = data.redirectUrl;
-                })
-                .catch(error => {
-                    console.error("An error occurred: ", error);
-                    // Display ModelState errors on your page here
-                });
+            }).then(response => {
+                if (response.ok) {
+                    history.go(-1);
+                } else {
+                    response.json().then(data => {
+                        if (data.status === 400) {
+                            data.errors.forEach(error => {
+                                alert(error);
+                                console.error("Error: ", error);
+                            });
+                        }
+                    });
+                }
+            }).catch(error => {
+                console.error("An error occurred: ", error);
+            });
         });
-    </script>
+        </script>
 </form>

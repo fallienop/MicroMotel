@@ -146,15 +146,12 @@ namespace MicroMotel.Web.Controllers
             if (result.IsValid)
             {
                 await _MotelService.CreateNewRoom(rci);
-                return Json(new { status = 200 });
+                return Ok(new { status = 200 });
             }
             else
             {
-
-                // Return an HTTP 400 status code
-                Response.StatusCode = 400;
-                var errors = result.Errors.ToList();
-                return Json(errors);
+                var errors = result.Errors.Select(x => x.ErrorMessage).ToList();
+                return BadRequest(new { status = 400, errors = errors });
             }
         }
 
