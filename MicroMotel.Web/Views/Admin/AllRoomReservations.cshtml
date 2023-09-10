@@ -43,31 +43,38 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                        @if (Model is null)
                         {
-                            <tr>
-
-
-
-
-                                <td>
-                                    @item.UserName
-                                </td>
-                                <td>
-                                    @item.PropertyId
-                                </td>
-                                <td>
-                                    @item.RoomId
-                                </td>
-                                <td>
-                                    @item.ReservStart.ToString("yyyy-MM-dd HH:mm")
-                                </td>
-                                <td>
-                                    @item.ReservEnd.ToString("yyyy-MM-dd HH:mm")
-                                </td>
-                                <td><a href="/Admin/DeleteRoomReserv/@item.Id" class="btn btn-danger btn-sm">Delete</a></td>
-                            </tr>
+                            
                         }
+                        else{
+                        @foreach (var item in Model)
+                            {
+                                <tr>
+
+
+
+
+                                    <td>
+                                        @item.UserName
+                                    </td>
+                                    <td>
+                                        @item.PropertyId
+                                    </td>
+                                    <td>
+                                        @item.RoomId
+                                    </td>
+                                    <td>
+                                        @item.ReservStart.ToString("yyyy-MM-dd HH:mm")
+                                    </td>
+                                    <td>
+                                        @item.ReservEnd.ToString("yyyy-MM-dd HH:mm")
+                                    </td>
+                                    <td><a href="/Admin/DeleteRoomReserv/@item.Id" class="btn btn-danger btn-sm">Delete</a></td>
+                                </tr>
+                            }
+                            }
+                        
                     </tbody>
                 </table>
             </div>

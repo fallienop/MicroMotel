@@ -160,7 +160,8 @@ namespace MicroMotel.Services.Motel.Migrations
                                 .HasForeignKey("PropertyId");
                         });
 
-                    b.Navigation("Address");
+                    b.Navigation("Address")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MicroMotel.Motel.Models.Room", b =>

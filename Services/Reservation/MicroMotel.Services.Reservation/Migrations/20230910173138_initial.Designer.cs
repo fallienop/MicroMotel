@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MicroMotel.Services.Reservation.Migrations
 {
     [DbContext(typeof(ReservationContext))]
-    [Migration("20230910122850_roomrtotalprice")]
-    partial class roomrtotalprice
+    [Migration("20230910173138_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

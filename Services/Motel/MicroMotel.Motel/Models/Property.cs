@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
             [Key]
             public int Id { get; set; }
             public string Name { get; set; }
+           [Required]
             public Address Address { get; set; }
 
             public byte RoomCount { get; set; }

@@ -20,15 +20,17 @@ namespace MicroMotel.Services.Motel.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address_City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address_District = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address_Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address_Building = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_District = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Building = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RoomCount = table.Column<byte>(type: "tinyint", nullable: false),
                     FloorCount = table.Column<byte>(type: "tinyint", nullable: false),
                     HasParking = table.Column<bool>(type: "bit", nullable: false),
-                    HasOpenSpace = table.Column<bool>(type: "bit", nullable: false)
+                    HasOpenSpace = table.Column<bool>(type: "bit", nullable: false),
+                    Picture = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -42,8 +44,8 @@ namespace MicroMotel.Services.Motel.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PrepTime = table.Column<int>(type: "int", nullable: false),
                     PropertyId = table.Column<int>(type: "int", nullable: false)
@@ -67,6 +69,7 @@ namespace MicroMotel.Services.Motel.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Number = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     BedCount = table.Column<byte>(type: "tinyint", nullable: false),
                     HasBath = table.Column<bool>(type: "bit", nullable: false),

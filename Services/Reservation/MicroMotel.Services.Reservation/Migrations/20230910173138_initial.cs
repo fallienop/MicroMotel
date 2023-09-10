@@ -24,7 +24,9 @@ namespace MicroMotel.Services.Reservation.Migrations
                     PropertyId = table.Column<int>(type: "int", nullable: false),
                     RoomId = table.Column<int>(type: "int", nullable: false),
                     ReservStart = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReservEnd = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    ReservEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {

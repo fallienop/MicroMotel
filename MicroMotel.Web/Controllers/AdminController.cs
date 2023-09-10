@@ -282,21 +282,28 @@ namespace MicroMotel.Web.Controllers
         {
             var reservs = await _reservationservice.GetAll();
             var roles = getroles();
-
-            foreach (var reservation in reservs)
+            if (!reservs.Any())
             {
+                return View();
 
-                reservation.UserName = await _userservice.getusername(reservation.UserID);
             }
-            int b = 0;
-            if (roles.Any(x => int.TryParse(x, out b)))
+           else
             {
+                foreach (var reservation in reservs)
+                {
 
-                reservs.RemoveAll(x => x.PropertyId != b);
+                    reservation.UserName = await _userservice.getusername(reservation.UserID);
+                }
+                int b = 0;
+                if (roles.Any(x => int.TryParse(x, out b)))
+                {
+
+                    reservs.RemoveAll(x => x.PropertyId != b);
+                }
+                  return View(reservs);
             }
+            
 
-
-            return View(reservs);
         }
 
         [AllowAnonymous]

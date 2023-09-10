@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MicroMotel.Services.Motel.Migrations
 {
     [DbContext(typeof(MotelContext))]
-    [Migration("20230822140538_photoinit")]
-    partial class photoinit
+    [Migration("20230910172958_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -149,6 +149,9 @@ namespace MicroMotel.Services.Motel.Migrations
                             b1.Property<string>("District")
                                 .HasColumnType("nvarchar(max)");
 
+                            b1.Property<string>("Location")
+                                .HasColumnType("nvarchar(max)");
+
                             b1.Property<string>("Street")
                                 .HasColumnType("nvarchar(max)");
 
@@ -160,7 +163,8 @@ namespace MicroMotel.Services.Motel.Migrations
                                 .HasForeignKey("PropertyId");
                         });
 
-                    b.Navigation("Address");
+                    b.Navigation("Address")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MicroMotel.Motel.Models.Room", b =>

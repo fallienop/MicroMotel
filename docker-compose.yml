@@ -2,22 +2,76 @@ version: "3.8"
 services:
   moteldb:
     image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: always
+    container_name: moteldb
+    volumes:
+      - moteldb_volume:/var/opt/mssql
+    environment:
+      SA_PASSWORD: "1_Parola7"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1440:1433"
   reservationdb:
     image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: always
+    container_name: reservationdb
+    volumes:
+      - reservationdb_volume:/var/opt/mssql
+    environment:
+      SA_PASSWORD: "1_Parola7"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1441:1433"
   fakepaymentdb:
     image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: always
+    container_name: fakepaymentdb
+    volumes:
+      - fakepaymentdb_volume:/var/opt/mssql
+    environment:
+      SA_PASSWORD: "1_Parola7"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1442:1433"
   identitydb:
     image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: always
+    container_name: identitydb
+    volumes:
+      - identitydb_volume:/var/opt/mssql
+    environment:
+      SA_PASSWORD: "1_Parola7"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1443:1433"
   motel.api:
+    container_name: motel.api
     image: motel_api_image
     build: 
      context: .
      dockerfile: Services/Motel/MicroMotel.Motel/Dockerfile
+    ports: 
+      - "5010:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - IdentityServerUrl:http://identityserver.api:5001
+      - "ConnectionStrings__SqlServerOrder=Server=moteldb;Database=Motel;User=sa;Password=1_Parola7;TrustServerCertificate=true"
+    depends_on:
+      - moteldb
   identityserver.api:
+    container_name: identityserver.api
     image: identityserver_api_image
     build: 
      context: .
      dockerfile: IdentityServer/MicroMotel.IdentityServer/Dockerfile
+    ports: 
+      - "5001:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings__SqlServerIdentity=Server=identitydb;Database=identitydb;User=sa;Password=1_Parola7;TrustServerCertificate=true"
+    depends_on:
+      - identitydb
+
 
 
 volumes:
