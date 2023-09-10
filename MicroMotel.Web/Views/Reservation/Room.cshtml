@@ -88,7 +88,8 @@
                         console.log(total)
                         console.log(reservend)
                         console.log(reservstart)
-                        var confirmed = confirm(userbudget < total ? "Insufficient balance. You need more " + total - userbudget + " balance. Do you want to proceed? " : "Are you sure you want to create this reservation?" + userbudget + " " + total);
+                        var insuff=total-userbudget;
+                        var confirmed = confirm(userbudget < total ? "Insufficient balance. You need more " + insuff + " balance. Do you want to proceed? " : "Are you sure you want to create this reservation? Total:" + total);
                     if (confirmed) {
                         // Formu submit et
                         document.querySelector("form").submit();

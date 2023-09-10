@@ -69,15 +69,19 @@ namespace MicroMotel.Services.Reservation.Services.Abstract
         public async Task<Response<List<RoomRDTO>>> GetAllRoomRsbyRoomId(int roomid)
         {
             var roomrsofprop = await _reservationContext.Set<RoomR>().Where(x => x.RoomId == roomid).Include(x => x.MealRs).ToListAsync();
-            if (roomrsofprop == null)
-            {
-                return Response<List<RoomRDTO>>.Fail("not found", 404);
-
-            }
+           
             var resp = _mapper.Map<List<RoomRDTO>>(roomrsofprop);
             return Response<List<RoomRDTO>>.Success(resp, 200);
 
         }
+
+        public async Task<Response<List<RoomRDTO>>> GetAllRoomRsbyUserId(string userid)
+        {
+            var reservedroom = await _reservationContext.RoomReservations.Where(x => x.UserID == userid).Include(x=>x.MealRs).ToListAsync();
+            var resp=_mapper.Map<List<RoomRDTO>>(reservedroom);
+            return Response<List<RoomRDTO>>.Success(resp, 200);
+        }
+
         public async Task<Response<RoomRDTO>> GetRoomRById(int id)
         {
             var reservedroom = await _reservationContext.Set<RoomR>().FindAsync(id);

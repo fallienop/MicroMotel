@@ -14,6 +14,6 @@ namespace MicroMotel.Services.Reservation.Models
         public ICollection<MealR>? MealRs { get; set;}
         public string UserID { get; set; }
 
-
+        public decimal? TotalPrice { get; set; }
     }
 }

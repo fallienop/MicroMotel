@@ -6,5 +6,6 @@
 
         public DateTime ReservationDate { get; set; }
         public int MealId { get; set; }
+
     }
 }

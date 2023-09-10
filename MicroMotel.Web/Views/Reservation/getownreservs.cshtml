@@ -1,0 +1,114 @@
+﻿@{
+    ViewData["Title"] = "getownreservs";
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+@model List<RoomRViewModel>
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">My Reservations</h4>
+
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Motel</th>
+                            <th>Starts</th>
+                            <th>Ends</th>
+                            <th>Meals</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            foreach(var item in Model)
+                            {
+
+                                <tr>
+                                    <td>@item.PropertyName</td>
+                                    <td>@item.ReservStart</td>
+                                    <td>@item.ReservEnd</td>
+                                    <td>
+                                        <a class="btn btn-outline-primary btn-sm toggle-meal" data-toggle="collapse" href="#meal-@item.Id" role="button" aria-expanded="false" aria-controls="meal-@item.Id">
+                                            Toggle Meals
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-outline-danger btn-sm" id="deleteButton" href="/reservation/CancelRoomReserv/@item.Id">Cancel</a>
+                                        <script>
+                                            document.getElementById("deleteButton").addEventListener("click", function () {
+
+
+                                                fetch("/Reservation/CancelRoomReserv?id=@item.Id", {
+                                                    method: "POST",
+                                                    headers: {
+                                                        "Content-Type": "application/json"
+                                                    }
+                                                })
+
+                                                    .then(response => {
+                                                        if (response.ok) {
+                                                            return false;
+                                                        } else {
+                                                            console.error("Bir hata oluştu: ", response);
+                                                        }
+                                                    })
+                                                    .catch(error => {
+                                                        console.error("Bir hata oluştu: ", error);
+                                                    });
+
+                                            });
+                                        </script>
+                                    </td>
+                                </tr>
+                                <tr id="meal-@item.Id" class="collapse">
+                                    <td colspan="5">
+                                        <div class="meal-reservation">
+                                            <ul>
+                                                @if (item.MealRs.Any()) 
+                                                {
+                                                    @foreach (var meal in item.MealRs)
+                                                    {
+                                                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+
+                                                        <li>
+                                                            @meal.MealName &nbsp;&nbsp;&nbsp;&nbsp;@meal.ReservationDate  &nbsp;&nbsp;&nbsp;&nbsp;
+                                                            <a class="btn btn-outline-danger btn-sm btn-sm-sm" href="/reservation/CancelMealReserv/@meal.Id">Cancel</a>
+
+                                                        </li>
+                                                    }
+
+                                                }
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".toggle-meal").click(function () {
+            var targetId = $(this).attr("href");
+            $(targetId).toggle();
+        });
+    });
+</script>
+
+<style>
+    
+
+    .btn.btn-sm-sm{
+        padding: 0.3rem 0.6rem;
+        font-size: 0.712rem;
+        border-radius: 12px;
+    }
+</style>
+

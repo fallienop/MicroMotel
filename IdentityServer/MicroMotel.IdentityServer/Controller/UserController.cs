@@ -53,7 +53,7 @@ namespace MicroMotel.IdentityServer.Controller
 
         }
         [HttpDelete]
-        public async Task<IActionResult> removeaccount(string id)
+        public async Task<IActionResult> removeaccount()
         {
             var useridclaim = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub);
             var user = await _userManager.FindByIdAsync(useridclaim.Value);
@@ -162,7 +162,7 @@ namespace MicroMotel.IdentityServer.Controller
         {
             var role = new IdentityRole();
             role.Name = id.ToString();
-          var r=  await _roleManager.CreateAsync(role);
+           await _roleManager.CreateAsync(role);
        
                 return NoContent();
            

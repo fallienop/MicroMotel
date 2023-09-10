@@ -11,8 +11,9 @@ namespace MicroMotel.Services.Reservation.DTOs.RoomRDTOs
         public DateTime ReservStart { get; set; }
         public DateTime ReservEnd { get; set; }
         public ICollection<MealRCreateDTO>? MealRs { get; set; }
-        public string UserID { get; set; }
+        public string? UserID { get; set; }
 
+        public decimal? TotalPrice { get; set; }
 
     }
 }

@@ -46,7 +46,6 @@ namespace MicroMotel.Web.Services.Abstract
             {
                 return null;
             }
-            var r = await response.Content.ReadAsStringAsync();
             var resp = await response.Content.ReadFromJsonAsync<Response<PropertyViewModel>>();
             resp.Data.Picture=_photohelper.GetPhotoStockURL(resp.Data.Picture);
             return resp.Data;

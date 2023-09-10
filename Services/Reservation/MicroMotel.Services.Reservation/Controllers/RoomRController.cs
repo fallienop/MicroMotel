@@ -33,7 +33,13 @@ namespace MicroMotel.Services.Reservation.Controllers
             return CustomActionResult(resp);
         }
 
-        
+        [HttpGet("user/{userid}")]
+        public async Task<IActionResult> GetRoomrByUserid(string userid)
+        {
+            var resp = await _roomRService.GetAllRoomRsbyUserId(userid);
+            return CustomActionResult(resp);
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> GetAll()

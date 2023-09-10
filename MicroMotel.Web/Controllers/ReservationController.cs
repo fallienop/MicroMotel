@@ -7,6 +7,8 @@ using MicroMotel.Web.Services.Abstract;
 using MicroMotel.Web.Services.Interface;
 using MicroMotel.Web.Validators;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.IdentityModel.Tokens;
 using System.Drawing.Text;
 using System.Net.Mail;
 using System.Text.Json;
@@ -86,10 +88,11 @@ namespace MicroMotel.Web.Controllers
                     HttpContext.Session.SetString("propid", rci.PropertyId.ToString());
                     HttpContext.Session.SetString("reservstart", (rci.ReservStart.ToString()));
                     HttpContext.Session.SetString("reservend", (rci.ReservEnd).ToString());
+                    rci.TotalPrice= total;
                     var resp = await _reservationService.NewRoomReservation(rci);
                     HttpContext.Session.SetString("resp", resp.ToString());
                     user.Budget -= total;
-                    UserUpdateModel usr = new UserUpdateModel() { Budget = user.Budget, City = user.City, Email = user.Email, Username = user.UserName };
+                    UserUpdateModel usr = new () { Budget = user.Budget, City = user.City, Email = user.Email, Username = user.UserName };
 
                     await _userservice.AddBalance(usr);
                 }
@@ -163,7 +166,7 @@ namespace MicroMotel.Web.Controllers
                         else
                         {
                             user.Budget -= total;
-                            UserUpdateModel usr = new UserUpdateModel() { Budget = user.Budget, City = user.City, Email = user.Email, Username = user.UserName };
+                            UserUpdateModel usr = new () { Budget = user.Budget, City = user.City, Email = user.Email, Username = user.UserName };
 
                             await _userservice.AddBalance(usr);
 
@@ -196,12 +199,13 @@ namespace MicroMotel.Web.Controllers
         }
 
 
+        
 
 
             public IActionResult Payment()
             {
               
-                PaymentInput payment = new PaymentInput()
+                PaymentInput payment = new ()
                 {
                    
                     TotalPrice = 0
@@ -235,7 +239,7 @@ namespace MicroMotel.Web.Controllers
         {
             string random = TempData["RandomCode"] as string;
             int rand = int.Parse(random);
-            VerificationCode vc = new VerificationCode() { Code=0 };
+            VerificationCode vc = new () { Code=0 };
             HttpContext.Session.SetInt32("randomcode", rand);
             return View(vc);
         }
@@ -252,7 +256,7 @@ namespace MicroMotel.Web.Controllers
                 var user = await _userservice.GetUser();
                 decimal money = Convert.ToDecimal(HttpContext.Session.GetString("Amount"));
                 user.Budget += money;
-                UserUpdateModel usr = new UserUpdateModel() { Budget=user.Budget,City=user.City,Email=user.Email,Username=user.UserName };
+                UserUpdateModel usr = new () { Budget=user.Budget,City=user.City,Email=user.Email,Username=user.UserName };
                 var paymentobject = JsonSerializer.Deserialize<PaymentInput>(HttpContext.Session.GetString("paymentobj"));
                 await _paymentService.ReceivePayment(paymentobject);
                 await _userservice.AddBalance(usr);
@@ -265,11 +269,11 @@ namespace MicroMotel.Web.Controllers
                 return View();
             }
         }
-        private string SendEmail(string email)
+        private static string SendEmail(string email)
         {
             Random r = new Random();
             string random6 = (r.Next(100000, 999999)).ToString();
-            MailMessage mymessage=new MailMessage();
+            MailMessage mymessage=new ();
             SmtpClient client = new();
             client.Credentials = new System.Net.NetworkCredential("sahin.b.03@outlook.com", "1Parola7");
             client.Port = 587;
@@ -285,8 +289,102 @@ namespace MicroMotel.Web.Controllers
     
 
 
+
+        public async Task<IActionResult> getownreservs()
+        {
+           var onehourerror= HttpContext.Session.GetString("timeonehour");
+
+            if (!onehourerror.IsNullOrEmpty())
+            {
+            var modelerror = JsonSerializer.Deserialize<ModelStateDictionary>(onehourerror);
+                var modelErrorDictionary = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(onehourerror);
+
+                foreach (var entry in modelErrorDictionary)
+                {
+                    foreach (var errorMessage in entry.Value)
+                    {
+                        ModelState.AddModelError(entry.Key, errorMessage);
+                    }
+                }
+            }
+            var reservs = await _reservationService.GetAllByUserId(_sharedIdentityService.getUserId);
+            foreach(var res in reservs)
+            {
+                res.PropertyName = (await _motelService.GetPropertybyId(res.PropertyId)).Name;
+
+                if (res.MealRs.Any())
+                {
+                    foreach (var meal in res.MealRs)
+                    {
+                        meal.MealName = (await _motelService.GetMealById(meal.MealId)).Name;
+                    }
+
+                   
+                }
+                
+
+            }
+            
+            return View(reservs); 
+        }
+        public async Task<IActionResult> CancelRoomReserv(int id)
+        {
+            var roomres = await _reservationService.GetRoomRById(id);
+            
+         var r=  await _reservationService.DeleteRoomReservation(id);
+            var user = await _userservice.GetUser();
+            decimal totalmealprice = 0;
+            if (roomres.MealRs.Any())
+            {
+                foreach(var mealres in roomres.MealRs)
+                {
+                    var meal = await _motelService.GetMealById(mealres.MealId);
+                    totalmealprice += meal.Price;
+                }
+            }
+            user.Budget += (roomres.TotalPrice+totalmealprice) * (decimal)0.9;
+            UserUpdateModel usr = new() { Budget = user.Budget, City = user.City, Email = user.Email, Username = user.UserName };
+
+            await _userservice.AddBalance(usr);
+            return RedirectToAction("getownreservs");
+
+        }
+
+        public async Task<IActionResult> CancelMealReserv(int id)
+        {
+            var mealres = await _reservationService.GetMealRById(id);
+
+          var hour = (mealres.ReservationDate-DateTime.Now).TotalHours;
+
+            if (hour < 1)
+            {
+                ModelStateDictionary model=new ModelStateDictionary();
+                model.AddModelError("timeonehour", "You cannot cancel meal reservation less than one hour before the reservation time");
+                string modelasstring = JsonSerializer.Serialize(model);
+                HttpContext.Session.SetString("timeonehour",modelasstring);
+                return RedirectToAction(nameof(getownreservs));
+            }
+            else
+            {
+                var r = await _reservationService.DeleteMealReservation(id);
+                var user = await _userservice.GetUser();
+
+
+                var meal = await _motelService.GetMealById(mealres.MealId);
+
+
+
+                user.Budget += meal.Price * (decimal)0.9;
+                UserUpdateModel usr = new() { Budget = user.Budget, City = user.City, Email = user.Email, Username = user.UserName };
+
+                await _userservice.AddBalance(usr);
+                return RedirectToAction("getownreservs");
+            }
+
+        }
     }
     
+  
 
     public class SelectedMealViewModel
     {

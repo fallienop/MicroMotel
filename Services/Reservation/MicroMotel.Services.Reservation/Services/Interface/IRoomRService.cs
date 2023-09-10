@@ -13,5 +13,7 @@ namespace MicroMotel.Services.Reservation.Services.Interface
         public Task<Response<int>> CreateReservation(RoomRCreateDTO roomR);
         public Task<Response<NoContent>> DeleteRoomReservation(int id);
         public Task<Response<List<RoomRDTO>>> GetAllRoomRsbyRoomId(int roomid);
+        public Task<Response<List<RoomRDTO>>> GetAllRoomRsbyUserId(string userid);
+        
     }
 }

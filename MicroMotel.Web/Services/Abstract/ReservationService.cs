@@ -72,50 +72,62 @@ namespace MicroMotel.Web.Services.Abstract
             return roomrs.Data;
         }
 
+        public async Task<List<RoomRViewModel>> GetAllByUserId(string userid)
+        {
+            var response = await _httpClient.GetAsync($"roomr/user/{userid}");
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+            var roomrs=await response.Content.ReadFromJsonAsync<Response<List<RoomRViewModel>>>();  
+            return roomrs.Data;
+        }
+
+
         #endregion
 
 
 
         #region MealR
 
-        public async Task<List<MealViewModel>> GetAllMealRs()
+        public async Task<List<MealRViewModel>> GetAllMealRs()
         {
             var response = await _httpClient.GetAsync("mealr");
             if (!response.IsSuccessStatusCode)
             {
                 return null;
             }
-            var mealrs=await response.Content.ReadFromJsonAsync<Response<List<MealViewModel>>>();
+            var mealrs=await response.Content.ReadFromJsonAsync<Response<List<MealRViewModel>>>();
             return mealrs.Data;
         }
-        public async Task<List<MealViewModel>> GetAllMealsByProperty(int propertyid)
+        public async Task<List<MealRViewModel>> GetAllMealRsByProperty(int propertyid)
         {
             var response = await _httpClient.GetAsync($"mealr/prop/{propertyid}");
             if (!response.IsSuccessStatusCode)
             {
                 return null;
             }
-            var mealrs = await response.Content.ReadFromJsonAsync<Response<List<MealViewModel>>>();
+            var mealrs = await response.Content.ReadFromJsonAsync<Response<List<MealRViewModel>>>();
             return mealrs.Data;
         }
-        public async Task<List<MealViewModel>> GetAllMealsByRoom(int roomid)
+        public async Task<List<MealRViewModel>> GetAllMealRsByRoom(int roomid)
         {
             var response = await _httpClient.GetAsync($"mealr/room/{roomid}");
             if (!response.IsSuccessStatusCode)
             {
                 return null;
             }
-            var mealrs = await response.Content.ReadFromJsonAsync<Response<List<MealViewModel>>>();
+            var mealrs = await response.Content.ReadFromJsonAsync<Response<List<MealRViewModel>>>();
             return mealrs.Data;
         }
-        public async Task<MealViewModel> GetMealById(int id)
+        public async Task<MealRViewModel> GetMealRById(int id)
         {
             var response = await _httpClient.GetAsync($"mealr/{id}");
             if (!response.IsSuccessStatusCode)
             {
                 return null;
             }
-            var mealrs = await response.Content.ReadFromJsonAsync<Response<MealViewModel>>();
+            var mealrs = await response.Content.ReadFromJsonAsync<Response<MealRViewModel>>();
             return mealrs.Data;
         }
         public async Task<bool> NewMealReservation(MealRCreateInput input)
@@ -130,7 +142,7 @@ namespace MicroMotel.Web.Services.Abstract
             return response.IsSuccessStatusCode;
         }
 
-      
+        
         #endregion
 
 

@@ -84,9 +84,9 @@ namespace MicroMotel.Web.Controllers
             var propid = room.PropertyId;
 
             var claimvalues = getroles();
-            if (!(claimvalues.Contains("Admin") || claimvalues.Contains(propid.ToString())))
-            {
-                return Unauthorized();
+            if (!(claimvalues.Contains("ADMIN") || claimvalues.Contains(propid.ToString())))
+            {   
+                return RedirectToAction("unauthorized", "AnotherPage");
             }
             return View(room);
         }
@@ -96,9 +96,9 @@ namespace MicroMotel.Web.Controllers
         {
             var room = await _MotelService.GetRoomById(id);
             var roles = getroles();
-            if (!(roles.Contains(room.PropertyId.ToString()) || roles.Contains("Admin")))
+            if (!(roles.Contains(room.PropertyId.ToString()) || roles.Contains("ADMIN")))
             {
-                return Unauthorized();
+                return RedirectToAction("unauthorized", "AnotherPage");
             }
             await _MotelService.DeleteRoom(id);
             return RedirectToAction("index", "home");
@@ -114,28 +114,7 @@ namespace MicroMotel.Web.Controllers
             };
             return View(roomcreate);
         }
-        //[HttpPost]
-        //public async Task<IActionResult> AddRoom(RoomCreateInput rci)
-        //{
-
-        //    var validator = new RoomCreateValidator(_MotelService);
-        //    var result = await validator.ValidateAsync(rci);
-        //    if (result.IsValid)
-        //    {
-        //        await _MotelService.CreateNewRoom(rci);
-        //        return RedirectToAction(nameof(PropertyWithRooms),rci.PropertyId ) ;
-        //    }
-        //    else
-        //    {
-        //        foreach (var error in result.Errors)
-        //        {
-        //            ModelState.AddModelError("", error.ErrorMessage);
-        //        }
-
-        //        return View(rci);
-        //    }
-
-        //}
+       
 
         [HttpPost]
         public async Task<IActionResult> AddRoom(RoomCreateInput rci)
@@ -151,7 +130,7 @@ namespace MicroMotel.Web.Controllers
             else
             {
                 var errors = result.Errors.Select(x => x.ErrorMessage).ToList();
-                return BadRequest(new { status = 400, errors = errors });
+                return BadRequest(new { status = 400,  errors });
             }
         }
 
@@ -160,9 +139,9 @@ namespace MicroMotel.Web.Controllers
         {
             var room = await _MotelService.GetRoomById(id);
             var roles = getroles();
-            if (!(roles.Contains("Admin") || roles.Contains(room.PropertyId.ToString())))
+            if (!(roles.Contains("ADMIN") || roles.Contains(room.PropertyId.ToString())))
             {
-                return Unauthorized();
+                return RedirectToAction("unauthorized", "AnotherPage");
             }
 
             var res = await _MotelService.GetAllPropertiesAsync();
@@ -180,7 +159,7 @@ namespace MicroMotel.Web.Controllers
         public async Task<IActionResult> UpdateRoom(RoomUpdateModel rum)
         {
             var roles = getroles();
-            if (!(roles.Contains("Admin") || roles.Contains(rum.PropertyId.ToString())))
+            if (!(roles.Contains("ADMIN") || roles.Contains(rum.PropertyId.ToString())))
             {
                 return Unauthorized();
             }
@@ -206,9 +185,9 @@ namespace MicroMotel.Web.Controllers
         {
             var roles = getroles();
             var meal = await _MotelService.GetMealById(id);
-            if (!(roles.Contains(meal.PropertyId.ToString()) || roles.Contains("Admin")))
+            if (!(roles.Contains(meal.PropertyId.ToString()) || roles.Contains("ADMIN")))
             {
-                return Unauthorized();
+                return RedirectToAction("unauthorized", "AnotherPage");
 
             }
             return View(meal);
@@ -238,9 +217,9 @@ namespace MicroMotel.Web.Controllers
         {
             var meal = await _MotelService.GetMealById(id);
             var roles = getroles();
-            if (!(roles.Contains("Admin") || roles.Contains(meal.PropertyId.ToString())))
+            if (!(roles.Contains("ADMIN") || roles.Contains(meal.PropertyId.ToString())))
             {
-                return Unauthorized();
+                return RedirectToAction("unauthorized", "AnotherPage");
             }
 
             await _MotelService.DeleteMeal(id);
@@ -255,9 +234,9 @@ namespace MicroMotel.Web.Controllers
         {
             var meal = await _MotelService.GetMealById(id);
             var roles = getroles();
-            if (!(roles.Contains("Admin") || roles.Contains(meal.PropertyId.ToString())))
+            if (!(roles.Contains("ADMIN") || roles.Contains(meal.PropertyId.ToString())))
             {
-                return Unauthorized();
+                return RedirectToAction("unauthorized", "AnotherPage");
             }
 
             return View(meal);
@@ -270,12 +249,12 @@ namespace MicroMotel.Web.Controllers
         public async Task<IActionResult> UpdateMeal(MealUpdateModel mum)
         {
             var roles = getroles();
-            if (!(roles.Contains("Admin") || roles.Contains(mum.PropertyId.ToString())))
+            if (!(roles.Contains("ADMIN") || roles.Contains(mum.PropertyId.ToString())))
             {
-                return Unauthorized();
+                return RedirectToAction("unauthorized", "AnotherPage");
             }
             await _MotelService.UpdateMeal(mum);
-            return RedirectToAction(nameof(MealDetails), new { Id = mum.Id });
+            return RedirectToAction(nameof(MealDetails), new {  mum.Id });
         }
 
 
@@ -325,9 +304,9 @@ namespace MicroMotel.Web.Controllers
         {
             var r = await _reservationservice.GetRoomRById(id);
             var roles = getroles();
-            if (!(roles.Contains("Admin") || roles.Contains(r.PropertyId.ToString())))
+            if (!(roles.Contains("ADMIN") || roles.Contains(r.PropertyId.ToString())))
             {
-                return Unauthorized();
+                return RedirectToAction("unauthorized", "AnotherPage");
             }
             await _reservationservice.DeleteRoomReservation(id);
             return RedirectToAction(nameof(AllRoomReservations));
