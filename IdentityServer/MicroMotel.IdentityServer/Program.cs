@@ -53,7 +53,7 @@ namespace MicroMotel.IdentityServer
                     if(!usermanager.Users.Any())
                     {
                        
-                        usermanager.CreateAsync(new ApplicationUser { UserName = "fallien", City = "Baku", Email = "fallien.ssd@gmail.com", }, "1_Paroll0").Wait();
+                        usermanager.CreateAsync(new ApplicationUser { UserName = "fallien", City = "Baku", Email = "fallien.ssd@gmail.com", Budget=0 }, "1_Paroll0").Wait();
                     }
              
                     
