@@ -116,7 +116,7 @@ namespace MicroMotel.IdentityServer.Controller
 
             var useridclaim = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub);
             var user = await _userManager.FindByIdAsync(useridclaim.Value);
-            user.Budget = balanceupdate.Budget;
+            user.Budget = balanceupdate.Budget.Value;
             var res = await _userManager.UpdateAsync(user);
             if (res.Succeeded)
             {

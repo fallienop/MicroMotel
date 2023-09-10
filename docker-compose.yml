@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  moteldb:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+  reservationdb:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+  fakepaymentdb:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+  identitydb:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+  motel.api:
+    image: motel_api_image
+    build: 
+     context: .
+     dockerfile: Services/Motel/MicroMotel.Motel/Dockerfile
+  identityserver.api:
+    image: identityserver_api_image
+    build: 
+     context: .
+     dockerfile: IdentityServer/MicroMotel.IdentityServer/Dockerfile
+
+
+volumes:
+  moteldb_volume: 
+  reservationdb_volume: 
+  fakepaymentdb_volume: 
+  identitydb_volume: 
+
+  
+  

@@ -28,7 +28,7 @@ namespace MicroMotel.IdentityServer.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal?>("Budget")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");

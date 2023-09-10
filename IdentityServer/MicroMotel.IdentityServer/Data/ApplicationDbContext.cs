@@ -18,9 +18,11 @@ namespace MicroMotel.IdentityServer.Data
             {
                 entity.HasIndex(e=>e.UserName).IsUnique();
                 entity.HasIndex(e=>e.Email).IsUnique();
-               
+                entity.Property(e => e.Budget)
+                           .HasColumnType("decimal(18, 2)");
             });
      
+           
         }
     }
 }

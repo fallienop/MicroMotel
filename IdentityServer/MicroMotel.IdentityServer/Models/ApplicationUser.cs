@@ -7,6 +7,6 @@ namespace MicroMotel.IdentityServer.Models
     {
         public string City { get; set; }
 
-        public decimal? Budget { get;set; }
+        public decimal Budget { get;set; }
     }
 }

@@ -1,0 +1,62 @@
+version: "3.8"
+services:
+  moteldb:
+    container_name: moteldb
+    restart: always
+    ports:
+      - "1447:1433"
+    volumes:
+      - moteldb_volume:/var/opt/mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=1_Parola7
+  reservationdb:
+    container_name: reservationdb
+    restart: always
+    ports:
+      - "1444:1433"
+    volumes:
+      - reservationdb_volume:/var/opt/mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=1_Parola7
+  fakepaymentdb:
+    container_name: fakepaymentdb
+    restart: always
+    ports:
+      - "1445:1433"
+    volumes:
+      - fakepaymentdb_volume:/var/opt/mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=1_Parola7
+  identitydb:
+    container_name: identitydb
+    restart: always
+    ports:
+      - "1446:1433"
+    volumes:
+      - identitydb_volume:/var/opt/mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=1_Parola7
+  motel.api:
+    container_name: motel.api
+   
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - IdentityServerUrl:http://identityserver.api:5001
+      - "ConnectionStrings:SqlServerOrder=Server=host.docker.internal,1447;Database=Motel;User=sa;Password=1_Parola7;TrustServerCertificate=True"
+    ports:
+      - "5010:80"
+    depends_on:
+      - moteldb
+  identityserver.api:
+    container_name: identityserver.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:SqlServerIdentity=Server=host.docker.internal,1446;Database=identitydb;User=sa;Password=1_Parola7;Trusted_Connection=true;TrustServerCertificate=true"
+    ports:
+      - "5001:80"
+    depends_on:
+      - identitydb
