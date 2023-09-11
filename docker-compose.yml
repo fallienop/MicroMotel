@@ -71,8 +71,34 @@ services:
       - "ConnectionStrings__SqlServerIdentity=Server=identitydb;Database=identitydb;User=sa;Password=1_Parola7;TrustServerCertificate=true"
     depends_on:
       - identitydb
-
-
+  reservation.api:
+    container_name: reservation.api
+    image: reservation_api_image
+    build: 
+     context: .
+     dockerfile: Services/Reservation/MicroMotel.Services.Reservation/Dockerfile
+    ports: 
+      - "5013:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - IdentityServerUrl:http://identityserver.api:5001
+      - "ConnectionStrings__SqlServerOrder=Server=reservationdb;Database=Reservation;User=sa;Password=1_Parola7;TrustServerCertificate=true"
+    depends_on:
+      - reservationdb
+  fakepayment.api:
+    container_name: fakepayment.api
+    image: fakepayment_api_image
+    build: 
+     context: .
+     dockerfile: Services/FakePayment/MicroMotel.Services.FakePayment/Dockerfile
+    ports: 
+      - "5012:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - IdentityServerUrl:http://identityserver.api:5001
+      - "ConnectionStrings__SqlServer=Server=fakepaymentdb;Database=Card;User=sa;Password=1_Parola7;TrustServerCertificate=true"
+    depends_on:
+      - fakepaymentdb
 
 volumes:
   moteldb_volume: 
