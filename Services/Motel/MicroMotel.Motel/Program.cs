@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using MicroMotel.Services.Motel.Services.Interface;
 using MicroMotel.Services.Motel.Services.Abstract;
 using MicroMotel.Motel.Models;
+using Microsoft.OpenApi.Writers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,22 +30,22 @@ builder.Services.AddAuthentication().AddJwtBearer(opt =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<ISharedIdentityService, SharedIdentityService>();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<MotelContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerOrder" )));
+builder.Services.AddDbContext<MotelContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerOrder" ),opt=>opt.EnableRetryOnFailure(maxRetryCount:5,maxRetryDelay:TimeSpan.FromSeconds(20),errorNumbersToAdd:null)));
 var app = builder.Build();
 using(var scope=app.Services.CreateScope())
 {
     var service = scope.ServiceProvider;
     var context = service.GetRequiredService<MotelContext>();
 
-    if (!context.Properties.Any())
-    {
-        var address = new Address { City = "Baku", District = "kyrdakhani", Street = "dadas vasif", Building = "15a" };
+    //if (!context.Properties.Any())
+    //{
+    //    var address = new Address { City = "Baku", District = "kyrdakhani", Street = "dadas vasif", Building = "15a" };
        
 
-        context.Properties.Add(new Property {  Address = address, HasOpenSpace = true, HasParking = true, FloorCount = 2, Name = "qarayevmicromotel", RoomCount = 15 });
+    //    context.Properties.Add(new Property {  Address = address, HasOpenSpace = true, HasParking = true, FloorCount = 2, Name = "qarayevmicromotel", RoomCount = 15 });
 
-        context.SaveChanges();
-    }
+    //    context.SaveChanges();
+    //}
 }
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
