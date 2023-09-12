@@ -37,15 +37,15 @@ using(var scope=app.Services.CreateScope())
     var service = scope.ServiceProvider;
     var context = service.GetRequiredService<MotelContext>();
 
-    //if (!context.Properties.Any())
-    //{
-    //    var address = new Address { City = "Baku", District = "kyrdakhani", Street = "dadas vasif", Building = "15a" };
+    if (!context.Properties.Any())
+    {
+       var address = new Address { City = "Baku", District = "kyrdakhani", Street = "dadas vasif", Building = "15a", Location="ccxsdfds" };  
        
 
-    //    context.Properties.Add(new Property {  Address = address, HasOpenSpace = true, HasParking = true, FloorCount = 2, Name = "qarayevmicromotel", RoomCount = 15 });
+       context.Properties.Add(new Property {  Address = address, HasOpenSpace = true, HasParking = true, FloorCount = 2, Name = "qarayevmicromotel", RoomCount = 15 });
 
-    //    context.SaveChanges();
-    //}
+       context.SaveChanges();
+    }
 }
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

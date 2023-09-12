@@ -46,6 +46,7 @@ services:
       - "1443:1433"
   motel.api:
     container_name: motel.api
+    restart: on-failure
     image: motel_api_image
     build: 
      context: .
@@ -54,12 +55,13 @@ services:
       - "5010:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - IdentityServerUrl:http://identityserver.api:5001
+      - IdentityServerUrl=http://identityserver.api
       - "ConnectionStrings__SqlServerOrder=Server=moteldb;Database=Motel;User=sa;Password=1_Parola7;TrustServerCertificate=true"
     depends_on:
       - moteldb
   identityserver.api:
     container_name: identityserver.api
+    restart: on-failure
     image: identityserver_api_image
     build: 
      context: .
@@ -73,6 +75,7 @@ services:
       - identitydb
   reservation.api:
     container_name: reservation.api
+    restart: on-failure
     image: reservation_api_image
     build: 
      context: .
@@ -81,12 +84,13 @@ services:
       - "5013:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - IdentityServerUrl:http://identityserver.api:5001
+      - IdentityServerUrl=http://identityserver.api
       - "ConnectionStrings__SqlServerOrder=Server=reservationdb;Database=Reservation;User=sa;Password=1_Parola7;TrustServerCertificate=true"
     depends_on:
       - reservationdb
   fakepayment.api:
     container_name: fakepayment.api
+    restart: on-failure
     image: fakepayment_api_image
     build: 
      context: .
@@ -95,10 +99,39 @@ services:
       - "5012:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - IdentityServerUrl:http://identityserver.api:5001
+      - IdentityServerUrl=http://identityserver.api
       - "ConnectionStrings__SqlServer=Server=fakepaymentdb;Database=Card;User=sa;Password=1_Parola7;TrustServerCertificate=true"
     depends_on:
       - fakepaymentdb
+  photostock.api:
+    container_name: photostock.motel_api_image
+    restart: on-failure
+    image: photostock_api_image
+    build:
+     context: .
+     dockerfile: Services/PhotoStock/MicroMotel.Services.PhotoStock/Dockerfile
+    ports:
+      - "5011:80"
+    volumes:
+     - type: bind
+       source: C:\Users\sahin\source\repos\MicroMotel\PhotoContainer
+       target: /app/wwwroot/Photos
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - IdentityServerUrl=http://identityserver.api
+  gateway.api:
+    container_name: gateway.api
+    image: gateway_api_image
+    build:
+     context: .
+     dockerfile: Gateway/MicroMotel.Gateway/Dockerfile
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - IdentityServer=http://identityserver.api
+    
+ 
 
 volumes:
   moteldb_volume: 

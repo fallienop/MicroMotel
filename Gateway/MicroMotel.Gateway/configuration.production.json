@@ -1,0 +1,78 @@
+{
+  
+    "Routes": [
+      {
+        "DownstreamPathTemplate": "/api/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "motel.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/services/motel/{everything}",
+        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+        "UpstreamScheme": "http",
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "GatewayScheme",
+          "AllowedScopes": [ "motel_fullpermission" ]
+        }
+      },
+      {
+        "DownstreamPathTemplate": "/api/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "photostock.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/services/photostock/{everything}",
+        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+        "UpstreamScheme": "http",
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "GatewayScheme",
+          "AllowedScopes": [ "photo_fullpermission" ]
+        }
+      },
+      {
+        "DownstreamPathTemplate": "/api/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "fakepayment.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/services/fakepayment/{everything}",
+        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+        "UpstreamScheme": "http",
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "GatewayScheme",
+          "AllowedScopes": [ "payment_fullpermission" ]
+        }
+      },
+      {
+        "DownstreamPathTemplate": "/api/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "reservation.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/services/reservation/{everything}",
+        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+        "UpstreamScheme": "http",
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "GatewayScheme",
+          "AllowedScopes": [ "reservation_fullpermission" ]
+        }
+      }
+
+
+    ],
+    "GlobalConfiguration": {
+      "BaseUrl": "http://gateway.api"
+    }
+  }
