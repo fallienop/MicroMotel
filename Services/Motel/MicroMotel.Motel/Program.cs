@@ -36,7 +36,7 @@ using(var scope=app.Services.CreateScope())
 {
     var service = scope.ServiceProvider;
     var context = service.GetRequiredService<MotelContext>();
-
+     context.Database.Migrate();
     if (!context.Properties.Any())
     {
        var address = new Address { City = "Baku", District = "kyrdakhani", Street = "dadas vasif", Building = "15a", Location="ccxsdfds" };  

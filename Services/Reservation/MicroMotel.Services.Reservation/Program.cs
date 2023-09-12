@@ -32,6 +32,13 @@ builder.Services.AddScoped<IMealRService,MealRService>();
 builder.Services.AddDbContext<ReservationContext>(opt=>opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerOrder")));
 var app = builder.Build();
 
+using(var scope = app.Services.CreateScope())
+{
+    var service = scope.ServiceProvider;
+    var context= service.GetRequiredService<ReservationContext>();  
+    context.Database.Migrate();
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

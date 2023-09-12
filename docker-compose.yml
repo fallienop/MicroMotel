@@ -130,6 +130,27 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - IdentityServer=http://identityserver.api
+  frontend.web:
+    container_name: frontend.web
+    image: frontend_web_image
+    build:
+     context: .
+     dockerfile: MicroMotel.Web/Dockerfile
+    ports:
+      - "5002:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ServiceURLs__IdentityServerURL=http://identityserver.api
+      - ServiceURLs__GatewayURL=http://gateway.api
+    depends_on:
+      - gateway.api
+      - identityserver.api
+      - motel.api
+      - fakepayment.api
+      - photostock.api
+      - reservation.api
+
+
     
  
 

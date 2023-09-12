@@ -14,7 +14,9 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MicroMotel.IdentityServer
 {
@@ -50,15 +52,25 @@ namespace MicroMotel.IdentityServer
                     dbcontext.Database.Migrate(); 
                     var usermanager=services.GetRequiredService<UserManager<ApplicationUser>>();
                     var rolemanager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                    if(!usermanager.Users.Any())
+                    if (!rolemanager.Roles.Any())
+                    {
+
+                        rolemanager.CreateAsync(new IdentityRole { Name = "Supervisor" }).Wait();
+                        rolemanager.CreateAsync(new IdentityRole { Name = "Admin" }).Wait();
+
+                    }
+                    if (!usermanager.Users.Any())
                     {
                        
                         usermanager.CreateAsync(new ApplicationUser { UserName = "fallien", City = "Baku", Email = "fallien.ssd@gmail.com", Budget=0 }, "1_Paroll0").Wait();
+                        var user = Task.Run(async () => await usermanager.FindByNameAsync("fallien")).Result;
+                        usermanager.AddToRolesAsync(user, new List<string> (){"Supervisor","Admin" }).Wait();
                     }
-             
                     
+
+
                 }
-              
+
 
                 Log.Information("Starting host...");
                 host.Run();
