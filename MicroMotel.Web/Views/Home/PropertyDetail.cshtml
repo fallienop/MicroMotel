@@ -1,0 +1,118 @@
+﻿
+@{
+    ViewData["Title"] = "PropertyDetail";
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+@model MicroMotel.Web.Models.Motel.Property.PropertyViewModel
+<div class="container">
+    <div class="title-and-button-container">
+
+        <a class="btn btn-outline-behance btn-sm mr-2" style="float: left" href="/home/index">←</a>
+        <h3 class="mb-0">Property Details</h3>
+
+    </div>
+
+    <div class="property-details">
+        <div class="property-info">
+            <div class="property-label">Property ID:</div>
+            <div class="property-value">@Model.Id</div>
+        </div>
+        <div class="property-info">
+            <div class="property-label">Property Name:</div>
+            <div class="property-value">@Model.Name</div>
+        </div>
+        <div class="property-info">
+            <div class="property-label">Room Count:</div>
+            <div class="property-value">@Model.RoomCount</div>
+        </div>
+        <div class="property-info">
+            <div class="property-label">Floor Count:</div>
+            <div class="property-value">@Model.FloorCount</div>
+        </div>
+        <div class="property-info">
+            <div class="property-label">Has Parking:</div>
+            <div class="property-value">@Model.HasParking</div>
+        </div>
+        <div class="property-info">
+            <div class="property-label">Has Open Space:</div>
+            <div class="property-value">@Model.HasOpenSpace</div>
+        </div>
+        <div class="property-info">
+            <div class="property-label">City:</div>
+            <div class="property-value">@Model.Address.City</div>
+        </div>
+        <div class="property-info">
+            <div class="property-label">District:</div>
+            <div class="property-value">@Model.Address.District</div>
+        </div>
+        <div class="property-info">
+            <div class="property-label">Street:</div>
+            <div class="property-value">@Model.Address.Street</div>
+        </div>
+        <div class="property-info">
+            <div class="property-label">Building:</div>
+            <div class="property-value">@Model.Address.Building</div>
+        </div>
+        <div class="property-info">
+            <div class="property-label">Location:</div>
+            <div class="property-value">@Model.Address.Location</div>
+        </div>
+      
+
+        <div class="buttons-container">
+            <a href="/Home/Rooms/@Model.Id" class="btn btn-warning">Rooms</a>
+            <a href="/Home/Meals/@Model.Id" class="btn btn-danger">Meals</a>
+        </div>
+
+
+    </div>
+</div>
+
+<style>
+
+ 
+
+    .title-and-button-container h3 {
+        margin-right: 20px; 
+    }
+
+    .title-and-button-container .btn {
+        width: 40px;
+        padding: 6px 7px;
+        margin-left: 10px; 
+    }
+
+    .property-details {
+        border: 1px solid #ddd;
+        padding: 20px;
+        margin: 20px 0;
+    }
+
+    .buttons-container {
+        display: grid;
+        grid-template-columns: repeat(2, auto); /* 2 sütun oluşturun */
+        gap: 20px; /* İstenilen boşluğu ayarlayın */
+        margin-top: 20px;
+    }
+
+    .btn {
+        width: 300px;
+        padding: 8px 10px;
+        text-align: center;
+        margin-left: 60px; /* Add a little margin to the left */
+    }
+
+    .property-info {
+        display: flex;
+        margin-bottom: 10px;
+    }
+
+    .property-label {
+        width: 120px;
+        font-weight: bold;
+    }
+
+    .property-value {
+        flex: 1;
+    }
+</style>

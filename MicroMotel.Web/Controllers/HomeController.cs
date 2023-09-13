@@ -50,7 +50,11 @@ namespace MicroMotel.Web.Controllers
             var room = await _motelService.GetRoomById(id);
             return View(room);
         }
-
+        public async Task<IActionResult> PropertyDetail(int id)
+        {
+            var property = await _motelService.GetPropertybyId(id);
+            return View(property);
+        }
         public IActionResult Contact()
         {
             return View();

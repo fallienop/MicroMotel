@@ -15,15 +15,15 @@
 
         <h3><span style="font-family: arial, helvetica, sans-serif;"><strong>Meal Name: @Model.Name</strong></span></h3>
         <h5 style="font-family: arial, helvetica, sans-serif;">Price : @Model.Price</h5>
-        <ul>
-            <li><span style="font-family: arial, helvetica, sans-serif;">Preperation time: @Model.PrepTime</span></li>
+       
+           <h3> <span style="font-family: arial, helvetica, sans-serif;">Preperation time: @Model.PrepTime</span></h3>
           
             
 
-        </ul>
+       
 
         <p>Description : @Model.Description</p>
-        @section script {
+        
             <script>
                 function customBackFunction() {
                     // Yapmak istediğiniz işlemleri burada gerçekleştirin
@@ -36,7 +36,7 @@
                     window.location.href = "/home/index"; // Sayfayı yönlendirme
                 });
             </script>
-        }
+        
 
 
     </div>

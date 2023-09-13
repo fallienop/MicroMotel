@@ -84,7 +84,7 @@ namespace MicroMotel.Web.Controllers
             var propid = room.PropertyId;
 
             var claimvalues = getroles();
-            if (!(claimvalues.Contains("ADMIN") || claimvalues.Contains(propid.ToString())))
+            if (!(claimvalues.Contains("Admin") || claimvalues.Contains(propid.ToString())))
             {   
                 return RedirectToAction("unauthorized", "AnotherPage");
             }
@@ -96,7 +96,7 @@ namespace MicroMotel.Web.Controllers
         {
             var room = await _MotelService.GetRoomById(id);
             var roles = getroles();
-            if (!(roles.Contains(room.PropertyId.ToString()) || roles.Contains("ADMIN")))
+            if (!(roles.Contains(room.PropertyId.ToString()) || roles.Contains("Admin")))
             {
                 return RedirectToAction("unauthorized", "AnotherPage");
             }
@@ -139,7 +139,7 @@ namespace MicroMotel.Web.Controllers
         {
             var room = await _MotelService.GetRoomById(id);
             var roles = getroles();
-            if (!(roles.Contains("ADMIN") || roles.Contains(room.PropertyId.ToString())))
+            if (!(roles.Contains("Admin") || roles.Contains(room.PropertyId.ToString())))
             {
                 return RedirectToAction("unauthorized", "AnotherPage");
             }
@@ -159,7 +159,7 @@ namespace MicroMotel.Web.Controllers
         public async Task<IActionResult> UpdateRoom(RoomUpdateModel rum)
         {
             var roles = getroles();
-            if (!(roles.Contains("ADMIN") || roles.Contains(rum.PropertyId.ToString())))
+            if (!(roles.Contains("Admin") || roles.Contains(rum.PropertyId.ToString())))
             {
                 return Unauthorized();
             }
@@ -185,7 +185,7 @@ namespace MicroMotel.Web.Controllers
         {
             var roles = getroles();
             var meal = await _MotelService.GetMealById(id);
-            if (!(roles.Contains(meal.PropertyId.ToString()) || roles.Contains("ADMIN")))
+            if (!(roles.Contains(meal.PropertyId.ToString()) || roles.Contains("Admin")))
             {
                 return RedirectToAction("unauthorized", "AnotherPage");
 
@@ -217,7 +217,7 @@ namespace MicroMotel.Web.Controllers
         {
             var meal = await _MotelService.GetMealById(id);
             var roles = getroles();
-            if (!(roles.Contains("ADMIN") || roles.Contains(meal.PropertyId.ToString())))
+            if (!(roles.Contains("Admin") || roles.Contains(meal.PropertyId.ToString())))
             {
                 return RedirectToAction("unauthorized", "AnotherPage");
             }
@@ -234,7 +234,7 @@ namespace MicroMotel.Web.Controllers
         {
             var meal = await _MotelService.GetMealById(id);
             var roles = getroles();
-            if (!(roles.Contains("ADMIN") || roles.Contains(meal.PropertyId.ToString())))
+            if (!(roles.Contains("Admin") || roles.Contains(meal.PropertyId.ToString())))
             {
                 return RedirectToAction("unauthorized", "AnotherPage");
             }
@@ -249,7 +249,7 @@ namespace MicroMotel.Web.Controllers
         public async Task<IActionResult> UpdateMeal(MealUpdateModel mum)
         {
             var roles = getroles();
-            if (!(roles.Contains("ADMIN") || roles.Contains(mum.PropertyId.ToString())))
+            if (!(roles.Contains("Admin") || roles.Contains(mum.PropertyId.ToString())))
             {
                 return RedirectToAction("unauthorized", "AnotherPage");
             }
@@ -311,7 +311,7 @@ namespace MicroMotel.Web.Controllers
         {
             var r = await _reservationservice.GetRoomRById(id);
             var roles = getroles();
-            if (!(roles.Contains("ADMIN") || roles.Contains(r.PropertyId.ToString())))
+            if (!(roles.Contains("Admin") || roles.Contains(r.PropertyId.ToString())))
             {
                 return RedirectToAction("unauthorized", "AnotherPage");
             }
@@ -346,7 +346,7 @@ namespace MicroMotel.Web.Controllers
             var claimvalues = new List<string>();
             foreach (var item in claimslist)
             {
-                claimvalues.Add(item?.Value?.ToUpper() ?? "");
+                claimvalues.Add(item?.Value?.ToString() ?? "");
             }
             return claimvalues;
         }
