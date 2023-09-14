@@ -78,8 +78,9 @@ namespace MicroMotel.Web.Controllers
                 if (user.Budget < total)
                 {
                     ModelState.AddModelError(string.Empty, "insufficient balance");
-                    return RedirectToAction("getusersets", "auth");
-                    
+                    HttpContext.Session.SetString("requiredmoney", (total - user.Budget).ToString());
+                    return RedirectToAction(nameof(Payment) );
+
                     //ViewData["TotalAmount"] = total;
                     //return View("InsufficientBalanceConfirmation", rci);
                 }
@@ -107,7 +108,7 @@ namespace MicroMotel.Web.Controllers
                 return View(rci);
             }
           
-           return RedirectToAction(nameof(doyouwant));
+           return RedirectToAction("doyouwant");
         } 
 
         public IActionResult doyouwant()
@@ -160,7 +161,8 @@ namespace MicroMotel.Web.Controllers
                         if (user.Budget < total)
                         {
                             ModelState.AddModelError(string.Empty, "insufficient balance");
-                            return RedirectToAction("getusersets", "auth");
+                            HttpContext.Session.SetString("requiredmoney", (total - user.Budget).ToString());
+                            return RedirectToAction(nameof(Payment));
 
                         }
                         else
@@ -210,6 +212,7 @@ namespace MicroMotel.Web.Controllers
                    
                     TotalPrice = 0
                };
+            decimal? reqmoney =Convert.ToDecimal( HttpContext.Session.GetString("requiredmoney")); 
                 return View(payment);
             }
 

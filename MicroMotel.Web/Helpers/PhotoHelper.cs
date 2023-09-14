@@ -14,7 +14,7 @@ namespace MicroMotel.Web.Helpers
 
         public string GetPhotoStockURL(string photourl)
         {
-            return $"{_serviceurls.PhotoStockURL}/photos/{photourl}";
+            return $"{_serviceurls.PhotoStockURL}/{_serviceurls.photoget.Path}/photos/{photourl}";
         }
     }
 }

@@ -1,6 +1,15 @@
 ﻿@using MicroMotel.Web.Models.FakePayment;
 
 @{
+    decimal money = 0;
+    try
+    {
+        money = Convert.ToDecimal(Context.Session.GetString("requiredmoney"));
+    }
+    catch
+    {
+        
+    }
     Layout = null;
 }
 
@@ -39,7 +48,7 @@
                 <div class="col-6">
                     <div class="d-flex flex-column">
                         <p class="text mb-1">Amount</p>
-                        <input asp-for="TotalPrice" class="form-control mb-3 pt-2 " value="0" type="number" placeholder="0">
+                        <input asp-for="TotalPrice" class="form-control mb-3 pt-2 " value="@money" type="number" placeholder="0">
                     </div>
                 </div>
             <br />

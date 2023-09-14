@@ -104,8 +104,7 @@ services:
     depends_on:
       - fakepaymentdb
   photostock.api:
-    container_name: photostock.motel_api_image
-    restart: on-failure
+    container_name: photostock.api
     image: photostock_api_image
     build:
      context: .
@@ -116,6 +115,8 @@ services:
      - type: bind
        source: C:\Users\sahin\source\repos\MicroMotel\PhotoContainer
        target: /app/wwwroot/Photos
+      
+      # - ./wwwroot/Photos:/app/wwwroot/Photos
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - IdentityServerUrl=http://identityserver.api
@@ -142,6 +143,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ServiceURLs__IdentityServerURL=http://identityserver.api
       - ServiceURLs__GatewayURL=http://gateway.api
+      - ServiceURLs__PhotoStockURL=http://photostock.api
+      
     depends_on:
       - gateway.api
       - identityserver.api

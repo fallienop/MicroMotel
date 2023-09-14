@@ -25,7 +25,7 @@ namespace MicroMotel.Web.Services.Abstract
 
 
 
-        #region Property
+            #region Property
         public async Task<List<PropertyViewModel>> GetAllPropertiesAsync()
         {
             var response = await _httpClient.GetAsync($"property");
