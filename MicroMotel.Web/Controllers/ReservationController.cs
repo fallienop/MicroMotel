@@ -278,7 +278,7 @@ namespace MicroMotel.Web.Controllers
             string random6 = (r.Next(100000, 999999)).ToString();
             MailMessage mymessage=new ();
             SmtpClient client = new();
-            client.Credentials = new System.Net.NetworkCredential("sahin.b.03@outlook.com", "1Parola7");
+            client.Credentials = new System.Net.NetworkCredential("******@outlook.com", "*********");
             client.Port = 587;
             client.Host = "smtp-mail.outlook.com";
             client.EnableSsl = true;
